@@ -1,4 +1,5 @@
-﻿using csharpmatic.XMLAPI.Generic;
+﻿using csharpmatic.Properties;
+using csharpmatic.XMLAPI.Generic;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -16,11 +17,10 @@ namespace csharpmatic
     {
         static void Main(string[] args)
         {
-            DeviceManager dm = new DeviceManager("192.168.1.200");
+            DeviceManager dm = new DeviceManager(Settings.Default.ServerAddress);
 
             Stopwatch watch = new Stopwatch();
-
-
+            
             for (;;)
             {
                 watch.Start();
@@ -28,8 +28,8 @@ namespace csharpmatic
                 var events = dm.Refresh();
 
                 watch.Stop();
-                Console.WriteLine("");
-                Console.WriteLine("###### download time: {0}", watch.Elapsed);
+                //Console.WriteLine("");
+                //Console.WriteLine("###### download time: {0}", watch.Elapsed);
                 watch.Restart();
 
                 if (events.Count > 0)
@@ -45,10 +45,10 @@ namespace csharpmatic
                 }
 
                 watch.Stop();
-                Console.WriteLine("###### compute time: {0}", watch.Elapsed);
-                Console.WriteLine("");
+                //Console.WriteLine("###### compute time: {0}", watch.Elapsed);
+                //Console.WriteLine("");
 
-                Thread.Sleep(1000);            
+                //Thread.Sleep(1000);            
             }            
         }      
     }

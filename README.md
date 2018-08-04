@@ -9,14 +9,14 @@ Requirements:
 
 What is working:
 - I can download XMLs for device, room, function and state lists and parse them into XMLAPI.CGI objects
-- I can consolidate the XMLAPI.CGI objects into XMLAPI.Genric objects which contaain information from all the xmls combined
-- I can detect events, that is state changes of each of the datapoints
+- I can consolidate the XMLAPI.CGI objects into XMLAPI.Generic objects which contain information from all the xmls combined
+- I can detect events, that is state changes of each of the datapoints.
 - Code works without any delays or resouce issues on rpi3
 
 Todo:
 - Dev friendly interfaces for Heating, Humidity, Lights, Security control
 - Algo for handling heating control, moisture control and lights/motion sensors with some predefine tresholds
-- Some nice angularJs UI with feedback (change temp zones/boost) 
+- Some nice web UI with simple feedback (change temp zones/boost, lights) 
 - Kafka message bus datapoints sink
 - Hadoop temp zone data crunching
 - Machine learning AI telling you which room is causing most of heating events

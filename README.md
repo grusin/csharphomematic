@@ -5,7 +5,7 @@ This is very new code, just few days old, so i did not have time polish it up.
 
 Requirements:
 - XML API addon 
-- Raspberymatic complied with mono support (git the latest version, menu gconig and select mono support; make dist and flash; - manual in progress)
+- Raspberymatic compiled with mono support (git the latest version, menu gconig and select mono support; make dist and flash; - manual in progress)
 
 What is working:
 - I can download XMLs for device, room, function and state lists and parse them into XMLAPI.CGI objects

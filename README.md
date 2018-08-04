@@ -11,6 +11,7 @@ What is working:
 - I can download XMLs for device, room, function and state lists and parse them into XMLAPI.CGI objects
 - I can consolidate the XMLAPI.CGI objects into XMLAPI.Genric objects which contaain information from all the xmls combined
 - I can detect events, that is state changes of each of the datapoints
+- Code works without any delays or resouce issues on rpi3
 
 Todo:
 - Dev friendly interfaces for Heating, Humidity, Lights, Security control

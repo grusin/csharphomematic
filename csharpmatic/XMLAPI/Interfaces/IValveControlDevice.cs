@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace csharpmatic.XMLAPI.Interfaces
 {
-    public interface IValveControl
+    public interface IValveControlDevice
     {
-        TypedDatapoint<Boolean> Valve_Adaption { get; }
+        ManagedDatapoint<Boolean> Valve_Adaption { get; }
 
-        TypedDatapoint<IValveControl_Valve_State_Enum> Valve_State { get; }
+        ManagedDatapoint<IValveControl_Valve_State_Enum> Valve_State { get; }
     }
 
     public enum IValveControl_Valve_State_Enum

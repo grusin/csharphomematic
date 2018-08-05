@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace csharpmatic.XMLAPI.Interfaces
 {
-    public interface IHumidityControl
+    public interface IHumidityControlDevice
     {
-        TypedDatapoint<Int32> Humidity { get; }
+        ManagedDatapoint<Int32> Humidity { get; }
 
-        TypedDatapoint<IHumidityControl_Humidity_Status_Enum> Humidity_Status { get; }
+        ManagedDatapoint<IHumidityControl_Humidity_Status_Enum> Humidity_Status { get; }
     }
 
     public enum IHumidityControl_Humidity_Status_Enum

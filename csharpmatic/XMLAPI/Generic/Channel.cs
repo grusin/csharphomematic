@@ -81,9 +81,9 @@ namespace csharpmatic.XMLAPI.Generic
             Operate = String.IsNullOrWhiteSpace(c.Operate) ? false : Convert.ToBoolean(c.Operate);                
         }               
 
-        public override string ToString()
+        public override string ToString()            
         {
-            return JsonConvert.SerializeObject(this);
+            return JsonConvert.SerializeObject(this, Formatting.Indented);
         }
     }
 }

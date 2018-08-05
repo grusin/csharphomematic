@@ -137,7 +137,7 @@ namespace csharpmatic.XMLAPI.Generic
 
         public override string ToString()
         {
-            return JsonConvert.SerializeObject(this);
+            return JsonConvert.SerializeObject(this, Formatting.Indented);
         }
     }  
 }

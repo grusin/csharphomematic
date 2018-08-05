@@ -35,7 +35,7 @@ namespace csharpmatic.XMLAPI.Generic
 
         public override string ToString()
         {
-            return JsonConvert.SerializeObject(this);
+            return JsonConvert.SerializeObject(this, Formatting.Indented);
         }
         
         [JsonIgnore]
@@ -44,7 +44,7 @@ namespace csharpmatic.XMLAPI.Generic
         public Datapoint(CGI.StateList.Datapoint dp, Channel c)
         {
             Channel = c;
-            Name = dp.Name;
+            Name = c.Name + "." + dp.Type;
             ISEID = dp.Ise_id;
             Type = MapDatapointType(dp, c);
             InternalValue = dp.Value;
@@ -87,7 +87,7 @@ namespace csharpmatic.XMLAPI.Generic
 
             if (dp.Type == "ACTUAL_TEMPERATURE_STATUS" && c.ChannelIndex == 0)
                 return "ACTUATOR_ACTUAL_TEMPERATURE_STATUS";
-
+                     
             return dp.Type;
         }
 

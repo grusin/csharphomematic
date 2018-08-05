@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace csharpmatic.XMLAPI.Interfaces
 {
-    public class InterfaceFactory
+    public class DeviceFactory
     {
         public static Dictionary<Type, Dictionary<string, PropertyInfo>> AllSupportedIntefraces { get; private set; }
         public static Dictionary<Type, Dictionary<string, Type>> AllSupportedDevices { get; private set; }
 
-        static InterfaceFactory()
+        static DeviceFactory()
         {
             initAllSupportedIntefraces();
             initAllSupportedDevices();

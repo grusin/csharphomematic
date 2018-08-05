@@ -17,39 +17,22 @@ namespace csharpmatic
     {
         static void Main(string[] args)
         {
-            DeviceManager dm = new DeviceManager(Settings.Default.ServerAddress);
+            DeviceManager dm = new DeviceManager(Settings.Default.ServerAddress); //replace with IP of your server
 
-            Stopwatch watch = new Stopwatch();
-            
             for (;;)
             {
-                watch.Start();
-
-                var events = dm.Refresh();
-
-                watch.Stop();
-                //Console.WriteLine("");
-                //Console.WriteLine("###### download time: {0}", watch.Elapsed);
-                watch.Restart();
-
-                if (events.Count > 0)
+                foreach (var e in dm.Refresh())
                 {
-                    Console.WriteLine("Got {0} events", events.Count);
-
-                    foreach(var e in events)
-                    {
-                        Console.WriteLine("--- Event ---");
-                        Console.WriteLine("  Current: {0}", e.Current);
-                        Console.WriteLine("  Prev: {0}", e.Previous == null ? null : e.Previous);
-                    }
+                    Console.WriteLine("{0} Event {1}\t\t{2} => {3}",
+                        e.EventTimestamp.ToString("o"),
+                        e.Current.Name,
+                        e.Previous == null ? null : e.Previous.Value, e.Current.Value
+                    );
+                                       
                 }
 
-                watch.Stop();
-                //Console.WriteLine("###### compute time: {0}", watch.Elapsed);
-                //Console.WriteLine("");
-
-                //Thread.Sleep(1000);            
-            }            
-        }      
+                Thread.Sleep(1000);
+            }
+        }  
     }
 }

@@ -96,6 +96,26 @@ namespace csharpmatic.XMLAPI.CGI
             }
 
             FetchStateList();            
-        }       
+        }      
+        
+        public void SetISEIDValue(string iseid, string newvalue)
+        {
+            //FIXME: validate that both iseid and newvalue do contain only a-z and 0-9 values
+
+            Uri uri = new Uri(HttpServerUri, String.Format(@"addons/xmlapi/statechange.cgi?ise_id={0}&new_value={1}", iseid, newvalue));
+
+            int tries = 3;
+
+            for (int i = 0; i < tries; ++i)
+            {
+                var res = SafeXMLGetRequest<StateChange.Result>(uri);
+
+                if (res.Changed.Id != iseid || res.Changed.New_value != newvalue)
+                {
+                    if (i + 1 >= tries)
+                        throw new Exception(String.Format("State change failed for {0}={1}. Got {2}={3} instead.", iseid, newvalue, res.Changed.Id, res.Changed.New_value));
+                }
+            }
+        } 
     }
 }

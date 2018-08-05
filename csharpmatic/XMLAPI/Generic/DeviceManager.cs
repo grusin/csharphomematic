@@ -96,7 +96,7 @@ namespace csharpmatic.XMLAPI.Generic
             {                
                 //Device gd = new Device(d, CGIClient);
 
-                Device gd = Interfaces.InterfaceFactory.CreateInstance(d, CGIClient);
+                Device gd = Interfaces.DeviceFactory.CreateInstance(d, CGIClient);
                                 
                 Devices.Add(gd);
                 DevicesByISEID.Add(gd.ISEID, gd);

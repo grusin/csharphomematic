@@ -8,29 +8,29 @@ Requirements:
 - Raspberymatic compiled with mono support (git the latest version, menu gconig and select mono support; make dist and flash; - manual in progress)
 
 Suported devices in generic mode (developer needs to iterate over channels and datapoints of each of devices)
-[x] Homematic IP - well tested
-[?] possibly even older Homematic devies, I do not see reason why they would fail to work, the XML API is the same for both
+-  Homematic IP - well tested
+-  possibly even older Homematic devies, I do not see reason why they would fail to work, the XML API is the same for both
 
 Supported in Temp Control Mode:
-[x] HmIP-ETRV (read only so far, raditor thermostat)
-[x] HmIP-ETRV-2 (read only so far raditor thermostat v2) 
-[x] HmIP-WTH-2 (read only so far, wall thermostat)
-[x] HmIP-HEATING (read only so far, virtual device)
+- HmIP-ETRV (read only so far, raditor thermostat)
+- HmIP-ETRV-2 (read only so far raditor thermostat v2) 
+- HmIP-WTH-2 (read only so far, wall thermostat)
+- HmIP-HEATING (read only so far, virtual device)
 
 Supported in Valve Control Mode:
-[x] HmIP-ETRV (read only so far, raditor thermostat)
-[x] HmIP-ETRV-2 (read only so far, raditor thermostat)
-[x] HmIP-HEATING (read only so far, virtual device)
+- HmIP-ETRV (read only so far, raditor thermostat)
+- HmIP-ETRV-2 (read only so far, raditor thermostat)
+- HmIP-HEATING (read only so far, virtual device)
 
 Supported in Humidity Control Mode:
-[x] HmIP-WTH-2 (read only so far, wall thermostat with humidity sensor)
+- HmIP-WTH-2 (read only so far, wall thermostat with humidity sensor)
 
-Suported Switch Actuators
-[ ] HmIP-PSM (wall switch with 1 socket)
-[ ] HmIP-Cant-Remember-Name (Development board with 12V relay)
+Not Suported Switch Actuators
+- HmIP-PSM (wall switch with 1 socket)
+- HmIP-Cant-Remember-Name (Development board with 12V relay)
 
-Supported Security:
-[ ] HmIP-SWDO (window open detector) 
+Not Supported Security:
+- HmIP-SWDO (window open detector) 
 
 In theory all devices can be supported, I just need to know the XMLAPI outputs to run them via the code generator. If you happen to be in need of getting more devives, please let me know, and we can sort it out.
 

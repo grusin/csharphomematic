@@ -1,14 +1,14 @@
 # C# homematic IP API
-C# interface to homematic ip smart home IoT devices, just wrote it beacause I hate writing software in "IDE" that does no support syntax highlihting or debugging or generaly anything that just give you QA.
+C# interface to homematic ip smart home IoT devices.
 
-This is very new code, just few days old, so i did not have time polish it up.
+This is very new code, just few days old so it changes quite quickly - lots of refactoring, so if you follow this development expect a lot of changes in next few weeks.
 
 Requirements:
 - XML API addon 
-- Raspberymatic compiled with mono support (git the latest version, menu gconig and select mono support; make dist and flash; - manual in progress)
+- Raspberymatic compiled with mono support (you need git the latest version of raspberymatic, do make menuconig and select mono support; make dist and flash to sdcard, restore the backup of your devices, you should be able to sftp .exe files to your rpi3)
 
-Suported devices in generic mode (developer needs to iterate over channels and datapoints of each of devices)
--  Homematic IP - well tested
+Suported devices in generic mode (developer needs to iterate over channels and datapoints of each of devices, so it's a bit akward way)
+-  Homematic IP - all devices - well tested
 -  possibly even older Homematic devies, I do not see reason why they would fail to work, the XML API is the same for both
 
 Supported in Temp Control Mode:
@@ -29,12 +29,12 @@ Suported Switch Actuators
 - HmIP-PSM (wall switch with 1 socket)
 
 Not Supported Switch Actuators
-- HmIP-PCBS (PCB board with up to 5-12V relay)
+- HmIP-PCBS (PCB board with 5-12V relay)
 
 Not Supported Security:
 - HmIP-SWDO (window open detector, currently works only in heating virtual device group) 
 
-In theory all devices can be supported, I just need to know the XMLAPI outputs to run them via the code generator. If you happen to be in need of getting more devives, please let me know, and I can sort it out.
+In theory all devices can be supported, I just need to know the XMLAPI outputs to run them via the code generator. If you happen to be in need of getting more devives, please let me know, and I can sort it out or show you how to do it. Generator is of course included in the git.
 
 What is working:
 - I can download XMLs for device, room, function and state lists and parse them into XMLAPI.CGI objects

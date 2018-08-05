@@ -68,19 +68,31 @@
     <Compile Include="XMLAPI\CGI\roomlist.cs" />
     <Compile Include="XMLAPI\CGI\statelist.cs" />
     <Compile Include="XMLAPI\Generic\DeviceManager.cs" />
-    <Compile Include="XMLAPI\Interfaces\Generated\HMIP_ETRV.generated.cs" />
-    <Compile Include="XMLAPI\Interfaces\Generated\HMIP_ETRV_2.generated.cs" />
-    <Compile Include="XMLAPI\Interfaces\Generated\HMIP_HEATING.generated.cs" />
-    <Compile Include="XMLAPI\Interfaces\Generated\HMIP_PSM.generated.cs" />
-    <Compile Include="XMLAPI\Interfaces\Generated\HMIP_WTH_2.generated.cs" />
+    <Compile Include="XMLAPI\Generic\TypedDatapoint.cs" />
+    <Compile Include="XMLAPI\Interfaces\Devices\HMIP_ETRV.generated.cs" />
+    <Compile Include="XMLAPI\Interfaces\Devices\HMIP_ETRV_2.generated.cs" />
+    <Compile Include="XMLAPI\Interfaces\Devices\HMIP_HEATING.generated.cs" />
+    <Compile Include="XMLAPI\Interfaces\Devices\HMIP_PSM.generated.cs" />
+    <Compile Include="XMLAPI\Interfaces\Devices\HMIP_SWDO.generated.cs" />
+    <Compile Include="XMLAPI\Interfaces\Devices\HMIP_WTH_2.generated.cs" />
+    <Compile Include="XMLAPI\Interfaces\IHumidityControl.cs" />
+    <Compile Include="XMLAPI\Interfaces\ILightControl.cs" />
+    <Compile Include="XMLAPI\Interfaces\ITempControl.cs" />
+    <Compile Include="XMLAPI\Interfaces\IHmIP.cs" />
+    <Compile Include="XMLAPI\Interfaces\IValveControl.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="LICENSE" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Include="README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include=".gitignore" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

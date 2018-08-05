@@ -51,7 +51,7 @@ namespace csharpmatic.XMLAPI.Generic
                         //new device was just added
                         if (prev == null)
                             list.Add(new DatapointEvent(current, null));
-                        else if (current.Value != prev.Value || current.OperationsCounter != prev.OperationsCounter)
+                        else if (current.InternalValue != prev.InternalValue || current.OperationsCounter != prev.OperationsCounter)
                             list.Add(new DatapointEvent(current, prev));                        
                     }
                 }

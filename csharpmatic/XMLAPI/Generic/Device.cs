@@ -21,13 +21,13 @@ namespace csharpmatic.XMLAPI.Generic
         public bool PendingConfig { get; private set; }
 
         public string Address { get; private set; }
-
+                
         public string Interface { get; private set; }
 
         public string DeviceType { get; private set; }
 
         public bool ReadyConfig { get; private set; }
-
+        
         ILog LOG = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         HashSet<string> Rooms { get { return new HashSet<string>(Channels.SelectMany(c => c.Rooms)); } }
@@ -45,19 +45,6 @@ namespace csharpmatic.XMLAPI.Generic
             }
 
             return null;            
-        }
-
-
-
-        public string ToCsharpPropertiesTemplate()
-        {
-            string code = "";
-
-            foreach (var c in Channels)
-                foreach (var dp in c.Datapoints.Values)
-                    code += dp.ToCSharpPropertyTemplate() + Environment.NewLine;
-
-            return code;
         }
 
         public void FillFromDeviceListDevice(CGI.DeviceList.Device d)

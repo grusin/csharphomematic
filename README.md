@@ -12,27 +12,29 @@ Suported devices in generic mode (developer needs to iterate over channels and d
 -  possibly even older Homematic devies, I do not see reason why they would fail to work, the XML API is the same for both
 
 Supported in Temp Control Mode:
-- HmIP-ETRV (read only so far, raditor thermostat)
-- HmIP-ETRV-2 (read only so far raditor thermostat v2) 
-- HmIP-WTH-2 (read only so far, wall thermostat)
-- HmIP-HEATING (read only so far, virtual device)
+- HmIP-ETRV (raditor thermostat)
+- HmIP-ETRV-2 (raditor thermostat v2) 
+- HmIP-WTH-2 (wall thermostat)
+- HmIP-HEATING (virtual device)
 
 Supported in Valve Control Mode:
-- HmIP-ETRV (read only so far, raditor thermostat)
-- HmIP-ETRV-2 (read only so far, raditor thermostat)
-- HmIP-HEATING (read only so far, virtual device)
+- HmIP-ETRV (raditor thermostat)
+- HmIP-ETRV-2 (raditor thermostat)
+- HmIP-HEATING (virtual device)
 
 Supported in Humidity Control Mode:
-- HmIP-WTH-2 (read only so far, wall thermostat with humidity sensor)
+- HmIP-WTH-2 (wall thermostat with humidity sensor)
 
-Not Suported Switch Actuators
+Suported Switch Actuators
 - HmIP-PSM (wall switch with 1 socket)
-- HmIP-Cant-Remember-Name (Development board with 12V relay)
+
+Not Supported Switch Actuators
+- HmIP-PCBS (PCB board with up to 5-12V relay)
 
 Not Supported Security:
-- HmIP-SWDO (window open detector) 
+- HmIP-SWDO (window open detector, currently works only in heating virtual device group) 
 
-In theory all devices can be supported, I just need to know the XMLAPI outputs to run them via the code generator. If you happen to be in need of getting more devives, please let me know, and we can sort it out.
+In theory all devices can be supported, I just need to know the XMLAPI outputs to run them via the code generator. If you happen to be in need of getting more devives, please let me know, and I can sort it out.
 
 What is working:
 - I can download XMLs for device, room, function and state lists and parse them into XMLAPI.CGI objects
@@ -40,9 +42,9 @@ What is working:
 - I can detect events, that is state changes of each of the datapoints.
 - Code works without any delays or resouce issues on rpi3
 - Dev friendly interfaces for Heating, Humidity, Lights, Security control <= built by generator based on the XMLAPI object. It should allow addition of new objects with ease.
+- Support of writing commands to devices (turn on switch, set temp, etc..)
 
 Todo:
-- Support of writing commands to devices (turn on switch, set temp, etc..)
 - Algo for handling heating control, moisture control and lights/motion sensors with some predefine tresholds
 - Some nice web UI with simple feedback (change temp zones/boost, lights) 
 - Kafka message bus datapoints sink

@@ -13,8 +13,6 @@ namespace csharpmatic.XMLAPI.Interfaces
 
         TypedDatapoint<Boolean> Duty_Cycle { get; }
 
-        TypedDatapoint<Boolean> Low_Bat { get; }
-
         TypedDatapoint<Decimal> Operating_Voltage { get; }
 
         TypedDatapoint<IHmIP_Operating_Voltage_Status_Enum> Operating_Voltage_Status { get; }

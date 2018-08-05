@@ -27,7 +27,12 @@ namespace csharpmatic.XMLAPI.Generic
             Name = dp.Name;
             Type = dp.Type;
             ISEID = dp.ISEID;
-            Value = (T)dp.Value;
+
+            if (dp.Value == null)
+                Value = default(T);
+            else
+                Value = (T)dp.Value;
+
             ValueUnit = dp.ValueUnit;
             Timestamp = dp.Timestamp;
             OperationsCounter = dp.OperationsCounter;

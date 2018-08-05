@@ -92,22 +92,15 @@ namespace csharpmatic.XMLAPI.Generic
             Devices = new List<Device>();
             DevicesByISEID = new Dictionary<string, Device>();
 
-            //fill in devices and channels
             foreach (var d in CGIClient.DeviceList.Device)
-            {
-                Device gd = new Device();
-                gd.FillFromDeviceListDevice(d);
+            {                
+                //Device gd = new Device(d, CGIClient);
+
+                Device gd = Interfaces.InterfaceFactory.CreateInstance(d, CGIClient);
+                                
                 Devices.Add(gd);
                 DevicesByISEID.Add(gd.ISEID, gd);
-            }
-
-            //fill in rooms, functions and datapoints
-            foreach (var d in Devices)
-            {
-                d.FillFromRoomList(CGIClient.RoomList);
-                d.FillFromFunctionList(CGIClient.FunctionList);
-                d.FillFromStateList(CGIClient.StateList);
-            }                              
+            }                           
         }
     }
 }

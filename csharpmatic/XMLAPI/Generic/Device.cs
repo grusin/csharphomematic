@@ -23,17 +23,26 @@ namespace csharpmatic.XMLAPI.Generic
         public string Address { get; private set; }
                 
         public string Interface { get; private set; }
+        
 
         public string DeviceType { get; private set; }
 
-        public bool ReadyConfig { get; private set; }
-        
-        ILog LOG = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        public bool ReadyConfig { get; private set; }            
 
         HashSet<string> Rooms { get { return new HashSet<string>(Channels.SelectMany(c => c.Rooms)); } }
 
         HashSet<string> Functions { get { return new HashSet<string>(Channels.SelectMany(c => c.Functions)); } }
-        
+
+        ILog LOG = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
+        public Device(CGI.DeviceList.Device d, CGI.CGIClient CGIClient)
+        {
+            FillFromDeviceListDevice(d);
+            FillFromRoomList(CGIClient.RoomList);
+            FillFromFunctionList(CGIClient.FunctionList);
+            FillFromStateList(CGIClient.StateList);
+        }
+
         public Datapoint GetDatapointByType(string type)
         {
             Datapoint dp = null;
@@ -47,7 +56,7 @@ namespace csharpmatic.XMLAPI.Generic
             return null;            
         }
 
-        public void FillFromDeviceListDevice(CGI.DeviceList.Device d)
+        private void FillFromDeviceListDevice(CGI.DeviceList.Device d)
         {
             Name = d.Name;
             ISEID = d.Ise_id;
@@ -71,7 +80,7 @@ namespace csharpmatic.XMLAPI.Generic
             }  
         }
 
-        public void FillFromRoomList(CGI.RoomList.RoomList roomList)
+        private void FillFromRoomList(CGI.RoomList.RoomList roomList)
         {
             foreach(var room in roomList.Room)
             {
@@ -89,7 +98,7 @@ namespace csharpmatic.XMLAPI.Generic
             }
         }
 
-        public void FillFromFunctionList(CGI.FunctionList.FunctionList funcList)
+        private void FillFromFunctionList(CGI.FunctionList.FunctionList funcList)
         {
             foreach(var function in funcList.Function)
             {
@@ -107,7 +116,7 @@ namespace csharpmatic.XMLAPI.Generic
             }
         }
 
-        public void FillFromStateList(CGI.StateList.Device d)
+        private void FillFromStateList(CGI.StateList.Device d)
         {
             PendingConfig = String.IsNullOrWhiteSpace(d.Config_pending) ? false : Convert.ToBoolean(d.Config_pending);
             Reachable = String.IsNullOrWhiteSpace(d.Unreach) ? true : !Convert.ToBoolean(d.Unreach);
@@ -119,7 +128,7 @@ namespace csharpmatic.XMLAPI.Generic
             }
         }
 
-        public void FillFromStateList(CGI.StateList.StateList stateList)
+        private void FillFromStateList(CGI.StateList.StateList stateList)
         {
             foreach(var d in stateList.Device)
                 if(d.Ise_id == ISEID)

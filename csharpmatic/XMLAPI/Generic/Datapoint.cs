@@ -31,6 +31,8 @@ namespace csharpmatic.XMLAPI.Generic
 
         public int OperationsCounter { get; private set; }
 
+        private string InterfacePropertyName;
+
         public override string ToString()
         {
             return JsonConvert.SerializeObject(this);
@@ -44,7 +46,7 @@ namespace csharpmatic.XMLAPI.Generic
             Channel = c;
             Name = dp.Name;
             ISEID = dp.Ise_id;
-            Type = dp.Type;
+            Type = MapDatapointType(dp, c);
             InternalValue = dp.Value;
             InternalValueType = dp.Valuetype;
             ValueUnit = dp.Valueunit;
@@ -54,6 +56,39 @@ namespace csharpmatic.XMLAPI.Generic
 
             Init_ValueType();
             Init_Value();
+        }
+
+        public string GetInterfacePropertyName(bool useCached=true)
+        {
+            if (useCached == false)
+                InterfacePropertyName = null;
+            else if (InterfacePropertyName != null)
+                return InterfacePropertyName;
+
+            string propname = Type.Replace("_", " ").ToLower();
+            propname = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(propname);
+            propname = propname.Replace(" ", "_");
+
+            int cnt = Channel.Device.Channels.SelectMany(c => c.Datapoints.Where(w => w.Value.Type == Type)).Count();
+            
+            if(cnt == 1)
+                InterfacePropertyName = propname;
+            else
+                InterfacePropertyName = String.Format("{0}_C{1}", propname, Channel.ChannelIndex);            
+            
+            return InterfacePropertyName;
+        }
+
+        private string MapDatapointType(CGI.StateList.Datapoint dp, Channel c)
+        {
+            //rename switching devices internal temperature, so that it does not conflic with heating systems temperatures naming.
+            if(dp.Type == "ACTUAL_TEMPERATURE" && c.ChannelIndex == 0)
+                return "ACTUATOR_ACTUAL_TEMPERATURE";
+
+            if (dp.Type == "ACTUAL_TEMPERATURE_STATUS" && c.ChannelIndex == 0)
+                return "ACTUATOR_ACTUAL_TEMPERATURE_STATUS";
+
+            return dp.Type;
         }
 
         private void Init_Value()

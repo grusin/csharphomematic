@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace csharpmatic.XMLAPI.Interfaces
 {
-    interface IHmIP
+    public interface IHmIP
     {
-        TypedDatapoint<Boolean> Config_Pending { get;  }
+        TypedDatapoint<Boolean> Config_Pending { get; }
 
         TypedDatapoint<Boolean> Duty_Cycle { get; }
 
@@ -17,14 +17,21 @@ namespace csharpmatic.XMLAPI.Interfaces
 
         TypedDatapoint<Decimal> Operating_Voltage { get; }
 
-        TypedDatapoint<Int32> Operating_Voltage_Status { get; }
+        TypedDatapoint<IHmIP_Operating_Voltage_Status_Enum> Operating_Voltage_Status { get; }
 
         TypedDatapoint<String> Rssi_Device { get; }
 
-        TypedDatapoint<String> Rssi_Peer { get;  }
+        TypedDatapoint<String> Rssi_Peer { get; }
 
         TypedDatapoint<Boolean> Unreach { get; }
 
         TypedDatapoint<Boolean> Update_Pending { get; }
+    }
+
+    public enum IHmIP_Operating_Voltage_Status_Enum
+    {
+        NORMAL,
+        UNKNOWN,
+        OVERFLOW,
     }
 }

@@ -21,6 +21,21 @@ namespace InterfaceGenerator
 
             dm.Refresh();
 
+
+            string[] interfaces = { "IHmIP", "IHumidityControl", "ILightControl", "ITempControl", "IValveControl" };
+
+            Type t2 = typeof(csharpmatic.XMLAPI.Interfaces.IHmIP);
+
+
+            foreach(var name in interfaces)
+            {
+                Type t = Type.GetType("csharpmatic.XMLAPI.Interfaces." + name + ", csharpmatic");
+                var props = t.GetRuntimeProperties();
+
+
+            }
+            
+
             HashSet<string> generatedTypes = new HashSet<string>();
 
             foreach (var d in dm.Devices)
@@ -51,9 +66,9 @@ namespace InterfaceGenerator
 
                     foreach(var c in d.Channels)
                     {
-                        foreach(var dp in c.Datapoints)
+                        foreach(var dp in c.Datapoints.Values)
                         {
-                            tw.WriteLine("\t\t{0}", ToCSharpPropertyTemplate(dp.Value, c.ChannelIndex));
+                            tw.WriteLine("\t\t{0}", ToCSharpPropertyTemplate(dp));
                             tw.WriteLine();
                         }
                     }
@@ -64,9 +79,9 @@ namespace InterfaceGenerator
 
                     foreach (var c in d.Channels)
                     {
-                        foreach (var dp in c.Datapoints)
+                        foreach (var dp in c.Datapoints.Values)
                         {
-                            tw.WriteLine("\t\t\t{0}", ToCSharpPropertyInitTemplate(dp.Value, c.ChannelIndex));
+                            tw.WriteLine("\t\t\t{0}", ToCSharpPropertyInitTemplate(dp));
                             tw.WriteLine();
                         }
                     }
@@ -79,29 +94,24 @@ namespace InterfaceGenerator
             }
         }
 
-        public static string ToCSharpPropertyTemplate(Datapoint dp, int channel_idx)
+        public static string ToCSharpPropertyTemplate(Datapoint dp)
         {
-            string propname = dp.Type.Replace("_", " ").ToLower();
-            propname = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(propname);
-            propname = propname.Replace(" ", "_");
-            propname = String.Format("{0}_C{1}", propname, channel_idx);
+            string propname = dp.GetInterfacePropertyName();
 
             string csharpdatatype = dp.ValueType.Name;
             
             return String.Format("public TypedDatapoint<{0}> {1} {{ get; private set; }}", csharpdatatype, propname);
         }
 
-        public static string ToCSharpPropertyInitTemplate(Datapoint dp, int channel_idx)
+        public static string ToCSharpPropertyInitTemplate(Datapoint dp)
         {
-            string propname = dp.Type.Replace("_", " ").ToLower();
-            propname = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(propname);
-            propname = propname.Replace(" ", "_");
-            propname = String.Format("{0}_C{1}", propname, channel_idx);
+            string propname = dp.GetInterfacePropertyName();
 
             string csharpdatatype = dp.ValueType.Name;
 
             return String.Format("{0} = new TypedDatapoint<{1}>(base.Channels[{2}].Datapoints[\"{3}\"]);", 
-                propname, csharpdatatype, channel_idx, dp.Type);
+                propname, csharpdatatype, dp.Channel.ChannelIndex, dp.Type);
         }
+
     }
 }

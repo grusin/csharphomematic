@@ -92,19 +92,6 @@ namespace csharpmatic.XMLAPI.Generic
             }
         }
 
-        public Datapoint GetDatapointByType(string type)
-        {
-            Datapoint dp = null;
-
-            foreach(Channel c in Channels)
-            {
-                if (c.Datapoints.TryGetValue(type, out dp))
-                    return dp;
-            }
-
-            return null;            
-        }
-
         private void FillFromDeviceListDevice(CGI.DeviceList.Device d)
         {
             Name = d.Name;

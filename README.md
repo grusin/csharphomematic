@@ -27,9 +27,8 @@ Supported in Humidity Control Mode:
 
 Suported Switch Actuators
 - HmIP-PSM (wall switch with 1 socket)
-
-Not Supported Switch Actuators
 - HmIP-PCBS (PCB board with 5-12V relay)
+- HmIP-BDT (wall dimmable switch)
 
 Not Supported Security:
 - HmIP-SWDO (window open detector, currently works only in heating virtual device group) 

@@ -16,6 +16,7 @@ Supported in Temp Control Mode:
 - HmIP-ETRV-2 (raditor thermostat v2) 
 - HmIP-WTH-2 (wall thermostat)
 - HmIP-HEATING (virtual device)
+- HmIP-SWDO (window open detector) 
 
 Supported in Valve Control Mode:
 - HmIP-ETRV (raditor thermostat)
@@ -30,8 +31,8 @@ Suported Switch Actuators
 - HmIP-PCBS (PCB board with 5-12V relay)
 - HmIP-BDT (wall dimmable switch)
 
-Not Supported Security:
-- HmIP-SWDO (window open detector, currently works only in heating virtual device group) 
+Supported Misc devices without group assignment:
+- HmIP-SWDO (window open detector) 
 
 In theory all devices can be supported, I just need to know the XMLAPI outputs to run them via the code generator. If you happen to be in need of getting more devives, please let me know, and I can sort it out or show you how to do it. Generator is of course included in the git.
 

@@ -81,7 +81,7 @@ namespace csharpmatic.XMLAPI.Interfaces.Devices
 
 		public ManagedDatapoint<csharpmatic.XMLAPI.Interfaces.ITempControl_Windows_State_Enum> Window_State { get; private set; }
 
-		public ManagedDatapoint<Int32> State_C3 { get; private set; }
+		public ManagedDatapoint<Int32> Handle_State { get; private set; }
 
 		public ManagedDatapoint<Int32> Process { get; private set; }
 
@@ -89,7 +89,7 @@ namespace csharpmatic.XMLAPI.Interfaces.Devices
 
 		public ManagedDatapoint<Int32> Section_Status { get; private set; }
 
-		public ManagedDatapoint<Boolean> State_C4 { get; private set; }
+		public ManagedDatapoint<Boolean> Relay_State { get; private set; }
 
 
       public HMIP_HEATING(CGI.DeviceList.Device d, CGI.CGIClient CGIClient) : base(d, CGIClient)
@@ -166,7 +166,7 @@ namespace csharpmatic.XMLAPI.Interfaces.Devices
 
 			Window_State = new ManagedDatapoint<csharpmatic.XMLAPI.Interfaces.ITempControl_Windows_State_Enum>(base.Channels[1].Datapoints["WINDOW_STATE"]);
 
-			State_C3 = new ManagedDatapoint<Int32>(base.Channels[3].Datapoints["STATE"]);
+			Handle_State = new ManagedDatapoint<Int32>(base.Channels[3].Datapoints["HANDLE_STATE"]);
 
 			Process = new ManagedDatapoint<Int32>(base.Channels[4].Datapoints["PROCESS"]);
 
@@ -174,7 +174,7 @@ namespace csharpmatic.XMLAPI.Interfaces.Devices
 
 			Section_Status = new ManagedDatapoint<Int32>(base.Channels[4].Datapoints["SECTION_STATUS"]);
 
-			State_C4 = new ManagedDatapoint<Boolean>(base.Channels[4].Datapoints["STATE"]);
+			Relay_State = new ManagedDatapoint<Boolean>(base.Channels[4].Datapoints["RELAY_STATE"]);
 
       }
   }

@@ -12,8 +12,12 @@ namespace csharpmatic.XMLAPI.Generic
     {
         public Channel[] Channels { get; private set; }
         [JsonIgnore]
-        public Dictionary<string, Channel> ChannelsByISEID { get; private set; }
+
+        public Dictionary<string, Channel> ChannelByISEID { get; private set; }
+        public Dictionary<string, Datapoint> DatapointByType { get; private set; }
+
         public string Name { get; private set; }
+
         public string ISEID { get; private set; }
 
         public bool Reachable { get; private set; }
@@ -22,8 +26,7 @@ namespace csharpmatic.XMLAPI.Generic
 
         public string Address { get; private set; }
                 
-        public string Interface { get; private set; }
-        
+        public string Interface { get; private set; }        
 
         public string DeviceType { get; private set; }
 
@@ -41,6 +44,52 @@ namespace csharpmatic.XMLAPI.Generic
             FillFromRoomList(CGIClient.RoomList);
             FillFromFunctionList(CGIClient.FunctionList);
             FillFromStateList(CGIClient.StateList);
+
+            InitDatapointByType();
+        }
+
+        private void InitDatapointByType()
+        {
+            //there can be multiple datapoints with the same type
+            //if that is the case, only the datapoint with channel of direction RECEIVER is the one we should selected   
+   
+           
+            var dict = new Dictionary<string, List<Datapoint>>();
+
+            foreach (var c in Channels)
+            {
+                foreach(var dp in c.Datapoints)
+                {
+                    if (dict.ContainsKey(dp.Key))
+                        dict[dp.Key].Add(dp.Value);
+                    else
+                    {
+                        var list = new List<Datapoint>();
+                        list.Add(dp.Value);
+                        dict.Add(dp.Key, list);
+                    }
+                }
+            }
+
+            DatapointByType = new Dictionary<string, Datapoint>();
+
+            foreach (var kvp in dict)
+            {
+                if (kvp.Value.Count == 1)
+                    DatapointByType.Add(kvp.Key, kvp.Value[0]);
+                else
+                {
+                    var first = kvp.Value.Where(w => w.Channel.Direction == "RECEIVER").FirstOrDefault();
+                    if (first == null)
+                    {
+                        //nothing interesting. ignoring.
+                    }
+                    else
+                    {
+                        DatapointByType.Add(first.Type, first);
+                    }
+                }              
+            }
         }
 
         public Datapoint GetDatapointByType(string type)
@@ -67,14 +116,14 @@ namespace csharpmatic.XMLAPI.Generic
             DeviceType = d.Device_type;
             ReadyConfig = String.IsNullOrWhiteSpace(d.Ready_config) ?  false : Convert.ToBoolean(d.Ready_config);
 
-            ChannelsByISEID = new Dictionary<string, Channel>();
+            ChannelByISEID = new Dictionary<string, Channel>();
 
             Channels = new Channel[d.Channel.Count];
             for (int i = 0; i < Channels.Length; i++)
             {
                 Channels[i] = new Channel(d.Channel[i], this);
-                if(!ChannelsByISEID.ContainsKey(Channels[i].ISEID))
-                    ChannelsByISEID.Add(Channels[i].ISEID, Channels[i]);
+                if(!ChannelByISEID.ContainsKey(Channels[i].ISEID))
+                    ChannelByISEID.Add(Channels[i].ISEID, Channels[i]);
                 else
                     throw new Exception(String.Format("Duplicated channel iseid {0} on device {1}.", Channels[i].ISEID, d.Name));                   
             }  
@@ -87,7 +136,7 @@ namespace csharpmatic.XMLAPI.Generic
                 foreach(var channel in room.Channel)
                 {
                     Channel c = null;
-                    if (ChannelsByISEID.TryGetValue(channel.Ise_id, out c))
+                    if (ChannelByISEID.TryGetValue(channel.Ise_id, out c))
                     {
                         if (!c.Rooms.Contains(room.Name))
                         {
@@ -105,7 +154,7 @@ namespace csharpmatic.XMLAPI.Generic
                 foreach (var channel in function.Channel)
                 {
                     Channel c = null;
-                    if (ChannelsByISEID.TryGetValue(channel.Ise_id, out c))
+                    if (ChannelByISEID.TryGetValue(channel.Ise_id, out c))
                     {
                         if(!c.Functions.Contains(function.Name))
                         {
@@ -123,7 +172,7 @@ namespace csharpmatic.XMLAPI.Generic
 
             foreach (var c in d.Channel)
             {
-                var dc = ChannelsByISEID[c.Ise_id];
+                var dc = ChannelByISEID[c.Ise_id];
                 dc.UpdateDataPoints(c.Datapoint);
             }
         }

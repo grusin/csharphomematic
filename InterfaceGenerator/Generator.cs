@@ -70,26 +70,21 @@ namespace InterfaceGenerator
                     tw.WriteLine("  public partial class {0} : {1}", deviceClass, String.Join(", ", inhericanceList));
                     tw.WriteLine("  {");
 
-                    foreach(var c in d.Channels)
+
+                    foreach (var dp in d.DatapointByType.Values)
                     {
-                        foreach(var dp in c.Datapoints.Values)
-                        {
-                            tw.WriteLine("\t\t{0}", ToCSharpPropertyTemplate(dp));
-                            tw.WriteLine();
-                        }
-                    }
+                        tw.WriteLine("\t\t{0}", ToCSharpPropertyTemplate(dp));
+                        tw.WriteLine();
+                    }                    
 
                     tw.WriteLine();
                     tw.WriteLine("      public {0}(CGI.DeviceList.Device d, CGI.CGIClient CGIClient) : base(d, CGIClient)", deviceClass);
                     tw.WriteLine("      {");
-
-                    foreach (var c in d.Channels)
+                    
+                    foreach (var dp in d.DatapointByType.Values)
                     {
-                        foreach (var dp in c.Datapoints.Values)
-                        {
-                            tw.WriteLine("\t\t\t{0}", ToCSharpPropertyInitTemplate(dp));
-                            tw.WriteLine();
-                        }
+                        tw.WriteLine("\t\t\t{0}", ToCSharpPropertyInitTemplate(dp));
+                        tw.WriteLine();
                     }
 
                     tw.WriteLine("      }");

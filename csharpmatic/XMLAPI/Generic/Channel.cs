@@ -43,7 +43,7 @@ namespace csharpmatic.XMLAPI.Generic
 
         [JsonIgnore]
         public Device Device { get; private set; }
-
+        
         public Channel(CGI.DeviceList.Channel dlc, Device d)
         {
             Device = d;

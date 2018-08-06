@@ -70,7 +70,7 @@ namespace csharpmatic.XMLAPI.Generic
             if(PrevDevicesByISEID.TryGetValue(current.Channel.Device.ISEID, out d))
             {
                 Channel c = null;
-                if(d.ChannelsByISEID.TryGetValue(current.Channel.ISEID, out c))
+                if(d.ChannelByISEID.TryGetValue(current.Channel.ISEID, out c))
                 {
                     Datapoint dp = null;
                     if(c.Datapoints.TryGetValue(current.Type, out dp))

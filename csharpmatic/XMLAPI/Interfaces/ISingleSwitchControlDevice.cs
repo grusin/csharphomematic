@@ -9,12 +9,24 @@ namespace csharpmatic.XMLAPI.Interfaces
 {
     public interface ISingleSwitchControlDevice
     {
-        ManagedDatapoint<Int32> Process { get; }
+        ManagedDatapoint<ISingleSwitchControlDevice_Process> Process { get; }
 
         ManagedDatapoint<Int32> Section { get; }
 
-        ManagedDatapoint<Int32> Section_Status { get; }
+        ManagedDatapoint<ISingleSwitchControlDevice_Section_Status> Section_Status { get; }
 
         ManagedDatapoint<Boolean> State { get; }
+    }
+
+    public enum ISingleSwitchControlDevice_Section_Status
+    {
+        NORMAL,
+        UNKNOWN
+    }
+
+    public enum ISingleSwitchControlDevice_Process
+    {
+        STABLE,
+        NOT_STABLE
     }
 }

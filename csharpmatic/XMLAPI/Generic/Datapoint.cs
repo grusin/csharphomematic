@@ -69,25 +69,36 @@ namespace csharpmatic.XMLAPI.Generic
             propname = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(propname);
             propname = propname.Replace(" ", "_");
 
-            int cnt = Channel.Device.Channels.SelectMany(c => c.Datapoints.Where(w => w.Value.Type == Type)).Count();
+            //just take the first one, seems that all devices use this rule ;-)
+
+            //int cnt = Channel.Device.Channels.SelectMany(c => c.Datapoints.Where(w => w.Value.Type == Type)).Count();
             
-            if(cnt == 1)
-                InterfacePropertyName = propname;
-            else
-                InterfacePropertyName = String.Format("{0}_C{1}", propname, Channel.ChannelIndex);            
+            //if(cnt == 1)
+            InterfacePropertyName = propname;
+            //else
+            //    InterfacePropertyName = String.Format("{0}_C{1}", propname, Channel.ChannelIndex);            
             
             return InterfacePropertyName;
         }
 
         private string MapDatapointType(CGI.StateList.Datapoint dp, Channel c)
         {
-            //rename switching devices internal temperature, so that it does not conflic with heating systems temperatures naming.
+            //rename switching devices internal temperature, so that it does not conflic with heating systems temperatures naming. Channel index logic should suffice.
             if(dp.Type == "ACTUAL_TEMPERATURE" && c.ChannelIndex == 0)
                 return "ACTUATOR_ACTUAL_TEMPERATURE";
 
             if (dp.Type == "ACTUAL_TEMPERATURE_STATUS" && c.ChannelIndex == 0)
                 return "ACTUATOR_ACTUAL_TEMPERATURE_STATUS";
-                     
+
+            //HmIP-HEATING virtual device heating conflicting names
+            if (c.Device.DeviceType == "HmIP-HEATING" && dp.Type == "STATE")
+            {
+                if (c.ChannelIndex == 3)
+                    return "HANDLE_STATE";
+                if (c.ChannelIndex == 4)
+                    return "RELAY_STATE";
+            }
+   
             return dp.Type;
         }
 

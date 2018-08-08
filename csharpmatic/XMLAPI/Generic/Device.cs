@@ -1,4 +1,5 @@
-﻿using log4net;
+﻿using csharpmatic.XMLAPI.Interfaces;
+using log4net;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace csharpmatic.XMLAPI.Generic
 {
-    public class Device
+    public class Device : IHmDevice
     {
         public Channel[] Channels { get; private set; }
         [JsonIgnore]
@@ -32,9 +33,9 @@ namespace csharpmatic.XMLAPI.Generic
 
         public bool ReadyConfig { get; private set; }            
 
-        HashSet<string> Rooms { get { return new HashSet<string>(Channels.SelectMany(c => c.Rooms)); } }
+        public HashSet<string> Rooms { get { return new HashSet<string>(Channels.SelectMany(c => c.Rooms)); } }
 
-        HashSet<string> Functions { get { return new HashSet<string>(Channels.SelectMany(c => c.Functions)); } }
+        public HashSet<string> Functions { get { return new HashSet<string>(Channels.SelectMany(c => c.Functions)); } }
 
         ILog LOG = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -52,8 +53,7 @@ namespace csharpmatic.XMLAPI.Generic
         {
             //there can be multiple datapoints with the same type
             //if that is the case, only the datapoint with channel of direction RECEIVER is the one we should selected   
-   
-           
+              
             var dict = new Dictionary<string, List<Datapoint>>();
 
             foreach (var c in Channels)
@@ -127,7 +127,12 @@ namespace csharpmatic.XMLAPI.Generic
                     {
                         if (!c.Rooms.Contains(room.Name))
                         {
-                            c.Rooms.Add(room.Name);
+                            string r = room.Name.Trim();
+
+                            if (r.StartsWith("room"))
+                                r = r.Substring(4);
+
+                            c.Rooms.Add(r);
                         }
                     }                   
                 }
@@ -145,7 +150,12 @@ namespace csharpmatic.XMLAPI.Generic
                     {
                         if(!c.Functions.Contains(function.Name))
                         {
-                            c.Functions.Add(function.Name);
+                            string f = function.Name;
+
+                            if (f.StartsWith("func"))
+                                f = f.Substring(4);
+
+                            c.Functions.Add(f);
                         }
                     }
                 }

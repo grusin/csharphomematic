@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{D3C127BA-763D-41C8-84A2-6A4677588767}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>csharpmatic</RootNamespace>
     <AssemblyName>csharpmatic</AssemblyName>
@@ -46,6 +46,9 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
@@ -93,6 +96,7 @@
     <Compile Include="XMLAPI\Interfaces\Devices\HMIP_PSM.generated.cs" />
     <Compile Include="XMLAPI\Interfaces\Devices\HMIP_SWDO.generated.cs" />
     <Compile Include="XMLAPI\Interfaces\Devices\HMIP_WTH_2.generated.cs" />
+    <Compile Include="XMLAPI\Interfaces\IHmDevice.cs" />
     <Compile Include="XMLAPI\Interfaces\IHumidityControlDevice.cs" />
     <Compile Include="XMLAPI\Interfaces\ILightControlDevice.cs" />
     <Compile Include="XMLAPI\Interfaces\DeviceFactory.cs" />

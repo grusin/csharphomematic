@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace csharpmatic.XMLAPI.Interfaces
 {
-    public interface IHmIPDevice
+    public interface IHmIPDevice : IHmDevice
     {
         ManagedDatapoint<Boolean> Config_Pending { get; }
 
@@ -20,7 +20,7 @@ namespace csharpmatic.XMLAPI.Interfaces
         ManagedDatapoint<String> Rssi_Device { get; }
 
         ManagedDatapoint<String> Rssi_Peer { get; }
-
+        
         ManagedDatapoint<Boolean> Unreach { get; }
 
         ManagedDatapoint<Boolean> Update_Pending { get; }

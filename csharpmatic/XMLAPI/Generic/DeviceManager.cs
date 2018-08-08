@@ -1,4 +1,5 @@
-﻿using System;
+﻿using csharpmatic.XMLAPI.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,14 +14,25 @@ namespace csharpmatic.XMLAPI.Generic
         public Dictionary<string, Device> DevicesByISEID { get; private set ;}
         private List<Device> PrevDevices { get; set; }
 
+        public List<DatapointEvent> Events { get; private set; }
+
         public Dictionary<string, Device> PrevDevicesByISEID { get; private set; }
-        
+                
         public DeviceManager(string serverAddress)
         {
             CGIClient = new XMLAPI.CGI.CGIClient("http://" + serverAddress);
             Devices = new List<Device>();
 
             CGIClient.FetchData();
+
+            Refresh();
+        }
+
+        public List<T> GetDevicesImplementingInterface<T>() where T : class
+        {
+            List<T> list = new List<T>();
+
+            return Devices.Where(w => w is T).Select(s => s as T).ToList();
         }
 
         public List<DatapointEvent> Refresh()
@@ -56,6 +68,8 @@ namespace csharpmatic.XMLAPI.Generic
                     }
                 }
             }
+
+            Events = list;
 
             return list;
         }

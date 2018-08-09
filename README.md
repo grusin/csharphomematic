@@ -88,3 +88,5 @@ In theory all devices can be supported, I just need to know the XML API outputs 
 - Machine learning AI telling you which room is causing most of heating events
 - Handling of bulgrary based on event
  
+ ## License
+ All code is open source, licensed as GPLv3. That means that if you fry your hardware, or blow up your light bulbs, or make your house cold like north pole, or sahara desert, cause alarm that will annoy neighbours, etc... it's on you, not me, yes on you!. Enjoy :)

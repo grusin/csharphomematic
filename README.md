@@ -11,7 +11,7 @@ I know you all care about what you can do, so here it goes... I hope you like it
 DeviceManager dm = new DeviceManager("192.168.1.200");
 
 //refresh data set, and obtain collection of all the events
-//each event contains before and after
+//each event contains before and after datapoint
 var events = dm.Refresh(); 
 
 //list all devices implementing temperature control interface

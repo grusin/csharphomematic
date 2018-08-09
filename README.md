@@ -5,7 +5,7 @@ This is very new code, just few days old so it changes quite quickly - lots of r
 
 ## Requirements:
 - XML API addon 
-- Raspberymatic compiled with mono support (you need git the latest version of raspberymatic, do make menuconig and select mono support; make dist and flash to sdcard, restore the backup of your devices, you should be able to sftp .exe files to your rpi3)
+- Raspberymatic compiled with mono support (you need git the latest version of raspberymatic, do make menuconig and select mono support; make dist and flash to sdcard, restore the backup of your devices, you should be able to sftp & mono run.exe files to your rpi3 now)
 
 ## Sample code
 

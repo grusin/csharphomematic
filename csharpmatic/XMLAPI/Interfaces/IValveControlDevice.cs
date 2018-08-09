@@ -7,8 +7,11 @@ using System.Threading.Tasks;
 
 namespace csharpmatic.XMLAPI.Interfaces
 {
-    public interface IValveControlDevice
+    public interface IValveControlDevice : IHmDevice
     {
+        ManagedDatapoint<Decimal> Level { get; }
+
+        ManagedDatapoint<IValveControlDevice_Level_Status> Level_Status { get; }
         ManagedDatapoint<Boolean> Valve_Adaption { get; }
 
         ManagedDatapoint<IValveControl_Valve_State_Enum> Valve_State { get; }
@@ -25,5 +28,14 @@ namespace csharpmatic.XMLAPI.Interfaces
         ADJUSTMENT_TOO_BIG,
         ADJUSTMENT_TOO_SMALL,
         ERROR_POSITION,
+    }
+
+    public enum IValveControlDevice_Level_Status
+    {
+        NORMAL,
+        UNKNOWN,
+        OVERFLOW,
+        UNDERFLOW,
+        ERROR
     }
 }

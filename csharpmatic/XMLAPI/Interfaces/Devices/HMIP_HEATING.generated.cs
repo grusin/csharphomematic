@@ -55,9 +55,9 @@ namespace csharpmatic.XMLAPI.Interfaces.Devices
 
 		public ManagedDatapoint<csharpmatic.XMLAPI.Interfaces.IHumidityControl_Humidity_Status_Enum> Humidity_Status { get; private set; }
 
-		public ManagedDatapoint<Decimal> Level { get; private set; }
+		public ManagedDatapoint<System.Decimal> Level { get; private set; }
 
-		public ManagedDatapoint<Int32> Level_Status { get; private set; }
+		public ManagedDatapoint<csharpmatic.XMLAPI.Interfaces.IValveControlDevice_Level_Status> Level_Status { get; private set; }
 
 		public ManagedDatapoint<Boolean> Party_Mode { get; private set; }
 
@@ -140,9 +140,9 @@ namespace csharpmatic.XMLAPI.Interfaces.Devices
 
 			Humidity_Status = new ManagedDatapoint<csharpmatic.XMLAPI.Interfaces.IHumidityControl_Humidity_Status_Enum>(base.Channels[1].Datapoints["HUMIDITY_STATUS"]);
 
-			Level = new ManagedDatapoint<Decimal>(base.Channels[1].Datapoints["LEVEL"]);
+			Level = new ManagedDatapoint<System.Decimal>(base.Channels[1].Datapoints["LEVEL"]);
 
-			Level_Status = new ManagedDatapoint<Int32>(base.Channels[1].Datapoints["LEVEL_STATUS"]);
+			Level_Status = new ManagedDatapoint<csharpmatic.XMLAPI.Interfaces.IValveControlDevice_Level_Status>(base.Channels[1].Datapoints["LEVEL_STATUS"]);
 
 			Party_Mode = new ManagedDatapoint<Boolean>(base.Channels[1].Datapoints["PARTY_MODE"]);
 

@@ -96,6 +96,7 @@
     <Compile Include="XMLAPI\Interfaces\Devices\HMIP_PSM.generated.cs" />
     <Compile Include="XMLAPI\Interfaces\Devices\HMIP_SWDO.generated.cs" />
     <Compile Include="XMLAPI\Interfaces\Devices\HMIP_WTH_2.generated.cs" />
+    <Compile Include="XMLAPI\Interfaces\IDimmerDevice.cs" />
     <Compile Include="XMLAPI\Interfaces\IHmDevice.cs" />
     <Compile Include="XMLAPI\Interfaces\IHumidityControlDevice.cs" />
     <Compile Include="XMLAPI\Interfaces\ILightControlDevice.cs" />

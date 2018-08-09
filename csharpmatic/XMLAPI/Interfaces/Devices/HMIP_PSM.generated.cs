@@ -7,7 +7,7 @@ using System.IO;
 
 namespace csharpmatic.XMLAPI.Interfaces.Devices
 {
-  public partial class HMIP_PSM : Device, ISingleSwitchControlDevice, IHmIPDevice
+  public partial class HMIP_PSM : Device, IHmIPDevice
   {
 		public ManagedDatapoint<Decimal> Actuator_Actual_Temperature { get; private set; }
 
@@ -37,13 +37,13 @@ namespace csharpmatic.XMLAPI.Interfaces.Devices
 
 		public ManagedDatapoint<Boolean> Press_Short { get; private set; }
 
-		public ManagedDatapoint<csharpmatic.XMLAPI.Interfaces.ISingleSwitchControlDevice_Process> Process { get; private set; }
+		public ManagedDatapoint<Int32> Process { get; private set; }
 
-		public ManagedDatapoint<System.Int32> Section { get; private set; }
+		public ManagedDatapoint<Int32> Section { get; private set; }
 
-		public ManagedDatapoint<csharpmatic.XMLAPI.Interfaces.ISingleSwitchControlDevice_Section_Status> Section_Status { get; private set; }
+		public ManagedDatapoint<Int32> Section_Status { get; private set; }
 
-		public ManagedDatapoint<System.Boolean> State { get; private set; }
+		public ManagedDatapoint<Boolean> State { get; private set; }
 
 		public ManagedDatapoint<Decimal> Current { get; private set; }
 
@@ -96,13 +96,13 @@ namespace csharpmatic.XMLAPI.Interfaces.Devices
 
 			Press_Short = new ManagedDatapoint<Boolean>(base.Channels[1].Datapoints["PRESS_SHORT"]);
 
-			Process = new ManagedDatapoint<csharpmatic.XMLAPI.Interfaces.ISingleSwitchControlDevice_Process>(base.Channels[3].Datapoints["PROCESS"]);
+			Process = new ManagedDatapoint<Int32>(base.Channels[3].Datapoints["PROCESS"]);
 
-			Section = new ManagedDatapoint<System.Int32>(base.Channels[3].Datapoints["SECTION"]);
+			Section = new ManagedDatapoint<Int32>(base.Channels[3].Datapoints["SECTION"]);
 
-			Section_Status = new ManagedDatapoint<csharpmatic.XMLAPI.Interfaces.ISingleSwitchControlDevice_Section_Status>(base.Channels[3].Datapoints["SECTION_STATUS"]);
+			Section_Status = new ManagedDatapoint<Int32>(base.Channels[3].Datapoints["SECTION_STATUS"]);
 
-			State = new ManagedDatapoint<System.Boolean>(base.Channels[3].Datapoints["STATE"]);
+			State = new ManagedDatapoint<Boolean>(base.Channels[3].Datapoints["STATE"]);
 
 			Current = new ManagedDatapoint<Decimal>(base.Channels[6].Datapoints["CURRENT"]);
 

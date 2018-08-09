@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace csharpmatic.XMLAPI.Interfaces
 {
-    public interface ISingleSwitchControlDevice
+    public interface ISingleSwitchControlDevice : IHmDevice
     {
         ManagedDatapoint<ISingleSwitchControlDevice_Process> Process { get; }
 
@@ -16,6 +16,8 @@ namespace csharpmatic.XMLAPI.Interfaces
         ManagedDatapoint<ISingleSwitchControlDevice_Section_Status> Section_Status { get; }
 
         ManagedDatapoint<Boolean> State { get; }
+
+        ManagedDatapoint<ISingleSwitchControlDevice_ActivityState> Activity_State { get; }
     }
 
     public enum ISingleSwitchControlDevice_Section_Status
@@ -28,5 +30,13 @@ namespace csharpmatic.XMLAPI.Interfaces
     {
         STABLE,
         NOT_STABLE
+    }
+
+    public enum ISingleSwitchControlDevice_ActivityState
+    {
+        UNKNOWN,
+        UP,
+        DOWN,
+        STABLE,
     }
 }

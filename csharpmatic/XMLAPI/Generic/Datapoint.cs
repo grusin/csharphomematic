@@ -128,6 +128,10 @@ namespace csharpmatic.XMLAPI.Generic
 
         private void Init_ValueType()
         {
+            //special handling of dimmer level, it's reported as a string.
+            if (Type == "LEVEL" && Channel.Device.DeviceType == "HmIP-BDT")
+                InternalValueType = "4"; //decimal
+
             switch (InternalValueType)
             {
                 //boolean

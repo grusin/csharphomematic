@@ -1,7 +1,7 @@
 ﻿using csharpmatic.Properties;
 using csharpmatic.XMLAPI.Generic;
 using csharpmatic.XMLAPI.Interfaces;
-using csharpmatic.XMLAPI.Interfaces.Devices;
+//using csharpmatic.XMLAPI.Interfaces.Devices;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

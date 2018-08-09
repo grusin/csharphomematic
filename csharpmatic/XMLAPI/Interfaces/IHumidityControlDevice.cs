@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace csharpmatic.XMLAPI.Interfaces
 {
-    public interface IHumidityControlDevice
+    public interface IHumidityControlDevice : IHmDevice
     {
         ManagedDatapoint<Int32> Humidity { get; }
 

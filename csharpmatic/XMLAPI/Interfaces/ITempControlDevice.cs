@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace csharpmatic.XMLAPI.Interfaces
 {
-    public interface ITempControlDevice
+    public interface ITempControlDevice : IHmDevice
     {
         ManagedDatapoint<Int32> Active_Profile { get; }
 

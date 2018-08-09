@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace csharpmatic.XMLAPI.Interfaces
 {
-    public interface ILightControlDevice
+    public interface ILightControlDevice : IHmDevice
     {
     }
 }

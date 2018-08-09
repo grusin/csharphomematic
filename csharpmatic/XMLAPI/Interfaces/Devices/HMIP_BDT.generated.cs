@@ -7,7 +7,7 @@ using System.IO;
 
 namespace csharpmatic.XMLAPI.Interfaces.Devices
 {
-  public partial class HMIP_BDT : Device, IHmIPDevice
+  public partial class HMIP_BDT : Device, IDimmerDevice, IHmIPDevice
   {
 		public ManagedDatapoint<Decimal> Actuator_Actual_Temperature { get; private set; }
 
@@ -39,9 +39,9 @@ namespace csharpmatic.XMLAPI.Interfaces.Devices
 
 		public ManagedDatapoint<Int32> Activity_State { get; private set; }
 
-		public ManagedDatapoint<String> Level { get; private set; }
+		public ManagedDatapoint<System.Decimal> Level { get; private set; }
 
-		public ManagedDatapoint<Int32> Level_Status { get; private set; }
+		public ManagedDatapoint<csharpmatic.XMLAPI.Interfaces.IDimmerDevice_Level_Status> Level_Status { get; private set; }
 
 		public ManagedDatapoint<Int32> Process { get; private set; }
 
@@ -49,7 +49,7 @@ namespace csharpmatic.XMLAPI.Interfaces.Devices
 
 		public ManagedDatapoint<Int32> Section_Status { get; private set; }
 
-		public ManagedDatapoint<Decimal> Ramp_Time { get; private set; }
+		public ManagedDatapoint<System.Decimal> Ramp_Time { get; private set; }
 
 		public ManagedDatapoint<Int32> Week_Program_Channel_Locks { get; private set; }
 
@@ -90,9 +90,9 @@ namespace csharpmatic.XMLAPI.Interfaces.Devices
 
 			Activity_State = new ManagedDatapoint<Int32>(base.Channels[4].Datapoints["ACTIVITY_STATE"]);
 
-			Level = new ManagedDatapoint<String>(base.Channels[4].Datapoints["LEVEL"]);
+			Level = new ManagedDatapoint<System.Decimal>(base.Channels[4].Datapoints["LEVEL"]);
 
-			Level_Status = new ManagedDatapoint<Int32>(base.Channels[4].Datapoints["LEVEL_STATUS"]);
+			Level_Status = new ManagedDatapoint<csharpmatic.XMLAPI.Interfaces.IDimmerDevice_Level_Status>(base.Channels[4].Datapoints["LEVEL_STATUS"]);
 
 			Process = new ManagedDatapoint<Int32>(base.Channels[4].Datapoints["PROCESS"]);
 
@@ -100,7 +100,7 @@ namespace csharpmatic.XMLAPI.Interfaces.Devices
 
 			Section_Status = new ManagedDatapoint<Int32>(base.Channels[4].Datapoints["SECTION_STATUS"]);
 
-			Ramp_Time = new ManagedDatapoint<Decimal>(base.Channels[4].Datapoints["RAMP_TIME"]);
+			Ramp_Time = new ManagedDatapoint<System.Decimal>(base.Channels[4].Datapoints["RAMP_TIME"]);
 
 			Week_Program_Channel_Locks = new ManagedDatapoint<Int32>(base.Channels[7].Datapoints["WEEK_PROGRAM_CHANNEL_LOCKS"]);
 

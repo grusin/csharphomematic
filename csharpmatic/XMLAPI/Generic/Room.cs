@@ -1,7 +1,4 @@
-﻿
-/*
- * 
-using csharpmatic.XMLAPI.Interfaces;
+﻿using csharpmatic.XMLAPI.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,18 +31,15 @@ namespace csharpmatic.XMLAPI.Generic
         {
             Name = roomName;
             ISEID = roomIseId;
-            
-            var list = dm.Devices.Where(d => d.Rooms.Contains(roomName)).ToList();
-
-            HmDevices = new DeviceGroup<IHmDevice>(dm.GetDevicesImplementingInterface<IHmDevice>());
-            HmIPDevices = new DeviceGroup<IHmIPDevice>(dm.GetDevicesImplementingInterface<IHmIPDevice>());
-            ValveControlDevices = new DeviceGroup<IValveControlDevice>(dm.GetDevicesImplementingInterface<IValveControlDevice>());
-            TempControlDevices = new DeviceGroup<ITempControlDevice>(dm.GetDevicesImplementingInterface<ITempControlDevice>());
-            SingleSwitchControlDevices = new DeviceGroup<ISingleSwitchControlDevice>(dm.GetDevicesImplementingInterface<ISingleSwitchControlDevice>());
-            DimmerDevices = new DeviceGroup<IDimmerDevice>(dm.GetDevicesImplementingInterface<IDimmerDevice>());
-            HumidityControlDevices = new DeviceGroup<IHumidityControlDevice>(dm.GetDevicesImplementingInterface<IHumidityControlDevice>());
+          
+            HmDevices = new DeviceGroup<IHmDevice>(dm.GetDevicesImplementingInterface<IHmDevice>().Where(w=>w.Rooms.Contains(roomName)));
+            HmIPDevices = new DeviceGroup<IHmIPDevice>(dm.GetDevicesImplementingInterface<IHmIPDevice>().Where(w => w.Rooms.Contains(roomName)));
+            ValveControlDevices = new DeviceGroup<IValveControlDevice>(dm.GetDevicesImplementingInterface<IValveControlDevice>().Where(w => w.Rooms.Contains(roomName)));
+            TempControlDevices = new DeviceGroup<ITempControlDevice>(dm.GetDevicesImplementingInterface<ITempControlDevice>().Where(w => w.Rooms.Contains(roomName)));
+            SingleSwitchControlDevices = new DeviceGroup<ISingleSwitchControlDevice>(dm.GetDevicesImplementingInterface<ISingleSwitchControlDevice>().Where(w => w.Rooms.Contains(roomName)));
+            DimmerDevices = new DeviceGroup<IDimmerDevice>(dm.GetDevicesImplementingInterface<IDimmerDevice>().Where(w => w.Rooms.Contains(roomName)));
+            HumidityControlDevices = new DeviceGroup<IHumidityControlDevice>(dm.GetDevicesImplementingInterface<IHumidityControlDevice>().Where(w => w.Rooms.Contains(roomName)));
         }
     }
 }
 
-*/

@@ -20,8 +20,8 @@ namespace csharpmatic.XMLAPI.Generic
 
         public Uri HttpServerUri { get { return CGIClient.HttpServerUri; } }
         
-        //public List<Room> Rooms { get; private set; }
-        //public Dictionary<string, Room> RoomsByName { get; private set; }
+        public List<Room> Rooms { get; private set; }
+        public Dictionary<string, Room> RoomsByName { get; private set; }
                 
         public DeviceManager(string serverAddress)
         {
@@ -44,7 +44,7 @@ namespace csharpmatic.XMLAPI.Generic
         {
             CGIClient.FetchData();
             BuildDeviceList();
-            //BuildRoomList();
+            BuildRoomList();
             return GetEvents();
         }
 
@@ -102,19 +102,19 @@ namespace csharpmatic.XMLAPI.Generic
 
             return null;
         }
-              
-        //private void BuildRoomList()
-        //{
-        //    Rooms = new List<Room>();
-        //    RoomsByName = new Dictionary<string, Room>();
-            
-        //    foreach (var cgiroom in CGIClient.RoomList.Room)
-        //    {
-        //        Room r = new Room(cgiroom.Name, cgiroom.Ise_id, this);
-        //        Rooms.Add(r);
-        //        RoomsByName.Add(r.Name, r);
-        //    }      
-        // }
+
+        private void BuildRoomList()
+        {
+            Rooms = new List<Room>();
+            RoomsByName = new Dictionary<string, Room>();
+
+            foreach (var cgiroom in CGIClient.RoomList.Room)
+            {
+                Room r = new Room(cgiroom.Name, cgiroom.Ise_id, this);
+                Rooms.Add(r);
+                RoomsByName.Add(r.Name, r);
+            }
+        }
 
         private void BuildDeviceList()
         {

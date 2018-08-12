@@ -90,6 +90,16 @@ namespace csharpmatic.XMLAPI.CGI
             FunctionList = SafeXMLGetRequest<FunctionList.FunctionList>(uri);
         }
 
+        private Mastervalue.mastervalue FetchMasterValueList(IEnumerable<string> iseids)
+        {
+            string iseidsString = String.Join(",", iseids);
+
+            Uri uri = new Uri(HttpServerUri, @"/addons/xmlapi/mastervalue.cgi?tcpport=2010&device_id=" + iseidsString);
+            var mv = SafeXMLGetRequest<Mastervalue.mastervalue>(uri);
+
+            return mv;
+        }
+
         public void FetchData(bool force=false)
         {             
             if(DateTime.Now - lastFullUpdateTimestamp > FullRecheckInternval || force)

@@ -17,11 +17,10 @@ namespace Sample.ManageTemp
             //both pieces of code assume that room "Living room and Kitchen" contains at least one device of interface ITempControlDevice
             //both pieces of code do the same logic, just with different API
 
-            //test_room_api();
-            test_device_api();
+            test_room_api();
+            //test_device_api();
         }
 
-        /*
         static void test_room_api()
         {
             DeviceManager dm = new DeviceManager("192.168.1.200");
@@ -47,16 +46,24 @@ namespace Sample.ManageTemp
 
                     //temperature "logic"; generaly here it should be something that actualy has sense ;)
                     //but this temp flips will do just fine for demo
+                    decimal newValue = leader.Set_Point_Temperature.Value;
+
                     if (leader.Set_Point_Temperature.Value >= 25)
-                        devs.SetDatapoint(leader.Set_Point_Temperature, leader.Set_Point_Temperature.Value -= 6);
+                        newValue -= 6;
                     else
-                        devs.SetDatapoint(leader.Set_Point_Temperature, leader.Set_Point_Temperature.Value += 3);
+                        newValue += 3;
+                                                            
+                    devs.SetRoomValue(leader.Set_Point_Temperature, newValue);
 
                     Console.WriteLine($"{leader.Set_Point_Temperature.Value}");                    
                 }
+
+                Console.WriteLine("\n\n");
+
+                Thread.Sleep(2000);
             }
         }
-        */
+
 
         //this is the way you would go and change a temp, on all divices in a room, one by one, without using any higher level api
         static void test_device_api()
@@ -80,6 +87,7 @@ namespace Sample.ManageTemp
                     Console.WriteLine($"- [{d.Name}]: Device Type: {d.DeviceType}; Actual Temp: {d.Actual_Temperature.Value}; Set Temp: {d.Set_Point_Temperature.Value}{d.Set_Point_Temperature.ValueUnit}; Boost Mode: {d.Boost_Mode.Value} {d.Boost_Time.Value}{d.Boost_Time.ValueUnit}; Window State: {d.Window_State.Value}");
  
                 //just run this once, so that we dont flip the temp every few seconds
+                //UI for virtual devices picks values from this device, so will I
                 if (doOnce == false)
                 {
                     doOnce = true;
@@ -90,19 +98,18 @@ namespace Sample.ManageTemp
 
                     //temperature "logic"; generaly here it should be something that actualy has sense ;)
                     //but this temp flips will do just fine for demo
+                    decimal newValue = leader.Set_Point_Temperature.Value;
+
                     if (leader.Set_Point_Temperature.Value >= 25)
-                        leader.Set_Point_Temperature.Value -= 6;
+                        newValue -= 6;
                     else
-                        leader.Set_Point_Temperature.Value += 3;
+                        newValue += 3;
 
-                    Console.WriteLine($"{leader.Set_Point_Temperature.Value}");
+                    //change value in whole room (this should work on every dp, not only on leaders, but if you plan to do some comparison if data is synced between devices, you need to have one leader you reference against - the first device).
+                    //it is highly suggested to add type of the interface to filter on, otherwise you might change cross device type features, like levels of dimmers when changing valve openings ;-)
+                    leader.Set_Point_Temperature.SetRoomValue(newValue, typeof(ITempControlDevice));
 
-                    //temp was updated only in the first device, iterate over remaning devices to update temp there too
-                    foreach(var s in devs)
-                    {
-                        if (s.ISEID != leader.ISEID)
-                            s.Set_Point_Temperature.Value = leader.Set_Point_Temperature.Value;
-                    }                    
+                    Console.WriteLine($"{leader.Set_Point_Temperature.Value}");             
                 }
                 
                 Console.WriteLine("\n\n");

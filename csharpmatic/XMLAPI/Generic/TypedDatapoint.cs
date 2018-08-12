@@ -29,6 +29,11 @@ namespace csharpmatic.XMLAPI.Generic
         public TypedDatapoint(Datapoint dp)
         {
             UnderlyingDatapoint = dp;
-        }     
+        }
+
+        public void SetRoomValue(object value, Type interfaceFilter = null)
+        {
+            UnderlyingDatapoint.SetRoomValue(value, interfaceFilter);
+        }
     }
 }

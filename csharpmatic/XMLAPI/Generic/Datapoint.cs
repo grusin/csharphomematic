@@ -27,11 +27,11 @@ namespace csharpmatic.XMLAPI.Generic
         private string _InternalValueType;
 
         public Type ValueType { get; private set; }
-  
+
         public string ValueUnit { get; private set; }
 
         private long _InternalTimestamp { get; }
-        public DateTime Timestamp { get; private set; }              
+        public DateTime Timestamp { get; private set; }
 
         public int OperationsCounter { get; private set; }
 
@@ -41,10 +41,10 @@ namespace csharpmatic.XMLAPI.Generic
         {
             return JsonConvert.SerializeObject(this, Formatting.Indented);
         }
-        
+
         [JsonIgnore]
         public Channel Channel { get; private set; }
-                
+
         public Datapoint(CGI.StateList.Datapoint dp, Channel c)
         {
             Channel = c;
@@ -62,7 +62,7 @@ namespace csharpmatic.XMLAPI.Generic
             SetInternalValue(dp.Value);
         }
 
-        public string GetInterfacePropertyName(bool useCached=true)
+        public string GetInterfacePropertyName(bool useCached = true)
         {
             if (useCached == false)
                 InterfacePropertyName = null;
@@ -73,15 +73,15 @@ namespace csharpmatic.XMLAPI.Generic
             propname = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(propname);
             propname = propname.Replace(" ", "_");
 
-            InterfacePropertyName = propname; 
-            
+            InterfacePropertyName = propname;
+
             return InterfacePropertyName;
         }
 
         private string MapDatapointType(CGI.StateList.Datapoint dp, Channel c)
         {
             //rename switching devices internal temperature, so that it does not conflic with heating systems temperatures naming. Channel index logic should suffice.
-            if(dp.Type == "ACTUAL_TEMPERATURE" && c.ChannelIndex == 0)
+            if (dp.Type == "ACTUAL_TEMPERATURE" && c.ChannelIndex == 0)
                 return "ACTUATOR_ACTUAL_TEMPERATURE";
 
             if (dp.Type == "ACTUAL_TEMPERATURE_STATUS" && c.ChannelIndex == 0)
@@ -95,9 +95,9 @@ namespace csharpmatic.XMLAPI.Generic
                 if (c.ChannelIndex == 4)
                     return "RELAY_STATE";
             }
-   
+
             return dp.Type;
-        }           
+        }
 
         private void Init_ValueType()
         {
@@ -125,7 +125,7 @@ namespace csharpmatic.XMLAPI.Generic
                     break;
             }
         }
-        
+
         public string GetValueString()
         {
             if (_InternalValue == null)
@@ -150,7 +150,7 @@ namespace csharpmatic.XMLAPI.Generic
             //_InternalValue is always representing c# object of ValueType type
             return _InternalValue;
         }
-        
+
         private void SetInternalValue(object value)
         {
             string valueStr = Convert.ToString(value);
@@ -173,15 +173,20 @@ namespace csharpmatic.XMLAPI.Generic
         public void SetValue(object value)
         {
             SetInternalValue(value);
-                          
-            CGIClient cgi = new CGIClient(Channel.Device.DeviceManager.HttpServerUri);            
+
+            CGIClient cgi = new CGIClient(Channel.Device.DeviceManager.HttpServerUri);
             cgi.SetISEIDValue(ISEID, GetValueString());
         }
 
-        public void SetRoomValue(object value, Type deviceTypeFilter=null)
+        public void SetRoomValue(object value, Type interfaceFilter = null)
         {
-            //get list all all devices in scope          
+            var list = Channel.Device.DeviceManager.Devices
+                 .Where(d => d.DatapointByType.ContainsKey(Type)).Select(s => s.DatapointByType[Type]) //select only datapoints having the same type
+                 .Where(dev => interfaceFilter == null || dev.Channel.Device.GetType().GetInterfaces().Contains(interfaceFilter)) //filter devices by supported interface   
+                 .Where(d => d.Channel.Rooms.Count() > 0 && d.Channel.Rooms.IsSubsetOf(Channel.Rooms)); //datapoints have to be in the same rooms as this one   
 
-        }
+            foreach (var dp in list)
+                dp.SetValue(value);                          
+        }      
     }
 }

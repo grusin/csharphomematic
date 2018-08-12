@@ -1,6 +1,4 @@
-﻿
-/*
-using csharpmatic.XMLAPI.Generic;
+﻿using csharpmatic.XMLAPI.Generic;
 using csharpmatic.XMLAPI.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -24,9 +22,14 @@ namespace csharpmatic.XMLAPI.Generic
             GroupLeader = deviceList.OrderBy(ob => ob.ISEID).FirstOrDefault();
         }
 
-        public bool SetDatapoint(string name, string value, bool throwIfNotFound=true)
-        {            
-            return true;
+        public void SetRoomValue(Datapoint dp, object newValue)
+        {
+            dp.SetRoomValue(newValue, typeof(T));
+        }
+
+        public void SetRoomValue<U>(TypedDatapoint<U> dp, U newValue)
+        {
+            dp.SetRoomValue(newValue, typeof(T));
         }
 
         public IEnumerator<T> GetEnumerator()
@@ -40,4 +43,3 @@ namespace csharpmatic.XMLAPI.Generic
         }
     }
 }
-*/

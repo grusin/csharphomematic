@@ -6,11 +6,6 @@ using System.Threading.Tasks;
 
 namespace csharpmatic.XMLAPI.CGI.Mastervalue
 {
-
-
-
-
-
     /// <remarks/>
     [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true)]
     [System.Xml.Serialization.XmlRootAttribute(Namespace = "", IsNullable = false)]

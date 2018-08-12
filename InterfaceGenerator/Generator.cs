@@ -78,7 +78,7 @@ namespace InterfaceGenerator
                     }                    
 
                     tw.WriteLine();
-                    tw.WriteLine("      public {0}(CGI.DeviceList.Device d, CGI.CGIClient CGIClient) : base(d, CGIClient)", deviceClass);
+                    tw.WriteLine("      public {0}(CGI.DeviceList.Device d, CGI.CGIClient CGIClient, DeviceManager dm) : base(d, CGIClient, dm)", deviceClass);
                     tw.WriteLine("      {");
                     
                     foreach (var dp in d.DatapointByType.Values)
@@ -123,7 +123,7 @@ namespace InterfaceGenerator
             string propname = dp.GetInterfacePropertyName();
             string csharpdatatype = GetCsharpDataType(dp);
             
-            return String.Format("public ManagedDatapoint<{0}> {1} {{ get; private set; }}", csharpdatatype, propname);
+            return String.Format("public TypedDatapoint<{0}> {1} {{ get; private set; }}", csharpdatatype, propname);
         }
 
         public string GetCsharpDataType(Datapoint dp)
@@ -148,7 +148,7 @@ namespace InterfaceGenerator
             string propname = dp.GetInterfacePropertyName();
             string csharpdatatype = GetCsharpDataType(dp);
 
-            return String.Format("{0} = new ManagedDatapoint<{1}>(base.Channels[{2}].Datapoints[\"{3}\"]);", 
+            return String.Format("{0} = new TypedDatapoint<{1}>(base.Channels[{2}].Datapoints[\"{3}\"]);", 
                 propname, csharpdatatype, dp.Channel.ChannelIndex, dp.Type);
         }
 

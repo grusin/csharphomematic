@@ -17,6 +17,11 @@ namespace csharpmatic.XMLAPI.Generic
         public List<DatapointEvent> Events { get; private set; }
 
         public Dictionary<string, Device> PrevDevicesByISEID { get; private set; }
+
+        public Uri HttpServerUri { get { return CGIClient.HttpServerUri; } }
+        
+        //public List<Room> Rooms { get; private set; }
+        //public Dictionary<string, Room> RoomsByName { get; private set; }
                 
         public DeviceManager(string serverAddress)
         {
@@ -39,6 +44,7 @@ namespace csharpmatic.XMLAPI.Generic
         {
             CGIClient.FetchData();
             BuildDeviceList();
+            //BuildRoomList();
             return GetEvents();
         }
 
@@ -63,7 +69,7 @@ namespace csharpmatic.XMLAPI.Generic
                         //new device was just added
                         if (prev == null)
                             list.Add(new DatapointEvent(current, null));
-                        else if (current.InternalValue != prev.InternalValue || current.OperationsCounter != prev.OperationsCounter)
+                        else if (current.GetValueString() != prev.GetValueString()|| current.OperationsCounter != prev.OperationsCounter)
                             list.Add(new DatapointEvent(current, prev));                        
                     }
                 }
@@ -97,6 +103,18 @@ namespace csharpmatic.XMLAPI.Generic
             return null;
         }
               
+        //private void BuildRoomList()
+        //{
+        //    Rooms = new List<Room>();
+        //    RoomsByName = new Dictionary<string, Room>();
+            
+        //    foreach (var cgiroom in CGIClient.RoomList.Room)
+        //    {
+        //        Room r = new Room(cgiroom.Name, cgiroom.Ise_id, this);
+        //        Rooms.Add(r);
+        //        RoomsByName.Add(r.Name, r);
+        //    }      
+        // }
 
         private void BuildDeviceList()
         {
@@ -108,9 +126,7 @@ namespace csharpmatic.XMLAPI.Generic
 
             foreach (var d in CGIClient.DeviceList.Device)
             {                
-                //Device gd = new Device(d, CGIClient);
-
-                Device gd = Interfaces.DeviceFactory.CreateInstance(d, CGIClient);
+                Device gd = DeviceFactory.CreateInstance(d, CGIClient, this);
                                 
                 Devices.Add(gd);
                 DevicesByISEID.Add(gd.ISEID, gd);

@@ -9,21 +9,21 @@ namespace csharpmatic.XMLAPI.Interfaces
 {
     public interface IHmIPDevice : IHmDevice
     {
-        ManagedDatapoint<Boolean> Config_Pending { get; }
+        TypedDatapoint<Boolean> Config_Pending { get; }
 
-        ManagedDatapoint<Boolean> Duty_Cycle { get; }
+        TypedDatapoint<Boolean> Duty_Cycle { get; }
 
-        ManagedDatapoint<Decimal> Operating_Voltage { get; }
+        TypedDatapoint<Decimal> Operating_Voltage { get; }
 
-        ManagedDatapoint<IHmIP_Operating_Voltage_Status_Enum> Operating_Voltage_Status { get; }
+        TypedDatapoint<IHmIP_Operating_Voltage_Status_Enum> Operating_Voltage_Status { get; }
 
-        ManagedDatapoint<String> Rssi_Device { get; }
+        TypedDatapoint<String> Rssi_Device { get; }
 
-        ManagedDatapoint<String> Rssi_Peer { get; }
+        TypedDatapoint<String> Rssi_Peer { get; }
         
-        ManagedDatapoint<Boolean> Unreach { get; }
+        TypedDatapoint<Boolean> Unreach { get; }
 
-        ManagedDatapoint<Boolean> Update_Pending { get; }
+        TypedDatapoint<Boolean> Update_Pending { get; }
     }
 
     public enum IHmIP_Operating_Voltage_Status_Enum

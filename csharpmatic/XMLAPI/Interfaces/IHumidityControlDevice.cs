@@ -9,9 +9,9 @@ namespace csharpmatic.XMLAPI.Interfaces
 {
     public interface IHumidityControlDevice : IHmDevice
     {
-        ManagedDatapoint<Int32> Humidity { get; }
+        TypedDatapoint<Int32> Humidity { get; }
 
-        ManagedDatapoint<IHumidityControl_Humidity_Status_Enum> Humidity_Status { get; }
+        TypedDatapoint<IHumidityControl_Humidity_Status_Enum> Humidity_Status { get; }
     }
 
     public enum IHumidityControl_Humidity_Status_Enum

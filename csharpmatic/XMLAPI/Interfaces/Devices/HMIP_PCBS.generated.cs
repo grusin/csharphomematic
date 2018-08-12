@@ -9,80 +9,80 @@ namespace csharpmatic.XMLAPI.Interfaces.Devices
 {
   public partial class HMIP_PCBS : Device, IHmIPDevice
   {
-		public ManagedDatapoint<Decimal> Actuator_Actual_Temperature { get; private set; }
+		public TypedDatapoint<Decimal> Actuator_Actual_Temperature { get; private set; }
 
-		public ManagedDatapoint<Int32> Actuator_Actual_Temperature_Status { get; private set; }
+		public TypedDatapoint<Int32> Actuator_Actual_Temperature_Status { get; private set; }
 
-		public ManagedDatapoint<System.Boolean> Config_Pending { get; private set; }
+		public TypedDatapoint<System.Boolean> Config_Pending { get; private set; }
 
-		public ManagedDatapoint<System.Boolean> Duty_Cycle { get; private set; }
+		public TypedDatapoint<System.Boolean> Duty_Cycle { get; private set; }
 
-		public ManagedDatapoint<String> Error_Code { get; private set; }
+		public TypedDatapoint<String> Error_Code { get; private set; }
 
-		public ManagedDatapoint<Boolean> Error_Overheat { get; private set; }
+		public TypedDatapoint<Boolean> Error_Overheat { get; private set; }
 
-		public ManagedDatapoint<System.Decimal> Operating_Voltage { get; private set; }
+		public TypedDatapoint<System.Decimal> Operating_Voltage { get; private set; }
 
-		public ManagedDatapoint<csharpmatic.XMLAPI.Interfaces.IHmIP_Operating_Voltage_Status_Enum> Operating_Voltage_Status { get; private set; }
+		public TypedDatapoint<csharpmatic.XMLAPI.Interfaces.IHmIP_Operating_Voltage_Status_Enum> Operating_Voltage_Status { get; private set; }
 
-		public ManagedDatapoint<System.String> Rssi_Device { get; private set; }
+		public TypedDatapoint<System.String> Rssi_Device { get; private set; }
 
-		public ManagedDatapoint<System.String> Rssi_Peer { get; private set; }
+		public TypedDatapoint<System.String> Rssi_Peer { get; private set; }
 
-		public ManagedDatapoint<System.Boolean> Unreach { get; private set; }
+		public TypedDatapoint<System.Boolean> Unreach { get; private set; }
 
-		public ManagedDatapoint<System.Boolean> Update_Pending { get; private set; }
+		public TypedDatapoint<System.Boolean> Update_Pending { get; private set; }
 
-		public ManagedDatapoint<Boolean> Press_Long { get; private set; }
+		public TypedDatapoint<Boolean> Press_Long { get; private set; }
 
-		public ManagedDatapoint<Boolean> Press_Short { get; private set; }
+		public TypedDatapoint<Boolean> Press_Short { get; private set; }
 
-		public ManagedDatapoint<Int32> Process { get; private set; }
+		public TypedDatapoint<Int32> Process { get; private set; }
 
-		public ManagedDatapoint<Int32> Section { get; private set; }
+		public TypedDatapoint<Int32> Section { get; private set; }
 
-		public ManagedDatapoint<Int32> Section_Status { get; private set; }
+		public TypedDatapoint<Int32> Section_Status { get; private set; }
 
-		public ManagedDatapoint<Boolean> State { get; private set; }
+		public TypedDatapoint<Boolean> State { get; private set; }
 
 
-      public HMIP_PCBS(CGI.DeviceList.Device d, CGI.CGIClient CGIClient) : base(d, CGIClient)
+      public HMIP_PCBS(CGI.DeviceList.Device d, CGI.CGIClient CGIClient, DeviceManager dm) : base(d, CGIClient, dm)
       {
-			Actuator_Actual_Temperature = new ManagedDatapoint<Decimal>(base.Channels[0].Datapoints["ACTUATOR_ACTUAL_TEMPERATURE"]);
+			Actuator_Actual_Temperature = new TypedDatapoint<Decimal>(base.Channels[0].Datapoints["ACTUATOR_ACTUAL_TEMPERATURE"]);
 
-			Actuator_Actual_Temperature_Status = new ManagedDatapoint<Int32>(base.Channels[0].Datapoints["ACTUATOR_ACTUAL_TEMPERATURE_STATUS"]);
+			Actuator_Actual_Temperature_Status = new TypedDatapoint<Int32>(base.Channels[0].Datapoints["ACTUATOR_ACTUAL_TEMPERATURE_STATUS"]);
 
-			Config_Pending = new ManagedDatapoint<System.Boolean>(base.Channels[0].Datapoints["CONFIG_PENDING"]);
+			Config_Pending = new TypedDatapoint<System.Boolean>(base.Channels[0].Datapoints["CONFIG_PENDING"]);
 
-			Duty_Cycle = new ManagedDatapoint<System.Boolean>(base.Channels[0].Datapoints["DUTY_CYCLE"]);
+			Duty_Cycle = new TypedDatapoint<System.Boolean>(base.Channels[0].Datapoints["DUTY_CYCLE"]);
 
-			Error_Code = new ManagedDatapoint<String>(base.Channels[0].Datapoints["ERROR_CODE"]);
+			Error_Code = new TypedDatapoint<String>(base.Channels[0].Datapoints["ERROR_CODE"]);
 
-			Error_Overheat = new ManagedDatapoint<Boolean>(base.Channels[0].Datapoints["ERROR_OVERHEAT"]);
+			Error_Overheat = new TypedDatapoint<Boolean>(base.Channels[0].Datapoints["ERROR_OVERHEAT"]);
 
-			Operating_Voltage = new ManagedDatapoint<System.Decimal>(base.Channels[0].Datapoints["OPERATING_VOLTAGE"]);
+			Operating_Voltage = new TypedDatapoint<System.Decimal>(base.Channels[0].Datapoints["OPERATING_VOLTAGE"]);
 
-			Operating_Voltage_Status = new ManagedDatapoint<csharpmatic.XMLAPI.Interfaces.IHmIP_Operating_Voltage_Status_Enum>(base.Channels[0].Datapoints["OPERATING_VOLTAGE_STATUS"]);
+			Operating_Voltage_Status = new TypedDatapoint<csharpmatic.XMLAPI.Interfaces.IHmIP_Operating_Voltage_Status_Enum>(base.Channels[0].Datapoints["OPERATING_VOLTAGE_STATUS"]);
 
-			Rssi_Device = new ManagedDatapoint<System.String>(base.Channels[0].Datapoints["RSSI_DEVICE"]);
+			Rssi_Device = new TypedDatapoint<System.String>(base.Channels[0].Datapoints["RSSI_DEVICE"]);
 
-			Rssi_Peer = new ManagedDatapoint<System.String>(base.Channels[0].Datapoints["RSSI_PEER"]);
+			Rssi_Peer = new TypedDatapoint<System.String>(base.Channels[0].Datapoints["RSSI_PEER"]);
 
-			Unreach = new ManagedDatapoint<System.Boolean>(base.Channels[0].Datapoints["UNREACH"]);
+			Unreach = new TypedDatapoint<System.Boolean>(base.Channels[0].Datapoints["UNREACH"]);
 
-			Update_Pending = new ManagedDatapoint<System.Boolean>(base.Channels[0].Datapoints["UPDATE_PENDING"]);
+			Update_Pending = new TypedDatapoint<System.Boolean>(base.Channels[0].Datapoints["UPDATE_PENDING"]);
 
-			Press_Long = new ManagedDatapoint<Boolean>(base.Channels[1].Datapoints["PRESS_LONG"]);
+			Press_Long = new TypedDatapoint<Boolean>(base.Channels[1].Datapoints["PRESS_LONG"]);
 
-			Press_Short = new ManagedDatapoint<Boolean>(base.Channels[1].Datapoints["PRESS_SHORT"]);
+			Press_Short = new TypedDatapoint<Boolean>(base.Channels[1].Datapoints["PRESS_SHORT"]);
 
-			Process = new ManagedDatapoint<Int32>(base.Channels[3].Datapoints["PROCESS"]);
+			Process = new TypedDatapoint<Int32>(base.Channels[3].Datapoints["PROCESS"]);
 
-			Section = new ManagedDatapoint<Int32>(base.Channels[3].Datapoints["SECTION"]);
+			Section = new TypedDatapoint<Int32>(base.Channels[3].Datapoints["SECTION"]);
 
-			Section_Status = new ManagedDatapoint<Int32>(base.Channels[3].Datapoints["SECTION_STATUS"]);
+			Section_Status = new TypedDatapoint<Int32>(base.Channels[3].Datapoints["SECTION_STATUS"]);
 
-			State = new ManagedDatapoint<Boolean>(base.Channels[3].Datapoints["STATE"]);
+			State = new TypedDatapoint<Boolean>(base.Channels[3].Datapoints["STATE"]);
 
       }
   }

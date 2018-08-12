@@ -74,20 +74,22 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="XMLAPI\CGI\mastervalue.cs" />
     <Compile Include="XMLAPI\CGI\statechange.cs" />
     <Compile Include="XMLAPI\Generic\Channel.cs" />
     <Compile Include="XMLAPI\Generic\Datapoint.cs" />
     <Compile Include="XMLAPI\Generic\DatapointEvent.cs" />
     <Compile Include="XMLAPI\Generic\Device.cs" />
-    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="XMLAPI\CGI\CGIClient.cs" />
     <Compile Include="XMLAPI\CGI\devicelist.cs" />
     <Compile Include="XMLAPI\CGI\functionlist.cs" />
     <Compile Include="XMLAPI\CGI\roomlist.cs" />
     <Compile Include="XMLAPI\CGI\statelist.cs" />
+    <Compile Include="XMLAPI\Generic\DeviceGroup.cs" />
     <Compile Include="XMLAPI\Generic\DeviceManager.cs" />
-    <Compile Include="XMLAPI\Generic\ManagedDatapoint.cs" />
+    <Compile Include="XMLAPI\Generic\TypedDatapoint.cs" />
+    <Compile Include="XMLAPI\Generic\Room.cs" />
     <Compile Include="XMLAPI\Interfaces\Devices\HMIP_BDT.generated.cs" />
     <Compile Include="XMLAPI\Interfaces\Devices\HMIP_ETRV.generated.cs" />
     <Compile Include="XMLAPI\Interfaces\Devices\HMIP_ETRV_2.generated.cs" />
@@ -131,7 +133,9 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="XMLRPC\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

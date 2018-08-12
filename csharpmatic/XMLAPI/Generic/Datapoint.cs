@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using csharpmatic.XMLAPI.CGI;
+using csharpmatic.XMLAPI.Interfaces;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -10,23 +12,25 @@ namespace csharpmatic.XMLAPI.Generic
 {
     public class Datapoint
     {
+        static string DateTimeFormatPattern { get { return "yyyy_MM_dd HH:mm"; } }
+
         public string Name { get; private set; }
 
         public string Type { get; private set; }
 
         public string ISEID { get; private set; }
 
-        public string InternalValue { get; private set; }
+        private object _InternalValue;
 
-        public object Value { get; private set; }
+        public object Value { get { return GetValue(); } set { SetValue(value); } }
 
-        public string InternalValueType { get; private set; }
+        private string _InternalValueType;
 
         public Type ValueType { get; private set; }
   
         public string ValueUnit { get; private set; }
 
-        public long InternalTimestamp { get; private set; }
+        private long _InternalTimestamp { get; }
         public DateTime Timestamp { get; private set; }              
 
         public int OperationsCounter { get; private set; }
@@ -47,15 +51,15 @@ namespace csharpmatic.XMLAPI.Generic
             Name = c.Name + "." + dp.Type;
             ISEID = dp.Ise_id;
             Type = MapDatapointType(dp, c);
-            InternalValue = dp.Value;
-            InternalValueType = dp.Valuetype;
             ValueUnit = dp.Valueunit;
-            InternalTimestamp = String.IsNullOrWhiteSpace(dp.Timestamp) ? 0 : Convert.ToInt64(dp.Timestamp);
+            _InternalTimestamp = String.IsNullOrWhiteSpace(dp.Timestamp) ? 0 : Convert.ToInt64(dp.Timestamp);
             Timestamp = new DateTime(1970, 1, 1, 0, 0, 0, 0);
-            Timestamp = Timestamp.AddSeconds(InternalTimestamp);
+            Timestamp = Timestamp.AddSeconds(_InternalTimestamp);
 
+            _InternalValueType = dp.Valuetype;
             Init_ValueType();
-            Init_Value();
+
+            SetInternalValue(dp.Value);
         }
 
         public string GetInterfacePropertyName(bool useCached=true)
@@ -69,14 +73,7 @@ namespace csharpmatic.XMLAPI.Generic
             propname = CultureInfo.CurrentCulture.TextInfo.ToTitleCase(propname);
             propname = propname.Replace(" ", "_");
 
-            //just take the first one, seems that all devices use this rule ;-)
-
-            //int cnt = Channel.Device.Channels.SelectMany(c => c.Datapoints.Where(w => w.Value.Type == Type)).Count();
-            
-            //if(cnt == 1)
-            InterfacePropertyName = propname;
-            //else
-            //    InterfacePropertyName = String.Format("{0}_C{1}", propname, Channel.ChannelIndex);            
+            InterfacePropertyName = propname; 
             
             return InterfacePropertyName;
         }
@@ -100,39 +97,15 @@ namespace csharpmatic.XMLAPI.Generic
             }
    
             return dp.Type;
-        }
-
-        private void Init_Value()
-        {
-            if (String.IsNullOrWhiteSpace(InternalValue))
-                Value = null;
-
-            try
-            {
-                if (ValueType == typeof(DateTime))
-                {
-                    //2000_01_01 00:00
-                    Value = DateTime.ParseExact(InternalValue, "YYYY_MM_DD HH:mm", CultureInfo.CurrentCulture.DateTimeFormat);
-                }
-                else
-                    Value = Convert.ChangeType(InternalValue, ValueType);
-            }
-            catch
-            {
-
-            }
-
-            if(Value == null)
-                Value = default(ValueType);
-        }
+        }           
 
         private void Init_ValueType()
         {
             //special handling of dimmer level, it's reported as a string.
             if (Type == "LEVEL" && Channel.Device.DeviceType == "HmIP-BDT")
-                InternalValueType = "4"; //decimal
+                _InternalValueType = "4"; //decimal
 
-            switch (InternalValueType)
+            switch (_InternalValueType)
             {
                 //boolean
                 case "2":
@@ -151,6 +124,64 @@ namespace csharpmatic.XMLAPI.Generic
                     ValueType = typeof(string);
                     break;
             }
-        }         
+        }
+        
+        public string GetValueString()
+        {
+            if (_InternalValue == null)
+                return "";
+
+            if (ValueType == typeof(DateTime))
+                return ((DateTime)_InternalValue).ToString(DateTimeFormatPattern);
+            else
+                return Convert.ToString(_InternalValue);
+        }
+
+        public T GetValue<T>()
+        {
+            if (_InternalValue == null)
+                return default(T);
+            else
+                return (T)GetValue();
+        }
+
+        private object GetValue()
+        {
+            //_InternalValue is always representing c# object of ValueType type
+            return _InternalValue;
+        }
+        
+        private void SetInternalValue(object value)
+        {
+            string valueStr = Convert.ToString(value);
+
+            if (value == null || String.IsNullOrWhiteSpace(valueStr))
+            {
+                _InternalValue = default(ValueType);
+            }
+            else if (ValueType == typeof(DateTime))
+            {
+                if (value is DateTime)
+                    _InternalValue = value;
+                else
+                    _InternalValue = DateTime.ParseExact(valueStr, DateTimeFormatPattern, CultureInfo.CurrentCulture.DateTimeFormat);
+            }
+            else
+                _InternalValue = Convert.ChangeType(value, ValueType);
+        }
+
+        public void SetValue(object value)
+        {
+            SetInternalValue(value);
+                          
+            CGIClient cgi = new CGIClient(Channel.Device.DeviceManager.HttpServerUri);            
+            cgi.SetISEIDValue(ISEID, GetValueString());
+        }
+
+        public void SetRoomValue(object value, Type deviceTypeFilter=null)
+        {
+            //get list all all devices in scope          
+
+        }
     }
 }

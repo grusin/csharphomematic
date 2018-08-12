@@ -39,8 +39,13 @@ namespace csharpmatic.XMLAPI.Generic
 
         ILog LOG = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        public Device(CGI.DeviceList.Device d, CGI.CGIClient CGIClient)
+        [JsonIgnore]
+        public DeviceManager DeviceManager { get; private set; }
+        
+        public Device(CGI.DeviceList.Device d, CGI.CGIClient CGIClient, DeviceManager dm)
         {
+            DeviceManager = dm;
+
             FillFromDeviceListDevice(d);
             FillFromRoomList(CGIClient.RoomList);
             FillFromFunctionList(CGIClient.FunctionList);
@@ -119,7 +124,7 @@ namespace csharpmatic.XMLAPI.Generic
         private void FillFromRoomList(CGI.RoomList.RoomList roomList)
         {
             foreach(var room in roomList.Room)
-            {
+            {                
                 foreach(var channel in room.Channel)
                 {
                     Channel c = null;

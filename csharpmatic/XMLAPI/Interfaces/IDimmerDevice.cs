@@ -10,11 +10,11 @@ namespace csharpmatic.XMLAPI.Interfaces
 {
     public interface IDimmerDevice : IHmDevice
     {
-        ManagedDatapoint<Decimal> Level { get;  }
+        TypedDatapoint<Decimal> Level { get;  }
 
-        ManagedDatapoint<IDimmerDevice_Level_Status> Level_Status { get; }
+        TypedDatapoint<IDimmerDevice_Level_Status> Level_Status { get; }
 
-        ManagedDatapoint<Decimal> Ramp_Time { get; }
+        TypedDatapoint<Decimal> Ramp_Time { get; }
     }
 
     public enum IDimmerDevice_Level_Status

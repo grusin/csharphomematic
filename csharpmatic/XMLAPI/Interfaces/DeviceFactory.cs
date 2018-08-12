@@ -52,11 +52,11 @@ namespace csharpmatic.XMLAPI.Interfaces
             }
         }
 
-        public static Device CreateInstance(CGI.DeviceList.Device d, CGI.CGIClient CGIClient)
+        public static Device CreateInstance(CGI.DeviceList.Device d, CGI.CGIClient CGIClient, DeviceManager dm)
         {
             Type t = GetInterfaceDeviceType(d);
 
-            Device newDev = Activator.CreateInstance(t, d, CGIClient) as Device;
+            Device newDev = Activator.CreateInstance(t, d, CGIClient, dm) as Device;
 
             return newDev;
         }

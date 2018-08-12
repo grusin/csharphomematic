@@ -56,6 +56,11 @@ namespace csharpmatic.XMLAPI.CGI
             throw new Exception("HTTP Get Request failed: " + getUrl, e);
         }
 
+        public CGIClient(Uri httpServerUri)
+        {
+            HttpServerUri = httpServerUri;
+        }
+
         public CGIClient(string httpServerUri)
         {
             HttpServerUri = new Uri(httpServerUri);

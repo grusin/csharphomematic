@@ -9,7 +9,8 @@ using System.Threading.Tasks;
 namespace Samples.ToggleButton
 {
     class Program
-    {        static void Main(string[] args)
+    {
+        static void Main(string[] args)
         {
             //replace with IP of your rasperymatic with XML API addon
             DeviceManager dm = new DeviceManager("192.168.1.200");

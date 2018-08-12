@@ -9,12 +9,12 @@ namespace csharpmatic.XMLAPI.Interfaces
 {
     public interface IValveControlDevice : IHmDevice
     {
-        ManagedDatapoint<Decimal> Level { get; }
+        TypedDatapoint<Decimal> Level { get; }
 
-        ManagedDatapoint<IValveControlDevice_Level_Status> Level_Status { get; }
-        ManagedDatapoint<Boolean> Valve_Adaption { get; }
+        TypedDatapoint<IValveControlDevice_Level_Status> Level_Status { get; }
+        TypedDatapoint<Boolean> Valve_Adaption { get; }
 
-        ManagedDatapoint<IValveControl_Valve_State_Enum> Valve_State { get; }
+        TypedDatapoint<IValveControl_Valve_State_Enum> Valve_State { get; }
     }
 
     public enum IValveControl_Valve_State_Enum

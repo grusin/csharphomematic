@@ -9,25 +9,25 @@ namespace csharpmatic.XMLAPI.Interfaces
 {
     public interface ITempControlDevice : IHmDevice
     {
-        ManagedDatapoint<Int32> Active_Profile { get; }
+        TypedDatapoint<Int32> Active_Profile { get; }
 
-        ManagedDatapoint<Decimal> Actual_Temperature { get; }
+        TypedDatapoint<Decimal> Actual_Temperature { get; }
 
-        ManagedDatapoint<ITempControl_Actual_Temperature_Status> Actual_Temperature_Status { get; }
+        TypedDatapoint<ITempControl_Actual_Temperature_Status> Actual_Temperature_Status { get; }
 
-        ManagedDatapoint<Boolean> Boost_Mode { get; }
+        TypedDatapoint<Boolean> Boost_Mode { get; }
 
-        ManagedDatapoint<Int32> Boost_Time { get; }
+        TypedDatapoint<Int32> Boost_Time { get; }
 
-        ManagedDatapoint<Int32> Set_Point_Mode { get; }
+        TypedDatapoint<Int32> Set_Point_Mode { get; }
 
-        ManagedDatapoint<Decimal> Set_Point_Temperature { get; }
+        TypedDatapoint<Decimal> Set_Point_Temperature { get; }
 
-        ManagedDatapoint<Boolean> Switch_Point_Occured { get; }
+        TypedDatapoint<Boolean> Switch_Point_Occured { get; }
 
-        ManagedDatapoint<ITempControl_Windows_State_Enum> Window_State { get; }
+        TypedDatapoint<ITempControl_Windows_State_Enum> Window_State { get; }
 
-        ManagedDatapoint<Boolean> Frost_Protection { get; }
+        TypedDatapoint<Boolean> Frost_Protection { get; }
     }
 
     public enum ITempControl_Windows_State_Enum

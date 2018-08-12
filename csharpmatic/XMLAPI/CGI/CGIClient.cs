@@ -17,12 +17,13 @@ namespace csharpmatic.XMLAPI.CGI
         public FunctionList.FunctionList FunctionList { get; private set; }
         public RoomList.RoomList RoomList { get; private set; }
         public StateList.StateList StateList { get; private set;  }
+        public MastervalueList.MastervalueList MasterValueList { get; private set; }
 
         private static WebClient WebClient = new WebClient();
 
         private DateTime lastFullUpdateTimestamp = DateTime.MinValue;
 
-        public TimeSpan FullRecheckInternval = new TimeSpan(0, 1, 0);
+        public TimeSpan FullRecheckInternval = new TimeSpan(0, 0, 15);
                 
         private static T XMLGetRequest<T>(Uri getUrl)
         {
@@ -90,12 +91,19 @@ namespace csharpmatic.XMLAPI.CGI
             FunctionList = SafeXMLGetRequest<FunctionList.FunctionList>(uri);
         }
 
-        private Mastervalue.mastervalue FetchMasterValueList(IEnumerable<string> iseids)
+        private void FetchMasterValueList()
+        {
+            var idse = this.DeviceList.Device.Where(w => w.Interface == "HmIP-RF").SelectMany(s => s.Channel).Select(s => s.Ise_id).ToList();
+
+            MasterValueList = FetchMasterValueList(idse);
+        }
+
+        private MastervalueList.MastervalueList FetchMasterValueList(IEnumerable<string> iseids)
         {
             string iseidsString = String.Join(",", iseids);
 
             Uri uri = new Uri(HttpServerUri, @"/addons/xmlapi/mastervalue.cgi?tcpport=2010&device_id=" + iseidsString);
-            var mv = SafeXMLGetRequest<Mastervalue.mastervalue>(uri);
+            var mv = SafeXMLGetRequest<MastervalueList.MastervalueList>(uri);
 
             return mv;
         }
@@ -108,7 +116,7 @@ namespace csharpmatic.XMLAPI.CGI
                 FetchFunctionList();
                 FetchRoomList();
                 lastFullUpdateTimestamp = DateTime.Now;
-            }
+            }         
 
             FetchStateList();            
         }      

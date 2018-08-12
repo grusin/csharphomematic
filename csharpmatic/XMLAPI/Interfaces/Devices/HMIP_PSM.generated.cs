@@ -7,11 +7,11 @@ using System.IO;
 
 namespace csharpmatic.XMLAPI.Interfaces.Devices
 {
-  public partial class HMIP_PSM : Device, IHmIPDevice
+  public partial class HMIP_PSM : Device, ISingleSwitchControlDevice, IHmIPDevice
   {
-		public TypedDatapoint<Decimal> Actuator_Actual_Temperature { get; private set; }
+		public TypedDatapoint<System.Decimal> Actuator_Actual_Temperature { get; private set; }
 
-		public TypedDatapoint<Int32> Actuator_Actual_Temperature_Status { get; private set; }
+		public TypedDatapoint<System.Int32> Actuator_Actual_Temperature_Status { get; private set; }
 
 		public TypedDatapoint<System.Boolean> Config_Pending { get; private set; }
 
@@ -37,13 +37,13 @@ namespace csharpmatic.XMLAPI.Interfaces.Devices
 
 		public TypedDatapoint<Boolean> Press_Short { get; private set; }
 
-		public TypedDatapoint<Int32> Process { get; private set; }
+		public TypedDatapoint<csharpmatic.XMLAPI.Interfaces.ISingleSwitchControlDevice_Process> Process { get; private set; }
 
-		public TypedDatapoint<Int32> Section { get; private set; }
+		public TypedDatapoint<System.Int32> Section { get; private set; }
 
-		public TypedDatapoint<Int32> Section_Status { get; private set; }
+		public TypedDatapoint<csharpmatic.XMLAPI.Interfaces.ISingleSwitchControlDevice_Section_Status> Section_Status { get; private set; }
 
-		public TypedDatapoint<Boolean> State { get; private set; }
+		public TypedDatapoint<System.Boolean> State { get; private set; }
 
 		public TypedDatapoint<Decimal> Current { get; private set; }
 
@@ -68,9 +68,9 @@ namespace csharpmatic.XMLAPI.Interfaces.Devices
 
       public HMIP_PSM(CGI.DeviceList.Device d, CGI.CGIClient CGIClient, DeviceManager dm) : base(d, CGIClient, dm)
       {
-			Actuator_Actual_Temperature = new TypedDatapoint<Decimal>(base.Channels[0].Datapoints["ACTUATOR_ACTUAL_TEMPERATURE"]);
+			Actuator_Actual_Temperature = new TypedDatapoint<System.Decimal>(base.Channels[0].Datapoints["ACTUATOR_ACTUAL_TEMPERATURE"]);
 
-			Actuator_Actual_Temperature_Status = new TypedDatapoint<Int32>(base.Channels[0].Datapoints["ACTUATOR_ACTUAL_TEMPERATURE_STATUS"]);
+			Actuator_Actual_Temperature_Status = new TypedDatapoint<System.Int32>(base.Channels[0].Datapoints["ACTUATOR_ACTUAL_TEMPERATURE_STATUS"]);
 
 			Config_Pending = new TypedDatapoint<System.Boolean>(base.Channels[0].Datapoints["CONFIG_PENDING"]);
 
@@ -96,13 +96,13 @@ namespace csharpmatic.XMLAPI.Interfaces.Devices
 
 			Press_Short = new TypedDatapoint<Boolean>(base.Channels[1].Datapoints["PRESS_SHORT"]);
 
-			Process = new TypedDatapoint<Int32>(base.Channels[3].Datapoints["PROCESS"]);
+			Process = new TypedDatapoint<csharpmatic.XMLAPI.Interfaces.ISingleSwitchControlDevice_Process>(base.Channels[3].Datapoints["PROCESS"]);
 
-			Section = new TypedDatapoint<Int32>(base.Channels[3].Datapoints["SECTION"]);
+			Section = new TypedDatapoint<System.Int32>(base.Channels[3].Datapoints["SECTION"]);
 
-			Section_Status = new TypedDatapoint<Int32>(base.Channels[3].Datapoints["SECTION_STATUS"]);
+			Section_Status = new TypedDatapoint<csharpmatic.XMLAPI.Interfaces.ISingleSwitchControlDevice_Section_Status>(base.Channels[3].Datapoints["SECTION_STATUS"]);
 
-			State = new TypedDatapoint<Boolean>(base.Channels[3].Datapoints["STATE"]);
+			State = new TypedDatapoint<System.Boolean>(base.Channels[3].Datapoints["STATE"]);
 
 			Current = new TypedDatapoint<Decimal>(base.Channels[6].Datapoints["CURRENT"]);
 

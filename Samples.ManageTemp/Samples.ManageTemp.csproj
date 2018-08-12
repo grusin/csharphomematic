@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{95E9CC49-7C17-4082-A47B-0DCACA30875C}</ProjectGuid>
+    <ProjectGuid>{6F19A5D7-C53D-4A2A-BC21-9988D704D15F}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Sample.ManageTemp</RootNamespace>
-    <AssemblyName>Sample.ManageTemp</AssemblyName>
+    <RootNamespace>Samples.ManageTemp</RootNamespace>
+    <AssemblyName>Samples.ManageTemp</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>

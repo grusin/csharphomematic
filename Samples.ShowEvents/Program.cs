@@ -30,7 +30,7 @@ namespace Samples.ShowEvents
 
                 }
 
-                Thread.Sleep(1000);
+                Thread.Sleep(10);
             }
         }
     }

@@ -9,6 +9,10 @@ namespace csharpmatic.XMLAPI.Interfaces
 {
     public interface ISingleSwitchControlDevice : IHmDevice
     {
+        TypedDatapoint<Decimal> Actuator_Actual_Temperature { get; }
+
+        TypedDatapoint<Int32> Actuator_Actual_Temperature_Status { get; }
+
         TypedDatapoint<ISingleSwitchControlDevice_Process> Process { get; }
 
         TypedDatapoint<Int32> Section { get; }
@@ -17,7 +21,6 @@ namespace csharpmatic.XMLAPI.Interfaces
 
         TypedDatapoint<Boolean> State { get; }
 
-        TypedDatapoint<ISingleSwitchControlDevice_ActivityState> Activity_State { get; }
     }
 
     public enum ISingleSwitchControlDevice_Section_Status

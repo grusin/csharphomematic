@@ -48,7 +48,7 @@ namespace Samples.ShowInterfaces
                 Console.WriteLine("\nDevices implementing ISingleSwitchControlDevice interface: {0}", hm1Switch.Count);
 
                 foreach (var d in hm1Switch)
-                    Console.WriteLine($"- [{d.Name}]: Device Type: {d.DeviceType}; Switch State: {d.State}");
+                    Console.WriteLine($"- [{d.Name}]: Device Type: {d.DeviceType}; Switch State: {d.State.Value}");
 
                 //IDimmerDevice
                 var hmDimmer = dm.GetDevicesImplementingInterface<IDimmerDevice>();

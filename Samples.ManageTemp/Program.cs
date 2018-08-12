@@ -7,10 +7,10 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Sample.ManageTemp
+namespace Samples.ManageTemp
 {
     class Program
-    { 
+    {
 
         static void Main(string[] args)
         {
@@ -34,7 +34,7 @@ namespace Sample.ManageTemp
 
                 foreach (var d in devs)
                     Console.WriteLine($"- [{d.Name}]: Device Type: {d.DeviceType}; Actual Temp: {d.Actual_Temperature.Value}; Set Temp: {d.Set_Point_Temperature.Value}{d.Set_Point_Temperature.ValueUnit}; Boost Mode: {d.Boost_Mode.Value} {d.Boost_Time.Value}{d.Boost_Time.ValueUnit}; Window State: {d.Window_State.Value}");
- 
+
                 //just run this once, so that we dont flip the temp every few seconds
                 if (doOnce == false)
                 {
@@ -52,10 +52,10 @@ namespace Sample.ManageTemp
                         newValue -= 6;
                     else
                         newValue += 3;
-                                                            
+
                     devs.SetRoomValue(leader.Set_Point_Temperature, newValue);
 
-                    Console.WriteLine($"{leader.Set_Point_Temperature.Value}");                    
+                    Console.WriteLine($"{leader.Set_Point_Temperature.Value}");
                 }
 
                 Console.WriteLine("\n\n");
@@ -69,7 +69,7 @@ namespace Sample.ManageTemp
         static void test_device_api()
         {
             //replace with IP of your rasperymatic with XML API addon
-            DeviceManager dm = new DeviceManager("192.168.1.200");                     
+            DeviceManager dm = new DeviceManager("192.168.1.200");
 
             bool doOnce = false;
 
@@ -85,7 +85,7 @@ namespace Sample.ManageTemp
 
                 foreach (var d in devs)
                     Console.WriteLine($"- [{d.Name}]: Device Type: {d.DeviceType}; Actual Temp: {d.Actual_Temperature.Value}; Set Temp: {d.Set_Point_Temperature.Value}{d.Set_Point_Temperature.ValueUnit}; Boost Mode: {d.Boost_Mode.Value} {d.Boost_Time.Value}{d.Boost_Time.ValueUnit}; Window State: {d.Window_State.Value}");
- 
+
                 //just run this once, so that we dont flip the temp every few seconds
                 //UI for virtual devices picks values from this device, so will I
                 if (doOnce == false)
@@ -109,9 +109,9 @@ namespace Sample.ManageTemp
                     //it is highly suggested to add type of the interface to filter on, otherwise you might change cross device type features, like levels of dimmers when changing valve openings ;-)
                     leader.Set_Point_Temperature.SetRoomValue(newValue, typeof(ITempControlDevice));
 
-                    Console.WriteLine($"{leader.Set_Point_Temperature.Value}");             
+                    Console.WriteLine($"{leader.Set_Point_Temperature.Value}");
                 }
-                
+
                 Console.WriteLine("\n\n");
 
                 Thread.Sleep(2000);

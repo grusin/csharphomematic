@@ -31,7 +31,7 @@ foreach (var sw in listSwitches)
 More code is available in the samples folder (Samples.ShowInterfaces is the most juicy one)
 
 ## Requirements:
-- [XML API addon](https://github.com/hobbyquaker/XML-API) - have not forked it yet, I am using api as it's in original repo. 
+- [XML API addon](https://github.com/grusin/XML-API) - forked repo, original does not support HmIP port numbers, I made PR to author to merge changes.
 - [RPI HmIP RF addon board - Pi HM-MOD-RPI-PCB](https://www.elv.de/homematic-funkmodul-fuer-raspberry-pi-bausatz.html) and some basic soldering skills (it comes in two pieces, RF module and addon board with caps allowing it to connect to rpi3 directly)
 - [Raspberymatic](https://github.com/jens-maus/RaspberryMatic) compiled with mono support (you need git the latest version of raspberymatic, do make menuconig and select mono support; make dist and flash obtained sdcard.img, then restore the backup of your devices, at this point you should be able to sftp & mono your.exe files on rpi3)
 - About 90 MB - 150MB of free RAM on your RPI. CPU is not an issue at all (0.1% avg). It should be OK for all default installs. I am regulary checking for mem/resource leaks and I find none, so I think my code is good quality ;-)

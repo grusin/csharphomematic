@@ -19,6 +19,8 @@ namespace csharpmatic.XMLAPI.CGI
         public StateList.StateList StateList { get; private set;  }
         public MastervalueList.MastervalueList MasterValueList { get; private set; }
 
+        public SysvarList.SystemVariables SystemVariablesList { get; private set; }
+
         private static WebClient WebClient = new WebClient();
 
         private DateTime lastFullUpdateTimestamp = DateTime.MinValue;
@@ -97,7 +99,8 @@ namespace csharpmatic.XMLAPI.CGI
 
             MasterValueList = FetchMasterValueList(idse);
         }
-
+            
+    
         private MastervalueList.MastervalueList FetchMasterValueList(IEnumerable<string> iseids)
         {
             string iseidsString = String.Join(",", iseids);
@@ -108,6 +111,12 @@ namespace csharpmatic.XMLAPI.CGI
             return mv;
         }
 
+        public void FetchSysvarList()
+        {
+            Uri uri = new Uri(HttpServerUri, @"addons/xmlapi/sysvarlist.cgi");
+            SystemVariablesList = SafeXMLGetRequest<SysvarList.SystemVariables>(uri);
+        }
+
         public void FetchData(bool force=false)
         {             
             if(DateTime.Now - lastFullUpdateTimestamp > FullRecheckInternval || force)
@@ -115,6 +124,8 @@ namespace csharpmatic.XMLAPI.CGI
                 FetchDeviceList();
                 FetchFunctionList();
                 FetchRoomList();
+                FetchSysvarList();
+                FetchMasterValueList();
                 lastFullUpdateTimestamp = DateTime.Now;
             }         
 

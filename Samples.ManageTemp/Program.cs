@@ -20,7 +20,7 @@ namespace Samples.ManageTemp
             test_room_api();
             //test_device_api();
         }
-
+               
         static void test_room_api()
         {
             DeviceManager dm = new DeviceManager("192.168.1.200");

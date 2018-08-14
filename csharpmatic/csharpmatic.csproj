@@ -76,6 +76,7 @@
     </Compile>
     <Compile Include="XMLAPI\CGI\mastervalue.cs" />
     <Compile Include="XMLAPI\CGI\statechange.cs" />
+    <Compile Include="XMLAPI\CGI\sysvarlist.cs" />
     <Compile Include="XMLAPI\Generic\Channel.cs" />
     <Compile Include="XMLAPI\Generic\Datapoint.cs" />
     <Compile Include="XMLAPI\Generic\DatapointEvent.cs" />

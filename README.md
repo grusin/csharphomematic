@@ -1,8 +1,6 @@
 # C# homematic IP API
 C# interface to homematic ip [smart home IoT devices](https://www.eq-3.com/products/homematic-ip.html).
 
-This is very new code, just few days old so it changes quite quickly - lots of refactoring, so if you follow this development expect a lot of changes in next few weeks.
-
 ## Sample code
 I know you all care about what you can do, so here it goes... I hope you like it.
 
@@ -31,7 +29,7 @@ foreach (var sw in listSwitches)
 More code is available in the samples folder (Samples.ShowInterfaces is the most juicy one)
 
 ## Requirements:
-- [XML API addon](https://github.com/hobbyquaker/XML-API) - have not forked it yet, I am using api as it's in original repo. 
+- [XML API addon](https://github.com/grusin/XML-API) - forked repo, original does not support HmIP port numbers, I made PR to author to merge changes.
 - [RPI HmIP RF addon board - Pi HM-MOD-RPI-PCB](https://www.elv.de/homematic-funkmodul-fuer-raspberry-pi-bausatz.html) and some basic soldering skills (it comes in two pieces, RF module and addon board with caps allowing it to connect to rpi3 directly)
 - [Raspberymatic](https://github.com/jens-maus/RaspberryMatic) compiled with mono support (you need git the latest version of raspberymatic, do make menuconig and select mono support; make dist and flash obtained sdcard.img, then restore the backup of your devices, at this point you should be able to sftp & mono your.exe files on rpi3)
 - About 90 MB - 150MB of free RAM on your RPI. CPU is not an issue at all (0.1% avg). It should be OK for all default installs. I am regulary checking for mem/resource leaks and I find none, so I think my code is good quality ;-)
@@ -79,9 +77,10 @@ In theory all devices can be supported, I just need to know the XML API outputs 
 - Code works without any delays or resouce issues on rpi3
 - Dev friendly interfaces for Heating, Humidity, Lights, Security control, Switches <= built by generator based on the XMLAPI object. It should allow addition of new objects with ease as long as developer has actual devices connected to this rpi3
 - Support of writing commands to devices (turn on switch, set temp, etc..) using simple setter.
+- Simple algo for for handling heating control, moisture control. It uses logic of detecting actuators and sensors allocated to the same function, and then determines based on given inital conditions if actuators needs to be turned on or off. Algo uses hysteresis and min/max on/off times, to make sure you don't get disco effect :)
 
 ### Todo:
-- Algo for handling heating control, moisture control and lights/motion sensors with some predefine tresholds
+- lights/motion sensors with some predefine tresholds
 - Some nice web UI with simple feedback (change temp zones/boost, lights) - [onsen.io](https://onsen.io/) is my choice
 - Kafka message bus datapoints sink
 - Hadoop temp zone data crunching

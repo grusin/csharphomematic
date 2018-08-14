@@ -1,6 +1,8 @@
 # C# homematic IP API
 C# interface to homematic ip [smart home IoT devices](https://www.eq-3.com/products/homematic-ip.html).
 
+Code has been tested only on Homematic IP devices, but I believe it should work also on other, non HmIP devices that are supported by XMLAPI.
+
 ## Sample code
 I know you all care about what you can do, so here it goes... I hope you like it.
 

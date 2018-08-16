@@ -49,6 +49,16 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\csharpmatic\csharpmatic.csproj">
+      <Project>{d3c127ba-763d-41c8-84a2-6a4677588767}</Project>
+      <Name>csharpmatic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\JsonRPC\JsonRPC.csproj">
+      <Project>{a9b68c90-2286-4cf2-8fbb-7318c5619f64}</Project>
+      <Name>JsonRPC</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

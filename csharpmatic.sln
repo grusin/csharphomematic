@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Samples.ControlGroup", "Sam
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Samples.JsonRPC", "Samples.JsonRPC\Samples.JsonRPC.csproj", "{140B3D75-8468-4A36-ACCD-0D928C005BC2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JsonRPC", "JsonRPC\JsonRPC.csproj", "{A9B68C90-2286-4CF2-8FBB-7318C5619F64}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,6 +61,10 @@ Global
 		{140B3D75-8468-4A36-ACCD-0D928C005BC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{140B3D75-8468-4A36-ACCD-0D928C005BC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{140B3D75-8468-4A36-ACCD-0D928C005BC2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9B68C90-2286-4CF2-8FBB-7318C5619F64}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9B68C90-2286-4CF2-8FBB-7318C5619F64}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9B68C90-2286-4CF2-8FBB-7318C5619F64}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9B68C90-2286-4CF2-8FBB-7318C5619F64}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

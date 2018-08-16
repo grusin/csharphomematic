@@ -5,7 +5,7 @@ namespace JsonRPC
     /// <summary>A JSON Response.</summary>
     public abstract class Response
     {
-        [JsonProperty("jsonrpc", Required = Required.Always)]
+        [JsonProperty("version", Required = Required.Always)]
         public string Version;
 
         /// <summary>Unique Request Id.</summary>

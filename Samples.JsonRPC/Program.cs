@@ -1,4 +1,6 @@
-﻿using System;
+﻿using JsonRPC;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -11,15 +13,28 @@ namespace Samples.JsonRPC
     {
         static void Main(string[] args)
         {
-            WebClient wc = new WebClient();
+            using (Client rpcClient = new Client("http://192.168.1.200/api/homematic.cgi"))
+            {
+                Request request;
+                GenericResponse response;
 
-            //string req = @"{ ""version"": ""1.1"", ""method"": ""Event.poll"", ""params"": { ""_session_id_"": ""U24JE4vSTI""} }";
-            string req = @"{ ""version"": ""1.1"", ""method"": ""Session.login"", ""params"": { ""username"": ""Admin"", ""password"":"""" } }";
+                //get session id
+                request = rpcClient.NewRequest("Session.login", JObject.Parse(@"{ username: 'Admin', password: ''}"));
+                response = rpcClient.Rpc(request);
 
-        Console.WriteLine($"req: {req}");
-            wc.Headers[HttpRequestHeader.ContentType] = "application/json";
-            string ret = wc.UploadString(new Uri(@"http://192.168.1.200/api/homematic.cgi"), "POST", req);
-            //wc.DownloadString()
+                string sessionId = response.Result.ToString();
+
+                //log out
+                //Session.logout
+
+                //list methods
+                request = rpcClient.NewRequest("Session.logout", JObject.Parse(@"{ _session_id_: '" + sessionId + "'}"));
+                response = rpcClient.Rpc(request);
+
+                //list interface
+                request = rpcClient.NewRequest("Interface.listInterfaces", JObject.Parse(@"{ _session_id_: '" + sessionId + "'}"));
+                response = rpcClient.Rpc(request);
+            }
         }
     }
 }

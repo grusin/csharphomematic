@@ -1,5 +1,5 @@
-﻿using csharpmatic.XMLAPI.Generic;
-using csharpmatic.XMLAPI.Interfaces;
+﻿using csharpmatic.Generic;
+using csharpmatic.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;

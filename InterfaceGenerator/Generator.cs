@@ -1,5 +1,5 @@
-﻿using csharpmatic.XMLAPI.Generic;
-using csharpmatic.XMLAPI.Interfaces;
+﻿using csharpmatic.Generic;
+using csharpmatic.Interfaces;
 using InterfaceGenerator.Properties;
 using System;
 using System.Collections.Generic;
@@ -26,7 +26,7 @@ namespace InterfaceGenerator
         {
             DeviceFactory x = new DeviceFactory();
 
-            string generatedDir = Path.Combine(Environment.CurrentDirectory, "..", "..", "..", @"csharpmatic\XMLAPI\Interfaces\Devices");
+            string generatedDir = Path.Combine(Environment.CurrentDirectory, "..", "..", "..", @"csharpmatic\Interfaces\Devices");
             
             DeviceManager dm = new DeviceManager(Settings.Default.ServerAddress);
 
@@ -59,13 +59,14 @@ namespace InterfaceGenerator
                 {
                     tw.WriteLine("/* This file was generated using InterfaceGenerator, any modifications made to this file will be lost */");
                     tw.WriteLine();
-                    tw.WriteLine("using csharpmatic.XMLAPI.Generic;");
+                    tw.WriteLine("using csharpmatic.Generic;");
+                    tw.WriteLine("using csharpmatic.Interfaces;");
                     tw.WriteLine("using System;");
                     tw.WriteLine("using System.Collections.Generic;");
                     tw.WriteLine("using System.IO;");
                     tw.WriteLine();
 
-                    tw.WriteLine("namespace csharpmatic.XMLAPI.Interfaces.Devices");
+                    tw.WriteLine("namespace csharpmatic.Interfaces.Devices");
                     tw.WriteLine("{");
                     tw.WriteLine("  public partial class {0} : {1}", deviceClass, String.Join(", ", inhericanceList));
                     tw.WriteLine("  {");
@@ -78,7 +79,7 @@ namespace InterfaceGenerator
                     }                    
 
                     tw.WriteLine();
-                    tw.WriteLine("      public {0}(CGI.DeviceList.Device d, CGI.CGIClient CGIClient, DeviceManager dm) : base(d, CGIClient, dm)", deviceClass);
+                    tw.WriteLine("      public {0}(XMLAPI.DeviceList.Device d, XMLAPI.Client CGIClient, DeviceManager dm) : base(d, CGIClient, dm)", deviceClass);
                     tw.WriteLine("      {");
                     
                     foreach (var dp in d.DatapointByType.Values)
@@ -100,7 +101,7 @@ namespace InterfaceGenerator
         {
             string[] allInterfaces = DeviceFactory.AllSupportedIntefraces.Keys.Select(s => s.AssemblyQualifiedName).ToArray();
 
-            Type t2 = typeof(csharpmatic.XMLAPI.Interfaces.IHmIPDevice);
+            Type t2 = typeof(csharpmatic.Interfaces.IHmIPDevice);
 
             var datapoints = d.Channels.SelectMany(s => s.Datapoints.Values).Select(dp => dp.GetInterfacePropertyName()).ToList();
 

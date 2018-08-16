@@ -1,5 +1,5 @@
-﻿using csharpmatic.XMLAPI.Generic;
-using csharpmatic.XMLAPI.Interfaces;
+﻿using csharpmatic.Generic;
+using csharpmatic.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,10 +20,10 @@ namespace Samples.ControlGroup
             for(;;)
             {
                 dm.Refresh();
-                p.sync_heating_values(dm);
-                p.valve_heating_control(dm);
+                //p.sync_heating_values(dm);
+                //p.valve_heating_control(dm);
                 p.humidity_control(dm);
-                Thread.Sleep(10000);
+                Thread.Sleep(3000);
             }
         }
 

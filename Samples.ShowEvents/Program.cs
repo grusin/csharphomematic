@@ -1,4 +1,4 @@
-﻿using csharpmatic.XMLAPI.Generic;
+﻿using csharpmatic.Generic;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -18,8 +18,8 @@ namespace JsonRPC
             this.Parameters = parameters;
         }
 
-        [JsonProperty("jsonrpc", Required = Required.Always)]
-        public string JsonRPC { get { return "2.0"; } }
+        [JsonProperty("version", Required = Required.Always)]
+        public string Version { get { return "1.1"; } }
 
         /// <summary>Unique call id.</summary>
         [JsonProperty("id", Required = Required.Always)]

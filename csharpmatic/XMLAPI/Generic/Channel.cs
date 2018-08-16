@@ -37,6 +37,8 @@ namespace csharpmatic.XMLAPI.Generic
 
         public Dictionary<string, Datapoint> Datapoints { get; private set; }
 
+        public Dictionary<string, MasterValue> MasterValues { get; private set; }
+
         public HashSet<string> Rooms { get; private set; }
 
         public HashSet<string> Functions { get; private set; }
@@ -50,6 +52,7 @@ namespace csharpmatic.XMLAPI.Generic
             Rooms = new HashSet<string>();
             Functions = new HashSet<string>();
             Datapoints = new Dictionary<string, Datapoint>();
+            MasterValues = new Dictionary<string, MasterValue>();
             FillFromDeviceListChannel(dlc);          
         }
         

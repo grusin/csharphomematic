@@ -89,6 +89,7 @@
     <Compile Include="XMLAPI\CGI\statelist.cs" />
     <Compile Include="XMLAPI\Generic\DeviceGroup.cs" />
     <Compile Include="XMLAPI\Generic\DeviceManager.cs" />
+    <Compile Include="XMLAPI\Generic\MasterValue.cs" />
     <Compile Include="XMLAPI\Generic\TypedDatapoint.cs" />
     <Compile Include="XMLAPI\Generic\Room.cs" />
     <Compile Include="XMLAPI\Interfaces\Devices\HMIP_BDT.generated.cs" />
@@ -136,6 +137,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="XMLRPC\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

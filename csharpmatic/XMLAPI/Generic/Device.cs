@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using csharpmatic.XMLAPI.CGI.MastervalueList;
 
 namespace csharpmatic.XMLAPI.Generic
 {
@@ -50,8 +51,29 @@ namespace csharpmatic.XMLAPI.Generic
             FillFromRoomList(CGIClient.RoomList);
             FillFromFunctionList(CGIClient.FunctionList);
             FillFromStateList(CGIClient.StateList);
+            FillFromMasterValueList(CGIClient.MasterValueList);
 
             InitDatapointByType();
+        }
+
+        private void FillFromMasterValueList(CGI.MastervalueList.mastervalue masterValueList)
+        {
+            //MasterValues = new Dictionary<string, MasterValue>();
+
+            foreach (var c in masterValueList.channels.Where(w => w.mastervalue != null))
+            {
+                var dc = DeviceManager.Devices.SelectMany(d => d.Channels.Where(w => w.ISEID == c.ise_id)).FirstOrDefault();
+
+                if(dc != null)
+                {
+                    dc.MasterValues.Clear();
+                    foreach (var mv in c.mastervalue)
+                    {
+                        var dmv = new MasterValue(mv, dc);                        
+                        dc.MasterValues.Add(dmv.Name, dmv);
+                    }
+                }
+            }
         }
 
         private void InitDatapointByType()

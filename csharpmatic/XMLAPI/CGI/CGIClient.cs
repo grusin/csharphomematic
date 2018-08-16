@@ -17,7 +17,7 @@ namespace csharpmatic.XMLAPI.CGI
         public FunctionList.FunctionList FunctionList { get; private set; }
         public RoomList.RoomList RoomList { get; private set; }
         public StateList.StateList StateList { get; private set;  }
-        public MastervalueList.MastervalueList MasterValueList { get; private set; }
+        public MastervalueList.mastervalue MasterValueList { get; private set; }
 
         public SysvarList.SystemVariables SystemVariablesList { get; private set; }
 
@@ -101,12 +101,12 @@ namespace csharpmatic.XMLAPI.CGI
         }
             
     
-        private MastervalueList.MastervalueList FetchMasterValueList(IEnumerable<string> iseids)
+        private MastervalueList.mastervalue FetchMasterValueList(IEnumerable<string> iseids)
         {
             string iseidsString = String.Join(",", iseids);
 
             Uri uri = new Uri(HttpServerUri, @"/addons/xmlapi/mastervalue.cgi?tcpport=2010&device_id=" + iseidsString);
-            var mv = SafeXMLGetRequest<MastervalueList.MastervalueList>(uri);
+            var mv = SafeXMLGetRequest<MastervalueList.mastervalue>(uri);
 
             return mv;
         }
@@ -151,5 +151,10 @@ namespace csharpmatic.XMLAPI.CGI
                 }
             }
         } 
+
+        public void SetMasterValue(string iseid, string masterValueName, string newValue)
+        {
+
+        }
     }
 }

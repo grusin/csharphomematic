@@ -20,10 +20,43 @@ namespace Samples.ControlGroup
             for(;;)
             {
                 dm.Refresh();
+                p.sync_heating_values(dm);
                 p.valve_heating_control(dm);
-                //p.humidity_control(dm);
+                p.humidity_control(dm);
                 Thread.Sleep(10000);
             }
+        }
+
+        public void sync_heating_values(DeviceManager dm) 
+        {
+            var devices = dm.GetDevicesImplementingInterface<ITempControlDevice>();
+
+            var houseLeader = devices.Where(w => w.ISEID == devices.Min(min => min.ISEID)).FirstOrDefault();
+
+            if (houseLeader == null)
+                return;
+
+            decimal eps = 0.000001M;
+
+            foreach (var lmv in houseLeader.Channels[1].MasterValues.Values)
+            {
+                foreach(var d in devices)
+                {
+                    if (d == houseLeader || d.Channels.Count() < 2)
+                        continue;
+
+                    MasterValue mv = null;
+
+                    if(d.Channels[1].MasterValues.TryGetValue(lmv.Name, out mv))
+                    {
+                        if(Math.Abs(mv.Value- lmv.Value) > eps)
+                        {
+                            Console.WriteLine($"{d.Name} {mv.Name} = {mv.Value} where leader ({houseLeader.Name}) has {lmv.Value}");
+                        }
+                    }
+                }
+            }
+
         }
                               
         public void valve_heating_control(DeviceManager dm)

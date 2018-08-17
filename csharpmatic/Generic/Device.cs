@@ -21,17 +21,15 @@ namespace csharpmatic.Generic
 
         public string ISEID { get; private set; }
 
-        public bool Reachable { get; private set; }
+        public bool Reachable { get; internal set; }
 
-        public bool PendingConfig { get; private set; }
+        public bool PendingConfig { get; internal set; }
 
         public string Address { get; private set; }
                 
         public string Interface { get; private set; }        
 
         public string DeviceType { get; private set; }
-
-        public bool ReadyConfig { get; private set; }            
 
         public HashSet<string> Rooms { get { return new HashSet<string>(Channels.SelectMany(c => c.Rooms)); } }
 
@@ -122,13 +120,10 @@ namespace csharpmatic.Generic
         {
             Name = d.Name;
             ISEID = d.Ise_id;
-            Reachable = false; //todo from state list
-            PendingConfig = true; //todo from state list
             Address = d.Address;
             Interface = d.Interface;
             DeviceType = d.Device_type;
-            ReadyConfig = String.IsNullOrWhiteSpace(d.Ready_config) ?  false : Convert.ToBoolean(d.Ready_config);
-
+          
             ChannelByISEID = new Dictionary<string, Channel>();
 
             Channels = new Channel[d.Channel.Count];
@@ -188,7 +183,7 @@ namespace csharpmatic.Generic
             }
         }
 
-        private void FillFromStateList(XMLAPI.StateList.Device d)
+        internal void FillFromStateList(XMLAPI.StateList.Device d)
         {
             PendingConfig = String.IsNullOrWhiteSpace(d.Config_pending) ? false : Convert.ToBoolean(d.Config_pending);
             Reachable = String.IsNullOrWhiteSpace(d.Unreach) ? true : !Convert.ToBoolean(d.Unreach);
@@ -196,7 +191,7 @@ namespace csharpmatic.Generic
             foreach (var c in d.Channel)
             {
                 var dc = ChannelByISEID[c.Ise_id];
-                dc.UpdateDataPoints(c.Datapoint);
+                dc.UpdateFromXMLAPI(c.Datapoint);
             }
         }
 

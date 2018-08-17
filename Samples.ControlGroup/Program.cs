@@ -23,7 +23,7 @@ namespace Samples.ControlGroup
                 //p.sync_heating_values(dm);
                 //p.valve_heating_control(dm);
                 p.humidity_control(dm);
-                Thread.Sleep(3000);
+                Thread.Sleep(500);
             }
         }
 

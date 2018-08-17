@@ -27,8 +27,6 @@ namespace csharpmatic.Interfaces
 
         string DeviceType { get;  }
 
-        bool ReadyConfig { get; }
-
         HashSet<string> Rooms { get; }
         HashSet<string> Functions { get; }
     }

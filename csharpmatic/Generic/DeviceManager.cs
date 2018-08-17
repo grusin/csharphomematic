@@ -13,14 +13,9 @@ namespace csharpmatic.Generic
         private XMLAPI.Client CGIClient;
         public List<Device> Devices { get; private set; }
         public Dictionary<string, Device> DevicesByISEID { get; private set ;}
-        private List<Device> PrevDevices { get; set; }
-
+        private Dictionary<string, Datapoint> PrevDataPointsByISEID { get; set; }
         public List<DatapointEvent> Events { get; private set; }
-
-        public Dictionary<string, Device> PrevDevicesByISEID { get; private set; }
-
-        public Uri HttpServerUri { get { return CGIClient.HttpServerUri; } }
-        
+        public Uri HttpServerUri { get { return CGIClient.HttpServerUri; } }        
         public List<Room> Rooms { get; private set; }
         public Dictionary<string, Room> RoomsByName { get; private set; }
                 
@@ -28,9 +23,6 @@ namespace csharpmatic.Generic
         {
             CGIClient = new Client("http://" + serverAddress);
             Devices = new List<Device>();
-
-            CGIClient.FetchData();
-
             Refresh();
         }
 
@@ -43,20 +35,32 @@ namespace csharpmatic.Generic
 
         public List<DatapointEvent> Refresh()
         {
-            CGIClient.FetchData();
-            BuildDeviceList();
-            BuildRoomList();
+            BuildPrevDataPointsByISEID();
+
+            bool fullRefresh = CGIClient.FetchData();
+
+            if (fullRefresh)
+            {
+                BuildDeviceList();
+                BuildRoomList();
+            }
+            else
+            {
+                foreach(var cgi_dev in CGIClient.StateList.Device)
+                {
+                    Device d = null;
+                    if (DevicesByISEID.TryGetValue(cgi_dev.Ise_id, out d))
+                        d.FillFromStateList(cgi_dev);                    
+                }
+            }
+
             return GetEvents();
         }
 
         private List<DatapointEvent> GetEvents()
         {
             List<DatapointEvent> list = new List<DatapointEvent>();
-
-            //first run
-            if (PrevDevicesByISEID == null)
-                return list;
-                        
+                       
             foreach (var d in Devices)
             {
                 foreach (var c in d.Channels)
@@ -64,8 +68,9 @@ namespace csharpmatic.Generic
                     foreach (var dpkvp in c.Datapoints)
                     {
                         Datapoint current = dpkvp.Value;
-                                                                              
-                        Datapoint prev = FindPreviousDatapoint(current);
+
+                        Datapoint prev = null;
+                        PrevDataPointsByISEID.TryGetValue(current.ISEID, out prev);
 
                         //new device was just added
                         if (prev == null)
@@ -79,30 +84,7 @@ namespace csharpmatic.Generic
             Events = list;
 
             return list;
-        }
-
-        public Datapoint FindPreviousDatapoint(Datapoint current)
-        {
-            if (PrevDevicesByISEID == null)
-                return null;
-
-            Device d = null;
-
-            if(PrevDevicesByISEID.TryGetValue(current.Channel.Device.ISEID, out d))
-            {
-                Channel c = null;
-                if(d.ChannelByISEID.TryGetValue(current.Channel.ISEID, out c))
-                {
-                    Datapoint dp = null;
-                    if(c.Datapoints.TryGetValue(current.Type, out dp))
-                    {
-                        return dp;
-                    }
-                }
-            }
-
-            return null;
-        }
+        }             
 
         private void BuildRoomList()
         {
@@ -117,11 +99,16 @@ namespace csharpmatic.Generic
             }
         }
 
-        private void BuildDeviceList()
+        private void BuildPrevDataPointsByISEID()
         {
-            PrevDevices = Devices;
-            PrevDevicesByISEID = DevicesByISEID;
+            if (Devices == null)
+                PrevDataPointsByISEID = new Dictionary<string, Datapoint>();
+            else
+                PrevDataPointsByISEID = Devices.SelectMany(d => d.Channels).SelectMany(c => c.Datapoints).Select(dp => dp.Value.Clone()).ToDictionary(ks => ks.ISEID);
+        }
 
+        private void BuildDeviceList()
+        {           
             Devices = new List<Device>();
             DevicesByISEID = new Dictionary<string, Device>();
 

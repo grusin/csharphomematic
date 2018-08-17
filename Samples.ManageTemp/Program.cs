@@ -60,7 +60,7 @@ namespace Samples.ManageTemp
 
                 Console.WriteLine("\n\n");
 
-                Thread.Sleep(2000);
+                Thread.Sleep(50);
             }
         }
 

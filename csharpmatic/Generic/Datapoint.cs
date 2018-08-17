@@ -28,7 +28,7 @@ namespace csharpmatic.Generic
 
         public string ValueUnit { get; private set; }
 
-        private long _InternalTimestamp { get; }
+        private long _InternalTimestamp { get; set; }
         public DateTime Timestamp { get; private set; }
 
         public int OperationsCounter { get; private set; }
@@ -38,7 +38,7 @@ namespace csharpmatic.Generic
         public override string ToString()
         {
             return JsonConvert.SerializeObject(this, Formatting.Indented);
-        }
+        }               
 
         [JsonIgnore]
         public Channel Channel { get; private set; }
@@ -57,7 +57,7 @@ namespace csharpmatic.Generic
             _InternalValueType = dp.Valuetype;
             Init_ValueType();
 
-            SetInternalValue(dp.Value);
+            SetInternalValue(dp.Value);           
         }
 
         public string GetInterfacePropertyName(bool useCached = true)
@@ -76,7 +76,7 @@ namespace csharpmatic.Generic
             return InterfacePropertyName;
         }
 
-        private string MapDatapointType(XMLAPI.StateList.Datapoint dp, Channel c)
+        public static string MapDatapointType(XMLAPI.StateList.Datapoint dp, Channel c)
         {
             //rename switching devices internal temperature, so that it does not conflic with heating systems temperatures naming. Channel index logic should suffice.
             if (dp.Type == "ACTUAL_TEMPERATURE" && c.ChannelIndex == 0)
@@ -149,6 +149,14 @@ namespace csharpmatic.Generic
             return _InternalValue;
         }
 
+        internal void UpdateFromXMLAPI(XMLAPI.StateList.Datapoint dp)
+        {
+            SetInternalValue(dp.Value);
+            _InternalTimestamp = String.IsNullOrWhiteSpace(dp.Timestamp) ? 0 : Convert.ToInt64(dp.Timestamp);
+            Timestamp = new DateTime(1970, 1, 1, 0, 0, 0, 0);
+            Timestamp = Timestamp.AddSeconds(_InternalTimestamp);
+        }
+
         private void SetInternalValue(object value)
         {
             string valueStr = Convert.ToString(value);
@@ -178,6 +186,8 @@ namespace csharpmatic.Generic
 
         public void SetRoomValue(object value, Type interfaceFilter = null)
         {
+            return;
+
             var list = Channel.Device.DeviceManager.Devices
                  .Where(d => d.DatapointByType.ContainsKey(Type)).Select(s => s.DatapointByType[Type]) //select only datapoints having the same type
                  .Where(dev => interfaceFilter == null || dev.Channel.Device.GetType().GetInterfaces().Contains(interfaceFilter)) //filter devices by supported interface   
@@ -185,6 +195,11 @@ namespace csharpmatic.Generic
 
             foreach (var dp in list)
                 dp.SetValue(value);                          
-        }      
+        }
+        
+        public Datapoint Clone()
+        {
+            return (Datapoint) this.MemberwiseClone();
+        }
     }
 }

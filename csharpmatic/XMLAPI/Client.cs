@@ -1,4 +1,5 @@
-﻿using System;
+﻿using csharpmatic.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -95,8 +96,7 @@ namespace csharpmatic.XMLAPI
 
         private void FetchMasterValueList()
         {
-            var idse = this.DeviceList.Device.Where(w => w.Interface == "HmIP-RF").SelectMany(s => s.Channel).Select(s => s.Ise_id).ToList();
-
+            var idse = this.DeviceList.Device.Where(w => w.Interface == "HmIP-RF").SelectMany(s => s.Channel).Select(s => s.Ise_id).ToList();    
             MasterValueList = FetchMasterValueList(idse);
         }
             
@@ -117,9 +117,11 @@ namespace csharpmatic.XMLAPI
             SystemVariablesList = SafeXMLGetRequest<SysvarList.SystemVariables>(uri);
         }
 
-        public void FetchData(bool force=false)
-        {             
-            if(DateTime.Now - lastFullUpdateTimestamp > FullRecheckInternval || force)
+        public bool FetchData(bool forceFullReload=false)
+        {
+            bool fullReload = false;
+                   
+            if(DateTime.Now - lastFullUpdateTimestamp > FullRecheckInternval || forceFullReload)
             {
                 FetchDeviceList();
                 FetchFunctionList();
@@ -127,9 +129,12 @@ namespace csharpmatic.XMLAPI
                 FetchSysvarList();
                 FetchMasterValueList();
                 lastFullUpdateTimestamp = DateTime.Now;
+                fullReload = true;
             }         
 
-            FetchStateList();            
+            FetchStateList();
+
+            return fullReload;
         }      
         
         public void SetISEIDValue(string iseid, string newvalue)

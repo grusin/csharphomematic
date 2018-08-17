@@ -55,16 +55,23 @@ namespace csharpmatic.Generic
             MasterValues = new Dictionary<string, MasterValue>();
             FillFromDeviceListChannel(dlc);          
         }
-        
-        public void UpdateDataPoints(IEnumerable<XMLAPI.StateList.Datapoint> list)
+
+        public void UpdateFromXMLAPI(IEnumerable<XMLAPI.StateList.Datapoint> list)
         {
-            Datapoints = new Dictionary<string, Datapoint>();
-
-            foreach (var dp in list)
+            foreach (var cgi_dp in list)
             {
-                var gdp = new Datapoint(dp, this);
+                string type = Datapoint.MapDatapointType(cgi_dp, this);
 
-                Datapoints.Add(gdp.Type, gdp);
+                Datapoint dp = null;
+                if (Datapoints.TryGetValue(type, out dp))
+                {
+                    dp.UpdateFromXMLAPI(cgi_dp);
+                }
+                else
+                {
+                    dp = new Datapoint(cgi_dp, this);
+                    Datapoints.Add(type, dp);
+                }
             }
         }
 

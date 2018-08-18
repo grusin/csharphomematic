@@ -27,7 +27,7 @@ var listSwitches = dm.GetDevicesImplementingInterface<ISingleSwitchControlDevice
 foreach (var sw in listSwitches)
 	sw.State.Value = !sw.State.Value;
 
-//turn on heating automation
+//turn on heating automation (you can instantiate automation for humidity, water level, etc.., with the same generic logic too!)
 var heatingAutomation = new ActuatorSensorAutomation<IValveControlDevice>(dm, "Heating", "LEVEL");
 heatingAutomation.RefencePoint = 20; //20% valve open
 heatingAutomation.Hysteresis = 2;
@@ -37,14 +37,14 @@ heatingAutomation.MinOnTime = new TimeSpan(0, 3, 0);
 
 for (;;)
 {
-	//pull latest data from the web services
-	dm.Refresh();
+    //pull latest data from the web services
+    dm.Refresh();
 
-	//Make sure that devices have synced master values, so that temp setup is not broken
+    //Make sure that devices have synced master values, so that temp setup is not broken
     SyncHeatingMasterValuesAutomation.SyncHeatingMastervalues(dm);
 
-	//Check if heating needs to be turned on/off
-	heatingAutomation.Work();
+    //Check if heating needs to be turned on/off
+    heatingAutomation.Work();
 
     //wait a bit before running again
     Thread.Sleep(3000);

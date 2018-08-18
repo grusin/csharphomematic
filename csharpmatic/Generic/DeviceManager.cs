@@ -1,5 +1,4 @@
 ﻿using csharpmatic.Interfaces;
-using csharpmatic.XMLAPI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,18 +9,21 @@ namespace csharpmatic.Generic
 {
     public class DeviceManager
     {
-        private XMLAPI.Client CGIClient;
+        internal XMLAPI.Client XMLAPIClient;
+        internal JsonAPI.Client JsonAPIClient;
+        //private 
         public List<Device> Devices { get; private set; }
         public Dictionary<string, Device> DevicesByISEID { get; private set ;}
         private Dictionary<string, Datapoint> PrevDataPointsByISEID { get; set; }
         public List<DatapointEvent> Events { get; private set; }
-        public Uri HttpServerUri { get { return CGIClient.HttpServerUri; } }        
+        public Uri HttpServerUri { get { return XMLAPIClient.HttpServerUri; } }        
         public List<Room> Rooms { get; private set; }
         public Dictionary<string, Room> RoomsByName { get; private set; }
                 
         public DeviceManager(string serverAddress)
         {
-            CGIClient = new Client("http://" + serverAddress);
+            XMLAPIClient = new XMLAPI.Client("http://" + serverAddress);
+            JsonAPIClient = new JsonAPI.Client(serverAddress);
             Devices = new List<Device>();
             Refresh();
         }
@@ -31,13 +33,13 @@ namespace csharpmatic.Generic
             List<T> list = new List<T>();
 
             return Devices.Where(w => w is T).Select(s => s as T).ToList();
-        }
+        }             
 
         public List<DatapointEvent> Refresh()
         {
             BuildPrevDataPointsByISEID();
 
-            bool fullRefresh = CGIClient.FetchData();
+            bool fullRefresh = XMLAPIClient.FetchData();
 
             if (fullRefresh)
             {
@@ -46,7 +48,7 @@ namespace csharpmatic.Generic
             }
             else
             {
-                foreach(var cgi_dev in CGIClient.StateList.Device)
+                foreach(var cgi_dev in XMLAPIClient.StateList.Device)
                 {
                     Device d = null;
                     if (DevicesByISEID.TryGetValue(cgi_dev.Ise_id, out d))
@@ -91,7 +93,7 @@ namespace csharpmatic.Generic
             Rooms = new List<Room>();
             RoomsByName = new Dictionary<string, Room>();
 
-            foreach (var cgiroom in CGIClient.RoomList.Room)
+            foreach (var cgiroom in XMLAPIClient.RoomList.Room)
             {
                 Room r = new Room(cgiroom.Name, cgiroom.Ise_id, this);
                 Rooms.Add(r);
@@ -112,9 +114,9 @@ namespace csharpmatic.Generic
             Devices = new List<Device>();
             DevicesByISEID = new Dictionary<string, Device>();
 
-            foreach (var d in CGIClient.DeviceList.Device)
+            foreach (var d in XMLAPIClient.DeviceList.Device)
             {                
-                Device gd = DeviceFactory.CreateInstance(d, CGIClient, this);
+                Device gd = DeviceFactory.CreateInstance(d, XMLAPIClient, this);
                                 
                 Devices.Add(gd);
                 DevicesByISEID.Add(gd.ISEID, gd);

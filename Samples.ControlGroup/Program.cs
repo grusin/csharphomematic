@@ -20,45 +20,79 @@ namespace Samples.ControlGroup
             for(;;)
             {
                 dm.Refresh();
-                //p.sync_heating_values(dm);
+                //syncs heating master values across the house and across the rooms
+                //house is synced with all master values except ones related to temperature
+                //each toom is synced with just the temperature related master values
+                //this setup allows very flexiable management of the time zones, but the heat zones are seperate for each room :)
+                p.sync_heating_mastervalues(dm);
                 //p.valve_heating_control(dm);
                 p.humidity_control(dm);
                 Thread.Sleep(500);
             }
         }
 
-        public void sync_heating_values(DeviceManager dm) 
+        private void sync_heating_mastervalues(ITempControlDevice leader, List<ITempControlDevice> devicesInScope, HashSet<string> masterValuesInScope)
         {
-            var devices = dm.GetDevicesImplementingInterface<ITempControlDevice>();
-
-            var houseLeader = devices.Where(w => w.ISEID == devices.Min(min => min.ISEID)).FirstOrDefault();
-
-            if (houseLeader == null)
+            if (leader == null || leader.PendingConfig)
                 return;
 
             decimal eps = 0.000001M;
 
-            foreach (var lmv in houseLeader.Channels[1].MasterValues.Values)
+            Dictionary<Channel, List<MasterValue>> toChange = new Dictionary<Channel, List<MasterValue>>();
+
+            foreach (var lmv in leader.Channels[1].MasterValues.Values.Where(w => masterValuesInScope.Contains(w.Name)))
             {
-                foreach(var d in devices)
+                foreach (var d in devicesInScope)
                 {
-                    if (d == houseLeader || d.Channels.Count() < 2)
+                    if (d == leader || d.Channels.Count() < 2 || d.PendingConfig)
                         continue;
 
                     MasterValue mv = null;
 
-                    if(d.Channels[1].MasterValues.TryGetValue(lmv.Name, out mv))
+                    if (d.Channels[1].MasterValues.TryGetValue(lmv.Name, out mv))
                     {
-                        if(Math.Abs(mv.Value- lmv.Value) > eps)
+                        if (Math.Abs(mv.Value - lmv.Value) > eps)
                         {
-                            Console.WriteLine($"{d.Name} {mv.Name} = {mv.Value} where leader ({houseLeader.Name}) has {lmv.Value}");
+                            if (!toChange.ContainsKey(d.Channels[1]))
+                                toChange.Add(d.Channels[1], new List<MasterValue>());
+
+                            toChange[d.Channels[1]].Add(lmv);
+                            Console.WriteLine($"{d.Name} {mv.Name} = {mv.Value} where leader ({leader.Name}) has {lmv.Value}");
                         }
                     }
                 }
             }
 
+            foreach (var kvp in toChange)
+            {
+                kvp.Key.SetMasterValues(kvp.Value);
+            }
         }
-                              
+
+        public void sync_heating_mastervalues(DeviceManager dm)
+        {
+            var allDevices = dm.GetDevicesImplementingInterface<ITempControlDevice>();
+            var houseLeader = allDevices.Where(w => w.ISEID == allDevices.Min(min => min.ISEID)).FirstOrDefault();
+            var houseMasterValues = new HashSet<string>(houseLeader.Channels[1].MasterValues.Values.Where(w => !w.Name.Contains("TEMPERATURE")).Select(s => s.Name));
+            var roomMasterValues = new HashSet<string>(houseLeader.Channels[1].MasterValues.Values.Where(w => w.Name.Contains("TEMPERATURE")).Select(s => s.Name));
+
+            Console.WriteLine("Syncing house mastervalues...");
+            sync_heating_mastervalues(houseLeader, allDevices, houseMasterValues);
+            
+            var allRooms = allDevices.SelectMany(d => d.Rooms).Distinct().ToList();
+
+            foreach (var r in allRooms)
+            {
+                var roomDevices = allDevices.Where(w => w.Rooms.Contains(r)).ToList();
+                var roomLeader = allDevices.Where(w => w.ISEID == roomDevices.Min(min => min.ISEID)).FirstOrDefault();
+
+                Console.WriteLine($"Syncing {r} mastervalues...");
+                sync_heating_mastervalues(roomLeader, roomDevices, roomMasterValues);
+            }
+
+            Console.WriteLine("Mastervalues across devices are in sync!");
+        }
+                             
         public void valve_heating_control(DeviceManager dm)
         {
             int refPoint = 20;

@@ -1,4 +1,4 @@
-﻿using JsonRPC;
+﻿using csharpmatic.JsonAPI;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -13,28 +13,11 @@ namespace Samples.JsonRPC
     {
         static void Main(string[] args)
         {
-            using (Client rpcClient = new Client("http://192.168.1.200/api/homematic.cgi"))
-            {
-                Request request;
-                GenericResponse response;
-
-                //get session id
-                request = rpcClient.NewRequest("Session.login", JObject.Parse(@"{ username: 'Admin', password: ''}"));
-                response = rpcClient.Rpc(request);
-
-                string sessionId = response.Result.ToString();
-
-                //log out
-                //Session.logout
-
-                //list methods
-                request = rpcClient.NewRequest("Session.logout", JObject.Parse(@"{ _session_id_: '" + sessionId + "'}"));
-                response = rpcClient.Rpc(request);
-
-                //list interface
-                request = rpcClient.NewRequest("Interface.listInterfaces", JObject.Parse(@"{ _session_id_: '" + sessionId + "'}"));
-                response = rpcClient.Rpc(request);
-            }
+            Client rpcClient = new Client("192.168.1.200");
+            var res = rpcClient.Device_listAllDetail();
+            var res2 = rpcClient.Device_listAllDetail();
+            var res3 = rpcClient.Device_listAllDetail();
+            var res4 = rpcClient.Device_listAllDetail();
         }
     }
 }

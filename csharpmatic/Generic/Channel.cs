@@ -95,5 +95,16 @@ namespace csharpmatic.Generic
         {
             return JsonConvert.SerializeObject(this, Formatting.Indented);
         }
+
+        public void SetMasterValues(List<MasterValue> list)
+        {
+            Device.DeviceManager.JsonAPIClient.Channel_SetMasterValues(this, list);
+
+            foreach(var mv in list)
+            {
+                if (MasterValues.ContainsKey(mv.Name))
+                    MasterValues[mv.Name].Value = mv.Value;
+            }
+        }
     }
 }

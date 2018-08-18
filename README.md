@@ -80,7 +80,7 @@ In theory all devices can be supported, I just need to know the XML API outputs 
 - Dev friendly interfaces for Heating, Humidity, Lights, Security control, Switches <= built by generator based on the XMLAPI object. It should allow addition of new objects with ease as long as developer has actual devices connected to this rpi3
 - Support of writing commands to devices (turn on switch, set temp, etc..) using simple setter.
 - Simple algo for for handling heating control, moisture control. It uses logic of detecting actuators and sensors allocated to the same function, across different rooms, and then determines based on given inital conditions if actuators needs to be turned on or off. Algo uses hysteresis and min/max on/off times, to make sure you don't get disco effect :)
-- Synchronization of master values related to heating. The time ranges for temp profiles are synced across whole house, but the temperature in each of the rooms is kept seperate and synced. House leader (the one whose time ranges are a referece) is heating device with lowest ISEID. Simillary each room leader is a device in a room with the lower ISEID.
+- Synchronization of master values related to heating. The time ranges for temp profiles are synced across whole house, but the temperature in each of the rooms is kept seperate and synced. House leader (the one whose time ranges are a referece) is heating device with lowest ISEID. Simillary each room leader is a device in a room with the lowest ISEID.
 
 ### Todo:
 - lights/motion sensors with some predefine tresholds

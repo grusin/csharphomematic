@@ -26,9 +26,32 @@ foreach (var d in hmTemp)
 var listSwitches = dm.GetDevicesImplementingInterface<ISingleSwitchControlDevice>();
 foreach (var sw in listSwitches)
 	sw.State.Value = !sw.State.Value;
+
+//turn on heating automation
+var heatingAutomation = new ActuatorSensorAutomation<IValveControlDevice>(dm, "Heating", "LEVEL");
+heatingAutomation.RefencePoint = 20; //20% valve open
+heatingAutomation.Hysteresis = 2;
+heatingAutomation.MaxOnTime = new TimeSpan(0, 5, 0);
+heatingAutomation.MinOnTime = new TimeSpan(0, 0, 30);
+heatingAutomation.MinOnTime = new TimeSpan(0, 3, 0);
+
+for (;;)
+{
+	//pull latest data from the web services
+	dm.Refresh();
+
+	//Make sure that devices have synced master values, so that temp setup is not broken
+    SyncHeatingMasterValuesAutomation.SyncHeatingMastervalues(dm);
+
+	//Check if heating needs to be turned on/off
+	heatingAutomation.Work();
+
+    //wait a bit before running again
+    Thread.Sleep(3000);
+}
 ```
 
-More code is available in the samples folder (Samples.ShowInterfaces is the most juicy one)
+More code is available in the samples folder
 
 ## Requirements:
 - [XML API addon](https://github.com/grusin/XML-API) - forked repo, original does not support HmIP port numbers, I made PR to author to merge changes.

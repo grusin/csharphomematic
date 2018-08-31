@@ -30,6 +30,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Samples.Automations", "Samp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Samples.RestApi", "Samples.RestApi\Samples.RestApi.csproj", "{8F19B03E-FF0D-47AC-BEF4-6353565403E8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HouseAutomationService", "HouseAutomationService\HouseAutomationService.csproj", "{B35AFF3E-5F44-4A11-B46F-65DFA2B6BFBC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -76,6 +78,10 @@ Global
 		{8F19B03E-FF0D-47AC-BEF4-6353565403E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8F19B03E-FF0D-47AC-BEF4-6353565403E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8F19B03E-FF0D-47AC-BEF4-6353565403E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B35AFF3E-5F44-4A11-B46F-65DFA2B6BFBC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B35AFF3E-5F44-4A11-B46F-65DFA2B6BFBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B35AFF3E-5F44-4A11-B46F-65DFA2B6BFBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B35AFF3E-5F44-4A11-B46F-65DFA2B6BFBC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

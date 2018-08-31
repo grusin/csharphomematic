@@ -33,7 +33,7 @@ namespace Samples.Automations
             heatingAutomation.Hysteresis = 2;
             heatingAutomation.MaxOnTime = new TimeSpan(0, 5, 0);
             heatingAutomation.MinOnTime = new TimeSpan(0, 0, 30);
-            heatingAutomation.MinOnTime = new TimeSpan(0, 3, 0);
+            heatingAutomation.MinOffTime = new TimeSpan(0, 3, 0);
 
             for (;;)
             {

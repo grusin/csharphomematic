@@ -1,11 +1,11 @@
-﻿using csharpmatic.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using csharpmatic.Interfaces;
 
-namespace Samples.RestApi.RoomController
+namespace csharpmatic.RestApi
 {
     public class Room
     {
@@ -15,14 +15,14 @@ namespace Samples.RestApi.RoomController
         public decimal? ActualTempMin { get; set; }
         public decimal? ActualTempMax { get; set; }
         public decimal? SetTemp { get; set; }
-        public decimal? HumidityAvg { get; set; }    
+        public decimal? HumidityAvg { get; set; }
         public decimal? HumidityMin { get; set; }
         public decimal? HumidityMax { get; set; }
         public decimal? ValveOpenAvg { get; set; }
         public decimal? ValveOpenMin { get; set; }
         public decimal? ValveOpenMax { get; set; }
 
-        
+
         public bool DehumidifierActive { get; set; }
         public bool HeatingActive { get; set; }
         public bool WindowOpen { get; set; }
@@ -32,14 +32,14 @@ namespace Samples.RestApi.RoomController
 
         public Room()
         {
-            
+
         }
 
         public Room(csharpmatic.Generic.Room dr)
         {
             Name = dr.Name;
             ISEID = dr.ISEID;
-                        
+
             if (dr.SingleSwitchControlDevices != null)
             {
                 //get heating actuators

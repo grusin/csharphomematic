@@ -19,9 +19,13 @@ namespace csharpmatic.Generic
         public Uri HttpServerUri { get { return XMLAPIClient.HttpServerUri; } }        
         public List<Room> Rooms { get; private set; }
         public Dictionary<string, Room> RoomsByName { get; private set; }
+
+        public object RefreshLock { get; set; }
                 
         public DeviceManager(string serverAddress)
         {
+            RefreshLock = new object();
+
             XMLAPIClient = new XMLAPI.Client("http://" + serverAddress);
             JsonAPIClient = new JsonAPI.Client(serverAddress);
             Devices = new List<Device>();
@@ -37,22 +41,27 @@ namespace csharpmatic.Generic
 
         public List<DatapointEvent> Refresh()
         {
-            BuildPrevDataPointsByISEID();
-
+            //this does not need lock, it's internal data structure, and this actually takes time
             bool fullRefresh = XMLAPIClient.FetchData();
 
-            if (fullRefresh)
+            //this should be quick
+            lock (RefreshLock)
             {
-                BuildDeviceList();
-                BuildRoomList();
-            }
-            else
-            {
-                foreach(var cgi_dev in XMLAPIClient.StateList.Device)
+                BuildPrevDataPointsByISEID();                              
+
+                if (fullRefresh)
                 {
-                    Device d = null;
-                    if (DevicesByISEID.TryGetValue(cgi_dev.Ise_id, out d))
-                        d.FillFromStateList(cgi_dev);                    
+                    BuildDeviceList();
+                    BuildRoomList();
+                }
+                else
+                {
+                    foreach (var cgi_dev in XMLAPIClient.StateList.Device)
+                    {
+                        Device d = null;
+                        if (DevicesByISEID.TryGetValue(cgi_dev.Ise_id, out d))
+                            d.FillFromStateList(cgi_dev);
+                    }
                 }
             }
 

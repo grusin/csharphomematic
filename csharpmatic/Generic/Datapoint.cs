@@ -186,15 +186,23 @@ namespace csharpmatic.Generic
 
         public void SetRoomValue(object value, Type interfaceFilter = null)
         {
-            return;
-
             var list = Channel.Device.DeviceManager.Devices
                  .Where(d => d.DatapointByType.ContainsKey(Type)).Select(s => s.DatapointByType[Type]) //select only datapoints having the same type
                  .Where(dev => interfaceFilter == null || dev.Channel.Device.GetType().GetInterfaces().Contains(interfaceFilter)) //filter devices by supported interface   
                  .Where(d => d.Channel.Rooms.Count() > 0 && d.Channel.Rooms.IsSubsetOf(Channel.Rooms)); //datapoints have to be in the same rooms as this one   
 
-            foreach (var dp in list)
-                dp.SetValue(value);                          
+            //look for virtual device, if it's present, just set parameter at it
+            var vdev = list.Where(w => w.Channel.Device.Interface == "VirtualDevices").FirstOrDefault();
+            if (vdev != null)
+            {
+                vdev.SetValue(value);
+            }
+            //otherwise iterate over all devices in the room
+            else
+            {
+                foreach (var dp in list)
+                    dp.SetValue(value);
+            }                   
         }
         
         public Datapoint Clone()

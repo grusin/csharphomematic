@@ -22,13 +22,13 @@ namespace csharpmatic.XMLAPI
 
         public SysvarList.SystemVariables SystemVariablesList { get; private set; }
 
-        private static WebClient WebClient = new WebClient();
+        private WebClient WebClient = new WebClient();
 
         private DateTime lastFullUpdateTimestamp = DateTime.MinValue;
 
         public TimeSpan FullRecheckInternval = new TimeSpan(0, 0, 15);
                 
-        private static T XMLGetRequest<T>(Uri getUrl)
+        private T XMLGetRequest<T>(Uri getUrl)
         {
             using (Stream rdr = WebClient.OpenRead(getUrl))
             {
@@ -38,7 +38,7 @@ namespace csharpmatic.XMLAPI
             }
         }
 
-        private static T SafeXMLGetRequest<T>(Uri getUrl, int attempts=3, int retryWaitMs=1000)
+        private T SafeXMLGetRequest<T>(Uri getUrl, int attempts=3, int retryWaitMs=1000)
         {
             Exception e = null;
 

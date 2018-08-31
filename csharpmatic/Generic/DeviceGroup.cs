@@ -17,8 +17,13 @@ namespace csharpmatic.Generic
         public DeviceGroup(IEnumerable<T> deviceList)
         {
             Devices = new List<T>(deviceList);
-            DevicesByISEID = deviceList.ToDictionary(ks => ks.ISEID);
-            GroupLeader = deviceList.OrderBy(ob => ob.ISEID).FirstOrDefault();
+            DevicesByISEID = deviceList
+                .ToDictionary(ks => ks.ISEID);
+
+            GroupLeader = deviceList.Where(w => w.Interface == "VirtualDevices").FirstOrDefault();
+
+            if(GroupLeader == null)
+                GroupLeader = deviceList.OrderBy(ob => ob.ISEID).FirstOrDefault();
         }
 
         public void SetRoomValue(Datapoint dp, object newValue)

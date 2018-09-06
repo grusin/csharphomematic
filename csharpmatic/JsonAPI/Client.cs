@@ -149,5 +149,9 @@ namespace csharpmatic.JsonAPI
             return null;
         }
 
+        public JToken Device_startCommunicationTest(Device d)
+        {
+            return Session_RpcCall("Device.startComTest", JObject.Parse(@"{ id: '" + d.ISEID + "'}"));
+        }
     }
 }

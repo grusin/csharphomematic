@@ -29,6 +29,7 @@ namespace csharpmatic.RestApi
         public bool BoostActive { get; set; }
         public int BoostSecondsLeft { get; set; }
         public DateTime Timestamp { get; set; } = DateTime.Now;
+        public List<string> Warnings { get; set; } = new List<string>();
 
         public Room()
         {
@@ -83,6 +84,27 @@ namespace csharpmatic.RestApi
                 ValveOpenMin = Math.Round(pts.Min());
                 ValveOpenMax = Math.Round(pts.Max());
             }
+
+            //get warnings
+            Warnings.AddRange(
+                dr.HmIPDevices.Where(w => 
+                        (w.Operating_Voltage.Value > 1.6M && w.Operating_Voltage.Value < 2.2M) || //3V norminal
+                        (w.Operating_Voltage.Value > 0.0M && w.Operating_Voltage.Value < 1.1M)) //1.5V nominal
+                    .Select(s => String.Format($"{s.Name}: low voltage: {s.Operating_Voltage.Value}"))
+                    .ToList()
+                    );
+
+            Warnings.AddRange(
+                dr.HmDevices.Where(w => w.PendingConfig)
+                    .Select(s => String.Format($"{s.Name}: pending configuration"))
+                    .ToList()
+                    );
+
+            Warnings.AddRange(
+                dr.HmDevices.Where(w=> !w.Reachable)
+                    .Select(s => String.Format($"{s.Name}: unreachable"))
+                    .ToList()
+                );
         }
 
         private decimal RoundToHalfPoint(decimal input)

@@ -22,16 +22,16 @@ namespace HouseAutomationService
             //init device manager
             var dm = new DeviceManager(Settings.Default.HomematicServerAddress);
 
-            //init humidity automation
-            var humidityAutomation = new ActuatorSensorAutomation<IHumidityControlDevice>(dm, "Humidity", "HUMIDITY");
+            //init humidity automation, humidity is int from 0 to 100
+            var humidityAutomation = new ActuatorSensorAutomation<IHumidityControlDevice>(dm, "Humidity", (d) => d.Humidity.Value);
             humidityAutomation.RefencePoint = Settings.Default.HumidityAutomationRefencePoint;
             humidityAutomation.Hysteresis = Settings.Default.HumidityAutomationHysteresis;
             humidityAutomation.MaxOnTime = Settings.Default.HumidityAutomationMaxOnTime;
             humidityAutomation.MinOnTime = Settings.Default.HumidityAutomationMinOnTime;
             humidityAutomation.MinOffTime = Settings.Default.HumidityAutomationMinOffTime;
          
-            //init heating automation
-            var heatingAutomation = new ActuatorSensorAutomation<IValveControlDevice>(dm, "Heating", "LEVEL");
+            //init heating automation, level is decimal from 0.0 to 1.0
+            var heatingAutomation = new ActuatorSensorAutomation<IValveControlDevice>(dm, "Heating", (d) => Convert.ToInt32(Math.Round(d.Level.Value * 100)));
             heatingAutomation.RefencePoint = Settings.Default.HeatingAutomationRefencePoint;
             heatingAutomation.Hysteresis = Settings.Default.HeatingAutomationHysteresis;
             heatingAutomation.MaxOnTime = Settings.Default.HeatingAutomationMaxOnTime;

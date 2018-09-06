@@ -12,7 +12,7 @@ namespace csharpmatic.Automation
     {
         public static void SyncHeatingMastervalues(ITempControlDevice leader, List<ITempControlDevice> devicesInScope, HashSet<string> masterValuesInScope)
         {
-            if (leader == null || leader.PendingConfig)
+            if (leader == null || leader.PendingConfig || !leader.Reachable)
                 return;
 
             decimal eps = 0.000001M;
@@ -23,7 +23,7 @@ namespace csharpmatic.Automation
             {
                 foreach (var d in devicesInScope)
                 {
-                    if (d == leader || d.Channels.Count() < 2 || d.PendingConfig)
+                    if (d == leader || d.Channels.Count() < 2 || d.PendingConfig || !d.Reachable)
                         continue;
 
                     MasterValue mv = null;

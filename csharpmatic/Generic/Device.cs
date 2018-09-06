@@ -37,6 +37,8 @@ namespace csharpmatic.Generic
 
         ILog LOG = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
+        public DateTime LastCommunicationTest { get; private set; } = DateTime.MinValue;
+
         [JsonIgnore]
         public DeviceManager DeviceManager { get; private set; }
         
@@ -193,6 +195,22 @@ namespace csharpmatic.Generic
                 var dc = ChannelByISEID[c.Ise_id];
                 dc.UpdateFromXMLAPI(c.Datapoint);
             }
+
+            //Datapoint voltageDp;
+            
+            //if(DatapointByType != null && DatapointByType.TryGetValue("OPERATING_VOLTAGE", out voltageDp))
+            //{
+            //    if (Convert.ToDecimal(voltageDp.Value) == 0.0M)
+            //        Reachable = false;
+            //}
+
+            Datapoint rssiDp;
+
+            if(DatapointByType != null && DatapointByType.TryGetValue("RSSI_DEVICE", out rssiDp))
+            {
+                if (rssiDp.Value as string == "0")
+                    Reachable = false;
+            }
         }
 
         private void FillFromStateList(XMLAPI.StateList.StateList stateList)
@@ -200,6 +218,14 @@ namespace csharpmatic.Generic
             foreach(var d in stateList.Device)
                 if(d.Ise_id == ISEID)
                     FillFromStateList(d);    
+        }
+
+        public string StartCommunicationTest()
+        {
+            var tkn = DeviceManager.JsonAPIClient.Device_startCommunicationTest(this);
+            LastCommunicationTest = DateTime.Now;
+
+            return tkn.ToString();
         }
 
         public override string ToString()

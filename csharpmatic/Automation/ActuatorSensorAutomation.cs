@@ -10,24 +10,22 @@ namespace csharpmatic.Automation
 {
     public class ActuatorSensorAutomation<T> where T : IHmDevice
     {
-        public string Function { get; private set; }
+        public string DeviceFunction { get; private set; }
         public int RefencePoint { get; set; } = 0;
         public int Hysteresis { get; set; } = 1;
-
         public TimeSpan MaxOnTime { get; set;} = new TimeSpan(0, 5, 0);
 
         public TimeSpan MinOnTime { get; set; } = new TimeSpan(0, 0, 30);
         public TimeSpan MinOffTime { get; set; } = new TimeSpan(0, 1, 0);
-
         public DeviceManager DeviceManager { get; private set; }
 
-        public string DatapointType { get; private set; }
+        public Func<T, int> DatapointGetter;
 
-        public ActuatorSensorAutomation(DeviceManager dm, string function, string datapointType)
+        public ActuatorSensorAutomation(DeviceManager dm, string deviceFunction,  Func<T, int> datapointGetter)
         {
-            Function = function;
+            DeviceFunction = deviceFunction;
             DeviceManager = dm;
-            DatapointType = datapointType;
+            DatapointGetter = datapointGetter;
         }
 
         public void Work()
@@ -43,12 +41,15 @@ namespace csharpmatic.Automation
             //- hysteresis will be guarding against too frequent on and off
 
             //this function must exist in your setup
-            var devices = DeviceManager.Devices.Where(w => w.Functions.Contains(Function)).ToList();
+            //skip devices which are not available
+            var devices = DeviceManager.Devices.Where(w => w.Functions.Contains(DeviceFunction)).ToList();
 
             //get list of all sensors in all rooms supporting the interface
-            var sensors = devices.Where(w => w is T);
+            //skip devices which are offline or have their config not up to date
+            var sensors = devices.Where(w => w is T && w.Reachable && !w.PendingConfig).Select(s => (T) Convert.ChangeType(s, typeof(T)));
 
             //get list of actuators for all rooms for function. Dimmer actuators are not supported.
+            //intentionaly we get all actuators, even the 'down' ones.
             var actuators = devices.Where(w => w is ISingleSwitchControlDevice).Select(s => s as ISingleSwitchControlDevice);
 
             //get list of all rooms
@@ -60,7 +61,7 @@ namespace csharpmatic.Automation
             //build the reason to be turned ON dict
             foreach (var r in rooms)
             {
-                Console.WriteLine($"[{Function} automation] Checking room: {r}");
+                Console.WriteLine($"[{DeviceFunction} automation] Checking room: {r}");
 
                 //get actuators for the room              
                 foreach (var a in actuators.Where(w => w.Rooms.Contains(r)))
@@ -82,16 +83,16 @@ namespace csharpmatic.Automation
 
                     foreach (var s in sensors.Where(s => s.Rooms.Contains(r)))
                     {
-                        Datapoint dp = s.DatapointByType[DatapointType];
+                        int dpValue = DatapointGetter(s);
 
-                        if (Convert.ToInt32(dp.Value) >= offCondition)
+                        if (dpValue >= offCondition)
                         {
-                            Console.WriteLine($"\t{s.Name} in {r} did not meet the OFF condition {offCondition}, valve open: {dp.Value}. Marking to turn ***ON*** {a.Name}");
+                            Console.WriteLine($"\t{s.Name} in {r} did not meet the OFF condition {offCondition}, valve open: {dpValue}. Marking to turn ***ON*** {a.Name}");
                             if (!toON.Contains(a))
                                 toON.Add(a);
                         }
                         else
-                            Console.WriteLine($"\t{s.Name} in {r} met OFF condition {offCondition}, valve open: {dp.Value}");
+                            Console.WriteLine($"\t{s.Name} in {r} met OFF condition {offCondition}, valve open: {dpValue}");
                     }
                 }
             }

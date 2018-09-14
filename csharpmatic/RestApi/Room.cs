@@ -80,9 +80,9 @@ namespace csharpmatic.RestApi
             if (dr.ValveControlDevices != null && dr.ValveControlDevices.GroupLeader != null)
             {
                 var pts = dr.ValveControlDevices.Select(s => Convert.ToDecimal(s.Level.Value));
-                ValveOpenAvg = Math.Round(pts.Average());
-                ValveOpenMin = Math.Round(pts.Min());
-                ValveOpenMax = Math.Round(pts.Max());
+                ValveOpenAvg = Math.Round(pts.Average()*100);
+                ValveOpenMin = Math.Round(pts.Min()*100);
+                ValveOpenMax = Math.Round(pts.Max()*100);
             }
 
             //get warnings

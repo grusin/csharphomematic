@@ -25,18 +25,6 @@ namespace HouseAutomationService.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("192.168.1.200")]
-        public string HomematicServerAddress {
-            get {
-                return ((string)(this["HomematicServerAddress"]));
-            }
-            set {
-                this["HomematicServerAddress"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("9696")]
         public int WebServerListenPort {
             get {
@@ -164,6 +152,18 @@ namespace HouseAutomationService.Properties {
             }
             set {
                 this["heatingAutomationMinOffTime"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("192.168.178.14")]
+        public string HomematicServerAddress {
+            get {
+                return ((string)(this["HomematicServerAddress"]));
+            }
+            set {
+                this["HomematicServerAddress"] = value;
             }
         }
     }

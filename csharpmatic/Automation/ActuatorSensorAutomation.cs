@@ -1,5 +1,6 @@
 ﻿using csharpmatic.Generic;
 using csharpmatic.Interfaces;
+using log4net;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,8 @@ namespace csharpmatic.Automation
         public DeviceManager DeviceManager { get; private set; }
 
         public Func<T, int> DatapointGetter;
+
+        private static ILog LOGGER = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         public ActuatorSensorAutomation(DeviceManager dm, string deviceFunction,  Func<T, int> datapointGetter)
         {
@@ -61,7 +64,7 @@ namespace csharpmatic.Automation
             //build the reason to be turned ON dict
             foreach (var r in rooms)
             {
-                Console.WriteLine($"[{DeviceFunction} automation] Checking room: {r}");
+                LOGGER.DebugFormat($"[{DeviceFunction} automation] Checking room: {r}");
 
                 //get actuators for the room              
                 foreach (var a in actuators.Where(w => w.Rooms.Contains(r)))
@@ -79,7 +82,7 @@ namespace csharpmatic.Automation
                         offCondition = RefencePoint;
                     }
 
-                    Console.WriteLine($"\t{a.Name} in {r} is {a.State.Value}, OFF condition: {offCondition}");
+                    LOGGER.DebugFormat($"\t{a.Name} in {r} is {a.State.Value}, OFF condition: {offCondition}");
 
                     foreach (var s in sensors.Where(s => s.Rooms.Contains(r)))
                     {
@@ -87,12 +90,17 @@ namespace csharpmatic.Automation
 
                         if (dpValue >= offCondition)
                         {
-                            Console.WriteLine($"\t{s.Name} in {r} did not meet the OFF condition {offCondition}, valve open: {dpValue}. Marking to turn ***ON*** {a.Name}");
+                           
                             if (!toON.Contains(a))
                                 toON.Add(a);
+
+                            if(a.State.Value == false)
+                                LOGGER.InfoFormat($"\t{s.Name} in {r} did not meet the OFF condition {offCondition}, value: {dpValue}. Marking to turn ***ON*** {a.Name}");
+                            else
+                                LOGGER.DebugFormat($"\t{s.Name} in {r} did not meet the OFF condition {offCondition}, valve: {dpValue}. Marking to turn ***ON*** {a.Name}");
                         }
                         else
-                            Console.WriteLine($"\t{s.Name} in {r} met OFF condition {offCondition}, valve open: {dpValue}");
+                            LOGGER.DebugFormat($"\t{s.Name} in {r} met OFF condition {offCondition}, valve open: {dpValue}");
                     }
                 }
             }
@@ -102,26 +110,32 @@ namespace csharpmatic.Automation
             foreach (var a in actuators)
             {
                 TimeSpan howLongInState = (DateTime.UtcNow - a.State.Timestamp);
-                Console.WriteLine($"{a.Name} is {a.State.Value} for {howLongInState}");
+                LOGGER.DebugFormat($"{a.Name} is {a.State.Value} for {howLongInState}");
 
                 if (a.State.Value == true && howLongInState > MaxOnTime)
                 {
-                    Console.WriteLine($"Turning OFF {a.Name}, it has been ON for too long  ({howLongInState} vs. {MaxOnTime})");
+                    LOGGER.InfoFormat($"Turning OFF {a.Name}, it has been ON for too long  ({howLongInState} vs. {MaxOnTime})");
                     a.State.Value = false;
                 }
                 else if (toON.Contains(a) && a.State.Value == false)
                 {
                     if (MinOffTime > howLongInState)
-                        Console.WriteLine($"Cannot turn ON {a.Name}, it has not been OFF long enough ({howLongInState} vs. {MinOffTime})");
+                        LOGGER.InfoFormat($"Cannot turn ON {a.Name}, it has not been OFF long enough ({howLongInState} vs. {MinOffTime})");
                     else
-                        a.State.Value = true;
+                    {
+                       LOGGER.InfoFormat($"Turning ON {a.Name}");
+                       a.State.Value = true;
+                    }
                 }
                 else if (!toON.Contains(a) && a.State.Value == true)
                 {
                     if (MinOnTime > howLongInState)
-                        Console.WriteLine($"Cannot turn OFF {a.Name}, it has not been ON long enough ({howLongInState} vs. {MinOnTime})");
+                        LOGGER.InfoFormat($"Cannot turn OFF {a.Name}, it has not been ON long enough ({howLongInState} vs. {MinOnTime})");
                     else
+                    {
+                        LOGGER.InfoFormat($"Turning OFF {a.Name}");
                         a.State.Value = false;
+                    }
                 }
             }
         }

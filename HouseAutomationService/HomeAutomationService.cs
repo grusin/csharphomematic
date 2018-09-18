@@ -44,8 +44,16 @@ namespace HouseAutomationService
                     humidityAutomation.MinOffTime = Settings.Default.HumidityAutomationMinOffTime;
  
                     LOGGER.Info("Starting heating manager");
-                    //init heating automation, level is decimal from 0.0 to 1.0
-                    var heatingAutomation = new ActuatorSensorAutomation<IValveControlDevice>(dm, "Heating", (d) => Convert.ToInt32(Math.Round(d.Level.Value * 100)));
+                    
+                    var heatingAutomation = new ActuatorSensorAutomation<ITempControlDevice>(dm, "Heating", (d) =>
+                        {
+                            int target = Convert.ToInt32(Math.Round(d.Set_Point_Temperature.Value * 10M));
+                            int actual = Convert.ToInt32(Math.Round(d.Actual_Temperature.Value * 10M));
+
+                            int diff = target - actual;
+                            return diff;
+                        }                   
+                    );
                     heatingAutomation.RefencePoint = Settings.Default.HeatingAutomationRefencePoint;
                     heatingAutomation.Hysteresis = Settings.Default.HeatingAutomationHysteresis;
                     heatingAutomation.MaxOnTime = Settings.Default.HeatingAutomationMaxOnTime;
@@ -66,7 +74,15 @@ namespace HouseAutomationService
                     for (;;)
                     {
                         //has internal smart locking (only locks when data structures are modified, not during xmlapi queries)
-                        dm.Refresh();
+                        List<DatapointEvent> eventsSinceLastRefresh = dm.Refresh();
+                        foreach (var e in eventsSinceLastRefresh)
+                        {
+                            LOGGER.InfoFormat("{0} EVENT {1}: ({2}) => ({3})",
+                                e.EventTimestamp.ToString("o"),
+                                e.Current.Name,
+                                e.Previous == null ? "" : e.Previous.Value, e.Current.Value
+                            );
+                        }
 
                         //dumb locking for now
                         lock (dm.RefreshLock)

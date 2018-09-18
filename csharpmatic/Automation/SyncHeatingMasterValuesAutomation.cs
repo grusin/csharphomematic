@@ -1,5 +1,6 @@
 ﻿using csharpmatic.Generic;
 using csharpmatic.Interfaces;
+using log4net;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,8 @@ namespace csharpmatic.Automation
 {
     public class SyncHeatingMasterValuesAutomation
     {
+        private static ILog LOGGER = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         public static void SyncHeatingMastervalues(ITempControlDevice leader, List<ITempControlDevice> devicesInScope, HashSet<string> masterValuesInScope)
         {
             if (leader == null || leader.PendingConfig || !leader.Reachable)
@@ -36,7 +39,7 @@ namespace csharpmatic.Automation
                                 toChange.Add(d.Channels[1], new List<MasterValue>());
 
                             toChange[d.Channels[1]].Add(lmv);
-                            Console.WriteLine($"{d.Name} {mv.Name} = {mv.Value} where leader ({leader.Name}) has {lmv.Value}");
+                            LOGGER.InfoFormat($"Master value sync: found {d.Name} {mv.Name} = {mv.Value} where leader ({leader.Name}) has {lmv.Value}. Syncing with leader.");
                         }
                     }
                 }
@@ -55,7 +58,7 @@ namespace csharpmatic.Automation
             var houseMasterValues = new HashSet<string>(houseLeader.Channels[1].MasterValues.Values.Where(w => !w.Name.Contains("TEMPERATURE")).Select(s => s.Name));
             var roomMasterValues = new HashSet<string>(houseLeader.Channels[1].MasterValues.Values.Where(w => w.Name.Contains("TEMPERATURE")).Select(s => s.Name));
 
-            Console.WriteLine("Syncing house mastervalues...");
+            LOGGER.Debug("Syncing house mastervalues...");
             SyncHeatingMastervalues(houseLeader, allDevices, houseMasterValues);
 
             var allRooms = allDevices.SelectMany(d => d.Rooms).Distinct().ToList();
@@ -65,11 +68,11 @@ namespace csharpmatic.Automation
                 var roomDevices = allDevices.Where(w => w.Rooms.Contains(r)).ToList();
                 var roomLeader = allDevices.Where(w => w.ISEID == roomDevices.Min(min => min.ISEID)).FirstOrDefault();
 
-                Console.WriteLine($"Syncing {r} mastervalues...");
+                LOGGER.Debug($"Syncing {r} mastervalues...");
                 SyncHeatingMastervalues(roomLeader, roomDevices, roomMasterValues);
             }
 
-            Console.WriteLine("Mastervalues across devices are in sync!");
+            LOGGER.Debug("Mastervalues across devices are in sync!");
         }
     }
 }

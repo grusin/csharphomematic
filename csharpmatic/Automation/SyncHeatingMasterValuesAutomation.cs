@@ -12,6 +12,7 @@ namespace csharpmatic.Automation
     public class SyncHeatingMasterValuesAutomation
     {
         private static ILog LOGGER = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private static Dictionary<string, string> RoomLeadersCache = new Dictionary<string, string>();
 
         public static void SyncHeatingMastervalues(ITempControlDevice leader, List<ITempControlDevice> devicesInScope, HashSet<string> masterValuesInScope)
         {
@@ -67,6 +68,12 @@ namespace csharpmatic.Automation
             {
                 var roomDevices = allDevices.Where(w => w.Rooms.Contains(r)).ToList();
                 var roomLeader = allDevices.Where(w => w.ISEID == roomDevices.Min(min => min.ISEID)).FirstOrDefault();
+
+                if(!RoomLeadersCache.ContainsKey(r))
+                {
+                    RoomLeadersCache.Add(r, roomLeader.ISEID);
+                    LOGGER.InfoFormat($"Room '{r}' leader is: '{roomLeader.Name}'");
+                }
 
                 LOGGER.Debug($"Syncing {r} mastervalues...");
                 SyncHeatingMastervalues(roomLeader, roomDevices, roomMasterValues);

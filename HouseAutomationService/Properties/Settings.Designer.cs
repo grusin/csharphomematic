@@ -23,147 +23,111 @@ namespace HouseAutomationService.Properties {
             }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("9696")]
-        public int WebServerListenPort {
-            get {
-                return ((int)(this["WebServerListenPort"]));
-            }
-            set {
-                this["WebServerListenPort"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("65")]
-        public int HumidityAutomationRefencePoint {
-            get {
-                return ((int)(this["HumidityAutomationRefencePoint"]));
-            }
-            set {
-                this["HumidityAutomationRefencePoint"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("3")]
         public int HumidityAutomationHysteresis {
             get {
                 return ((int)(this["HumidityAutomationHysteresis"]));
             }
-            set {
-                this["HumidityAutomationHysteresis"] = value;
-            }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("01:00:00")]
         public global::System.TimeSpan HumidityAutomationMaxOnTime {
             get {
                 return ((global::System.TimeSpan)(this["HumidityAutomationMaxOnTime"]));
             }
-            set {
-                this["HumidityAutomationMaxOnTime"] = value;
-            }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("00:15:00")]
         public global::System.TimeSpan HumidityAutomationMinOnTime {
             get {
                 return ((global::System.TimeSpan)(this["HumidityAutomationMinOnTime"]));
             }
-            set {
-                this["HumidityAutomationMinOnTime"] = value;
-            }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("00:05:00")]
         public global::System.TimeSpan HumidityAutomationMinOffTime {
             get {
                 return ((global::System.TimeSpan)(this["HumidityAutomationMinOffTime"]));
             }
-            set {
-                this["HumidityAutomationMinOffTime"] = value;
-            }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("20")]
-        public int HeatingAutomationRefencePoint {
-            get {
-                return ((int)(this["HeatingAutomationRefencePoint"]));
-            }
-            set {
-                this["HeatingAutomationRefencePoint"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("2")]
-        public int HeatingAutomationHysteresis {
-            get {
-                return ((int)(this["HeatingAutomationHysteresis"]));
-            }
-            set {
-                this["HeatingAutomationHysteresis"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("00:05:00")]
-        public global::System.TimeSpan HeatingAutomationMaxOnTime {
-            get {
-                return ((global::System.TimeSpan)(this["HeatingAutomationMaxOnTime"]));
-            }
-            set {
-                this["HeatingAutomationMaxOnTime"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("00:00:30")]
         public global::System.TimeSpan HeatingAutomationMinOnTime {
             get {
                 return ((global::System.TimeSpan)(this["HeatingAutomationMinOnTime"]));
             }
-            set {
-                this["HeatingAutomationMinOnTime"] = value;
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("78")]
+        public int HumidityAutomationRefencePoint {
+            get {
+                return ((int)(this["HumidityAutomationRefencePoint"]));
             }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("00:02:00")]
+        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        public int HeatingAutomationRefencePoint {
+            get {
+                return ((int)(this["HeatingAutomationRefencePoint"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        public int HeatingAutomationHysteresis {
+            get {
+                return ((int)(this["HeatingAutomationHysteresis"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("00:06:00")]
+        public global::System.TimeSpan HeatingAutomationMaxOnTime {
+            get {
+                return ((global::System.TimeSpan)(this["HeatingAutomationMaxOnTime"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("00:05:00")]
         public global::System.TimeSpan heatingAutomationMinOffTime {
             get {
                 return ((global::System.TimeSpan)(this["heatingAutomationMinOffTime"]));
             }
-            set {
-                this["heatingAutomationMinOffTime"] = value;
-            }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("192.168.178.14")]
+        [global::System.Configuration.DefaultSettingValueAttribute("192.168.1.200")]
         public string HomematicServerAddress {
             get {
                 return ((string)(this["HomematicServerAddress"]));
             }
-            set {
-                this["HomematicServerAddress"] = value;
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("81")]
+        public int WebServerListenPort {
+            get {
+                return ((int)(this["WebServerListenPort"]));
             }
         }
     }

@@ -2,41 +2,41 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="HouseAutomationService.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="WebServerListenPort" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">9696</Value>
-    </Setting>
-    <Setting Name="HumidityAutomationRefencePoint" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">65</Value>
-    </Setting>
-    <Setting Name="HumidityAutomationHysteresis" Type="System.Int32" Scope="User">
+    <Setting Name="HumidityAutomationHysteresis" Type="System.Int32" Scope="Application">
       <Value Profile="(Default)">3</Value>
     </Setting>
-    <Setting Name="HumidityAutomationMaxOnTime" Type="System.TimeSpan" Scope="User">
+    <Setting Name="HumidityAutomationMaxOnTime" Type="System.TimeSpan" Scope="Application">
       <Value Profile="(Default)">01:00:00</Value>
     </Setting>
-    <Setting Name="HumidityAutomationMinOnTime" Type="System.TimeSpan" Scope="User">
+    <Setting Name="HumidityAutomationMinOnTime" Type="System.TimeSpan" Scope="Application">
       <Value Profile="(Default)">00:15:00</Value>
     </Setting>
-    <Setting Name="HumidityAutomationMinOffTime" Type="System.TimeSpan" Scope="User">
+    <Setting Name="HumidityAutomationMinOffTime" Type="System.TimeSpan" Scope="Application">
       <Value Profile="(Default)">00:05:00</Value>
     </Setting>
-    <Setting Name="HeatingAutomationRefencePoint" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">20</Value>
-    </Setting>
-    <Setting Name="HeatingAutomationHysteresis" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">2</Value>
-    </Setting>
-    <Setting Name="HeatingAutomationMaxOnTime" Type="System.TimeSpan" Scope="User">
-      <Value Profile="(Default)">00:05:00</Value>
-    </Setting>
-    <Setting Name="HeatingAutomationMinOnTime" Type="System.TimeSpan" Scope="User">
+    <Setting Name="HeatingAutomationMinOnTime" Type="System.TimeSpan" Scope="Application">
       <Value Profile="(Default)">00:00:30</Value>
     </Setting>
-    <Setting Name="heatingAutomationMinOffTime" Type="System.TimeSpan" Scope="User">
-      <Value Profile="(Default)">00:02:00</Value>
+    <Setting Name="HumidityAutomationRefencePoint" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">78</Value>
     </Setting>
-    <Setting Name="HomematicServerAddress" Type="System.String" Scope="User">
-      <Value Profile="(Default)">192.168.178.14</Value>
+    <Setting Name="HeatingAutomationRefencePoint" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">5</Value>
+    </Setting>
+    <Setting Name="HeatingAutomationHysteresis" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">5</Value>
+    </Setting>
+    <Setting Name="HeatingAutomationMaxOnTime" Type="System.TimeSpan" Scope="Application">
+      <Value Profile="(Default)">00:06:00</Value>
+    </Setting>
+    <Setting Name="heatingAutomationMinOffTime" Type="System.TimeSpan" Scope="Application">
+      <Value Profile="(Default)">00:05:00</Value>
+    </Setting>
+    <Setting Name="HomematicServerAddress" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">192.168.1.200</Value>
+    </Setting>
+    <Setting Name="WebServerListenPort" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">81</Value>
     </Setting>
   </Settings>
 </SettingsFile>

@@ -15,26 +15,71 @@ namespace csharpmatic.Automation
         public int RefencePoint { get; set; } = 0;
         public int Hysteresis { get; set; } = 1;
         public TimeSpan MaxOnTime { get; set;} = new TimeSpan(0, 5, 0);
-
         public TimeSpan MinOnTime { get; set; } = new TimeSpan(0, 0, 30);
         public TimeSpan MinOffTime { get; set; } = new TimeSpan(0, 1, 0);
         public DeviceManager DeviceManager { get; private set; }
 
-        public Func<T, int> DatapointGetter;
+        public Func<ActuatorSensorAutomation<T>, T, int> DatapointGetter;
+
+        private Dictionary<string, UsageTracker> UsageTracker;
+        private List<UsageLimit> UsageLimits;
 
         private static ILog LOGGER = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
-        public ActuatorSensorAutomation(DeviceManager dm, string deviceFunction,  Func<T, int> datapointGetter)
+        public bool IgnoreLimits = false;
+
+        public ActuatorSensorAutomation(DeviceManager dm, string deviceFunction, Func<ActuatorSensorAutomation<T>, T, int> datapointGetter)
         {
             DeviceFunction = deviceFunction;
             DeviceManager = dm;
-            DatapointGetter = datapointGetter;
+            DatapointGetter = datapointGetter;            
+
+            UsageTracker = new Dictionary<string, Automation.UsageTracker>();
+            UsageLimits = new List<UsageLimit>();
+            UsageLimits.Add(new UsageLimit(new TimeSpan(0, 7, 0), 5)); 
+            UsageLimits.Add(new UsageLimit(new TimeSpan(0, 15, 0), 10));
+            UsageLimits.Add(new UsageLimit(new TimeSpan(0, 60, 0), 20));
+        }
+
+        private void AddActuatorUsage(ISingleSwitchControlDevice dev)
+        {
+            if (!UsageTracker.ContainsKey(dev.ISEID))
+                UsageTracker.Add(dev.ISEID, new UsageTracker());
+
+            UsageTracker ut = UsageTracker[dev.ISEID];
+
+            ut.SetUsageTrueWins(dev.State.Value);
+        }
+
+        public bool CheckIfActuatorIsWithinUsageLimits(ISingleSwitchControlDevice dev)
+        {
+            foreach(var ul in UsageLimits)
+            {
+                UsageTracker ut = null;
+
+                if (!UsageTracker.TryGetValue(dev.ISEID, out ut))
+                    continue;
+
+                int cnt = ut.GetEventCount(ul.TimeSpan, true);
+
+                if (cnt > ul.MaximumTrue)
+                {
+                    if (dev.State.Value)
+                        LOGGER.InfoFormat($"{dev.Name} is above usage limit: {cnt} (max {ul.MaximumTrue} in {ul.TimeSpan}");
+
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         public void Work()
         {
             if (RefencePoint == 0)
                 throw new Exception("Reference point not set!");
+
+            IgnoreLimits = false;
             
             //logic:
             //- each control group is controlled by multiple actuators assigned to the room that sensors are in. both sensors and acturators must be in the same function group
@@ -49,7 +94,8 @@ namespace csharpmatic.Automation
 
             //get list of all sensors in all rooms supporting the interface
             //skip devices which are offline or have their config not up to date
-            var sensors = devices.Where(w => w is T && w.Reachable && !w.PendingConfig).Cast<T>();
+            //skip devices which are having 'NOSENSOR' function
+            var sensors = devices.Where(w => w is T && w.Reachable && !w.PendingConfig && !w.Functions.Contains(Device.NoSensorDeviceFunction)).Cast<T>();
 
             //get list of actuators for all rooms for function. Dimmer actuators are not supported.
             //intentionaly we get all actuators, even the 'down' ones.
@@ -69,6 +115,8 @@ namespace csharpmatic.Automation
                 //get actuators for the room              
                 foreach (var a in actuators.Where(w => w.Rooms.Contains(r)))
                 {
+                    AddActuatorUsage(a);
+
                     int offCondition;
 
                     //if actuators is on, it has to go below refPoint - hysteresis to be switched off
@@ -86,7 +134,7 @@ namespace csharpmatic.Automation
 
                     foreach (var s in sensors.Where(s => s.Rooms.Contains(r)))
                     {
-                        int dpValue = DatapointGetter(s);
+                        int dpValue = DatapointGetter(this, s);
 
                         if (dpValue >= offCondition)
                         {
@@ -112,14 +160,16 @@ namespace csharpmatic.Automation
                 TimeSpan howLongInState = (DateTime.UtcNow - a.State.Timestamp);
                 LOGGER.DebugFormat($"{a.Name} is {a.State.Value} for {howLongInState}");
 
-                if (a.State.Value == true && howLongInState > MaxOnTime)
+                //bool isWithinLimits = CheckIfActuatorIsWithinUsageLimits(a);
+
+                if (a.State.Value == true && (howLongInState > MaxOnTime) && IgnoreLimits == false)
                 {
                     LOGGER.InfoFormat($"Turning OFF {a.Name}, it has been ON for too long  ({howLongInState} vs. {MaxOnTime})");
                     a.State.Value = false;
                 }
                 else if (toON.Contains(a) && a.State.Value == false)
                 {
-                    if (MinOffTime > howLongInState)
+                    if (MinOffTime > howLongInState && IgnoreLimits == false)
                         LOGGER.InfoFormat($"Cannot turn ON {a.Name}, it has not been OFF long enough ({howLongInState} vs. {MinOffTime})");
                     else
                     {

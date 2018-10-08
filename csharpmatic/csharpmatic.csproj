@@ -81,7 +81,7 @@
   <ItemGroup>
     <Compile Include="Automation\ActuatorSensorAutomation.cs" />
     <Compile Include="Automation\SyncHeatingMasterValuesAutomation.cs" />
-    <Compile Include="Automation\UsageLimits.cs" />
+    <Compile Include="Automation\UsageLimit.cs" />
     <Compile Include="Automation\UsageTracker.cs" />
     <Compile Include="Interfaces\Devices\HMIP_BDT.generated.cs" />
     <Compile Include="Interfaces\Devices\HMIP_ETRV.generated.cs" />

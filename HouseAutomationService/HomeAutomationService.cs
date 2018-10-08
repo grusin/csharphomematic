@@ -36,7 +36,7 @@ namespace HouseAutomationService
 
                     LOGGER.Info($"Starting humidity manager");
                     //init humidity automation, humidity is int from 0 to 100
-                    var humidityAutomation = new ActuatorSensorAutomation<IHumidityControlDevice>(dm, "Humidity", (d) => d.Humidity.Value);
+                    var humidityAutomation = new ActuatorSensorAutomation<IHumidityControlDevice>(dm, "Humidity", (a, d) => d.Humidity.Value);
                     humidityAutomation.RefencePoint = Settings.Default.HumidityAutomationRefencePoint;
                     humidityAutomation.Hysteresis = Settings.Default.HumidityAutomationHysteresis;
                     humidityAutomation.MaxOnTime = Settings.Default.HumidityAutomationMaxOnTime;
@@ -45,11 +45,19 @@ namespace HouseAutomationService
  
                     LOGGER.Info("Starting heating manager");
                     
-                    var heatingAutomation = new ActuatorSensorAutomation<ITempControlDevice>(dm, "Heating", (d) =>
+                    var heatingAutomation = new ActuatorSensorAutomation<ITempControlDevice>(dm, "Heating", (a, d) =>
                         {
+                            a.IgnoreLimits = false;
+
+                            if (d.Boost_Mode.Value)
+                            {
+                                a.IgnoreLimits = true;
+                                return 100;
+                            }
+
                             int target = Convert.ToInt32(Math.Round(d.Set_Point_Temperature.Value * 10M));
                             int actual = Convert.ToInt32(Math.Round(d.Actual_Temperature.Value * 10M));
-
+                            
                             int diff = target - actual;
                             return diff;
                         }                   
@@ -68,6 +76,10 @@ namespace HouseAutomationService
                     server.Module<CorsModule>();
                     RoomController.DeviceManager = dm;
                     server.Module<WebApiModule>().RegisterController<RoomController>();
+                    server.RegisterModule(new StaticFilesModule(@"www"));
+                    server.Module<StaticFilesModule>().UseRamCache = true;
+                    server.Module<StaticFilesModule>().DefaultExtension = ".html";
+
                     server.RunAsync();
 
                     LOGGER.Info("Starting entering main loop");

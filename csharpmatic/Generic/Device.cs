@@ -11,6 +11,9 @@ namespace csharpmatic.Generic
 {
     public class Device : IHmDevice
     {
+        public const String NoSensorDeviceFunction = "NOSENSOR";
+        public const String NoActuatorDeviceFunction = "NOACTUATOR";
+
         public Channel[] Channels { get; private set; }
         [JsonIgnore]
 

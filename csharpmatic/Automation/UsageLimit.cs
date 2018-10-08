@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace csharpmatic.Automation
 {
-    public class UsageLimits
+    public class UsageLimit
     {
         public TimeSpan TimeSpan { get; private set; }
         public int MaximumTrue { get; private set; }
 
-        public UsageLimits(TimeSpan ts, int limit)
+        public UsageLimit(TimeSpan ts, int limit)
         {
             TimeSpan = ts;
             MaximumTrue = limit;

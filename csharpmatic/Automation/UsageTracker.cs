@@ -23,7 +23,7 @@ namespace csharpmatic.Automation
                 return false;
         }
 
-        public int GetEventsStats(TimeSpan ts, bool value)
+        public int GetEventCount(TimeSpan ts, bool value)
         {
             DateTime start = GetTimeStampWithMinutesPrecision() - ts;
 

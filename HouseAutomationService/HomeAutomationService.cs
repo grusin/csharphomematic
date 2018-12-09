@@ -46,9 +46,7 @@ namespace HouseAutomationService
                     LOGGER.Info("Starting heating manager");
                     
                     var heatingAutomation = new ActuatorSensorAutomation<ITempControlDevice>(dm, "Heating", (a, d) =>
-                        {
-                            a.IgnoreLimits = false;
-
+                        {                           
                             if (d.Boost_Mode.Value)
                             {
                                 a.IgnoreLimits = true;

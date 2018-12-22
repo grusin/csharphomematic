@@ -65,24 +65,7 @@ namespace csharpmatic.Generic
                 }
             }
 
-            PingUnreachableDevices(1);
             return GetEvents();
-        }
-
-        private void PingUnreachableDevices(int count)
-        {
-            return;
-
-            var devs = Devices.Where(w => !w.Reachable && (DateTime.Now - w.LastCommunicationTest).TotalSeconds >= 120).OrderBy(w => w.LastCommunicationTest);
-
-            foreach (var d in devs)
-            {
-                d.StartCommunicationTest();
-                count--;
-
-                if (count <= 0)
-                    return;
-            }
         }
 
         private List<DatapointEvent> GetEvents()

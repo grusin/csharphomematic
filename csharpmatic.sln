@@ -34,6 +34,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HomeAutomationService", "Ho
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Samples.WebServer", "Samples.WebServer\Samples.WebServer.csproj", "{16CF27E3-59A3-4BE0-B203-5730AB7AFF9B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Samples.Alarm", "Samples.Alarm\Samples.Alarm.csproj", "{78F8739E-48EC-45DA-8A98-A3DC96851079}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D3C127BA-763D-41C8-84A2-6A4677588767} = {D3C127BA-763D-41C8-84A2-6A4677588767}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -88,6 +93,10 @@ Global
 		{16CF27E3-59A3-4BE0-B203-5730AB7AFF9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{16CF27E3-59A3-4BE0-B203-5730AB7AFF9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{16CF27E3-59A3-4BE0-B203-5730AB7AFF9B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{78F8739E-48EC-45DA-8A98-A3DC96851079}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78F8739E-48EC-45DA-8A98-A3DC96851079}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78F8739E-48EC-45DA-8A98-A3DC96851079}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78F8739E-48EC-45DA-8A98-A3DC96851079}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -101,5 +110,6 @@ Global
 		{55E5A067-DC0B-46C2-BA4F-83BC01A00E09} = {00178263-1F68-4E6B-99D2-C91570495BF1}
 		{8F19B03E-FF0D-47AC-BEF4-6353565403E8} = {00178263-1F68-4E6B-99D2-C91570495BF1}
 		{16CF27E3-59A3-4BE0-B203-5730AB7AFF9B} = {00178263-1F68-4E6B-99D2-C91570495BF1}
+		{78F8739E-48EC-45DA-8A98-A3DC96851079} = {00178263-1F68-4E6B-99D2-C91570495BF1}
 	EndGlobalSection
 EndGlobal

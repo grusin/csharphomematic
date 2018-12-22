@@ -16,8 +16,12 @@ namespace csharpmatic.RestApi
     {
         public static DeviceManager DeviceManager { get; set; }
 
+        public RoomController(IHttpContext context) : base(context)
+        {
+        }
+        
         [WebApiHandler(HttpVerbs.Get, "/api/rooms")]
-        public bool GetRooms(WebServer server, HttpListenerContext context)
+        public bool GetRooms()
         {
             List<Room> list = new List<Room>();
 
@@ -30,13 +34,11 @@ namespace csharpmatic.RestApi
                 }
             }
 
-            context.JsonResponse(list);
-
-            return true;
+            return this.JsonResponse(list);
         }
 
         [WebApiHandler(HttpVerbs.Get, "/api/rooms/{iseid}")]
-        public bool GetRoom(WebServer server, HttpListenerContext context, string iseid)
+        public bool GetRoom(string iseid)
         {
             lock (DeviceManager.RefreshLock)
             {
@@ -44,8 +46,7 @@ namespace csharpmatic.RestApi
                 if (dr != null)
                 {
                     Room r = new Room(dr);
-                    context.JsonResponse(r);
-                    return true;
+                    return this.JsonResponse(r);
                 }
             }
 
@@ -53,7 +54,7 @@ namespace csharpmatic.RestApi
         }
 
         [WebApiHandler(HttpVerbs.Get, "/api/rooms/{iseid}/temp/{newtemp}")]
-        public bool SetRoomTemp(WebServer server, HttpListenerContext context, string iseid, decimal newtemp)
+        public bool SetRoomTemp(string iseid, decimal newtemp)
         {
             List<Room> list = new List<Room>();
 
@@ -66,8 +67,7 @@ namespace csharpmatic.RestApi
                     var dp = dr.TempControlDevices.GroupLeader.Set_Point_Temperature;
                     dp.SetRoomValue(newtemp);
                     Room r = new Room(dr);
-                    context.JsonResponse(r);
-                    return true;
+                    return this.JsonResponse(r);
                 }
             }
 
@@ -75,7 +75,7 @@ namespace csharpmatic.RestApi
         }
 
         [WebApiHandler(HttpVerbs.Get, "/api/rooms/{iseid}/boostmode/{newstate}")]
-        public bool SetRoom(WebServer server, HttpListenerContext context, string iseid, bool newstate)
+        public bool SetRoom(string iseid, bool newstate)
         {
             List<Room> list = new List<Room>();
 
@@ -89,9 +89,7 @@ namespace csharpmatic.RestApi
                     dp.SetRoomValue(newstate);
 
                     Room r = new Room(dr);
-                    context.JsonResponse(r);
-
-                    return true;
+                    return this.JsonResponse(r);
                 }
             }
 
@@ -99,11 +97,10 @@ namespace csharpmatic.RestApi
         }
 
         // You can override the default headers and add custom headers to each API Response.
-        public override void SetDefaultHeaders(HttpListenerContext context)
+        public override void SetDefaultHeaders()
         {
-            context.NoCache();
-            context.Response.Headers.Add("Access-Control-Allow-Origin", "*");
+            this.NoCache();
+            this.Response.Headers.Add("Access-Control-Allow-Origin", "*");
         }
     }
-
 }

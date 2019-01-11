@@ -23,15 +23,12 @@ namespace csharpmatic.Properties {
             }
         }
         
-        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("192.168.1.200")]
         public string ServerAddress {
             get {
                 return ((string)(this["ServerAddress"]));
-            }
-            set {
-                this["ServerAddress"] = value;
             }
         }
     }

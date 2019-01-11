@@ -42,7 +42,10 @@ namespace csharpmatic.Generic
         public List<DatapointEvent> Refresh()
         {
             //this does not need lock, it's internal data structure, and this actually takes time
-            bool fullRefresh = XMLAPIClient.FetchData();
+            var refreshTask = XMLAPIClient.FetchData();
+            refreshTask.Wait();
+
+            bool fullRefresh = refreshTask.Result;
 
             //this should be quick
             lock (RefreshLock)

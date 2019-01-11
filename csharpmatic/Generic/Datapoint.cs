@@ -20,7 +20,7 @@ namespace csharpmatic.Generic
 
         private object _InternalValue;
 
-        public object Value { get { return GetValue(); } set { SetValue(value); } }
+        public object Value { get { return GetValue(); } set { SetValue(value); } }               
 
         private string _InternalValueType;
 
@@ -179,8 +179,11 @@ namespace csharpmatic.Generic
         public void SetValue(object value)
         {
             SetInternalValue(value);
+                       
 
             XMLAPI.Client cgi = new XMLAPI.Client(Channel.Device.DeviceManager.HttpServerUri);
+
+            //FIXME: this should use async logic
             cgi.SetISEIDValue(ISEID, GetValueString());
         }
 

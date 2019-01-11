@@ -59,9 +59,7 @@ namespace csharpmatic.Generic
         }
 
         private void FillFromMasterValueList(XMLAPI.MastervalueList.mastervalue masterValueList)
-        {
-            //MasterValues = new Dictionary<string, MasterValue>();
-
+        {            
             foreach (var c in masterValueList.channels.Where(w => w.mastervalue != null))
             {
                 var dc = DeviceManager.Devices.SelectMany(d => d.Channels.Where(w => w.ISEID == c.ise_id)).FirstOrDefault();

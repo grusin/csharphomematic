@@ -19,11 +19,16 @@ namespace Samples.RestApi
             DeviceManager dm = new DeviceManager("192.168.1.200");                  
                      
             //start webserver listening on 
-            var server = new WebServer("http://localhost:9696/", RoutingStrategy.Regex);
+            var server = new WebServer("http://localhost:81/", RoutingStrategy.Regex);
+
             server.RegisterModule(new WebApiModule());
             server.Module<CorsModule>();
             RoomController.DeviceManager = dm;
             server.Module<WebApiModule>().RegisterController<RoomController>();
+
+            server.RegisterModule(new StaticFilesModule(@"C:\Users\G\npm\homeui\build"));
+
+
             server.RunAsync();
 
             //do homemmatic logic 

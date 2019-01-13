@@ -57,7 +57,7 @@ namespace csharpmatic.Automation
             var allDevices = dm.GetDevicesImplementingInterface<ITempControlDevice>();
             var houseLeader = allDevices.Where(w => w.ISEID == allDevices.Min(min => min.ISEID)).FirstOrDefault();
             var houseMasterValues = new HashSet<string>(houseLeader.Channels[1].MasterValues.Values.Where(w => !w.Name.Contains("TEMPERATURE")).Select(s => s.Name));
-            var roomMasterValues = new HashSet<string>(houseLeader.Channels[1].MasterValues.Values.Where(w => w.Name.Contains("TEMPERATURE")).Select(s => s.Name));
+            var roomMasterValues = new HashSet<string>(houseLeader.Channels[1].MasterValues.Values.Where(w => w.Name.Contains("TEMPERATURE") && w.Name != "TEMPERATURE_OFFSET").Select(s => s.Name));
 
             LOGGER.Debug("Syncing house mastervalues...");
             SyncHeatingMastervalues(houseLeader, allDevices, houseMasterValues);

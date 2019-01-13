@@ -70,7 +70,7 @@ namespace HouseAutomationService.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("78")]
+        [global::System.Configuration.DefaultSettingValueAttribute("60")]
         public int HumidityAutomationRefencePoint {
             get {
                 return ((int)(this["HumidityAutomationRefencePoint"]));
@@ -128,6 +128,15 @@ namespace HouseAutomationService.Properties {
         public int WebServerListenPort {
             get {
                 return ((int)(this["WebServerListenPort"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Users\\G\\npm\\homeui\\build")]
+        public string WebServerRoot {
+            get {
+                return ((string)(this["WebServerRoot"]));
             }
         }
     }

@@ -74,7 +74,7 @@ namespace HouseAutomationService
                     server.Module<CorsModule>();
                     RoomController.DeviceManager = dm;
                     server.Module<WebApiModule>().RegisterController<RoomController>();
-                    server.RegisterModule(new StaticFilesModule(@"www"));
+                    server.RegisterModule(new StaticFilesModule(Settings.Default.WebServerRoot));
                     server.Module<StaticFilesModule>().UseRamCache = true;
                     server.Module<StaticFilesModule>().DefaultExtension = ".html";
 

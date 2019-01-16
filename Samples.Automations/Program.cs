@@ -35,6 +35,8 @@ namespace Samples.Automations
             heatingAutomation.MinOnTime = new TimeSpan(0, 0, 30);
             heatingAutomation.MinOffTime = new TimeSpan(0, 3, 0);
 
+            var windowAutomation = new WindowOpenAutomation(dm);
+
             for (;;)
             {
                 //pull latest data from the web services
@@ -53,11 +55,15 @@ namespace Samples.Automations
                 //- if in any room, function's datapoint goes belove ref point, all function actuators assigned to that room will be turned ON
                 //  - actuators that are needed for multiple rooms, will be kept alive, till they are not needed to be ON in all rooms
                 //- hysteresis will be guarding against too frequent on and off
-                humidityAutomation.Work();
-                heatingAutomation.Work();
+
+                //DEBUG these are commented out if you don't need to test them/use them
+                //humidityAutomation.Work();
+                //heatingAutomation.Work();
+
+                windowAutomation.Work();
 
                 //wait a bit before running again
-                Thread.Sleep(3000);
+                Thread.Sleep(1000);
             }
         }
     }

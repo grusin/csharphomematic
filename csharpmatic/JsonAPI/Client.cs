@@ -153,5 +153,12 @@ namespace csharpmatic.JsonAPI
         {
             return Session_RpcCall("Device.startComTest", JObject.Parse(@"{ id: '" + d.ISEID + "'}"));
         }
+
+        public JToken Interface_GetRSSI(string interfaceName="HmIP-RF")
+        {
+            Session_Login();
+
+            return Session_RpcCall("Interface.rssiInfo", JObject.Parse(@"{ interface: '" + interfaceName + "'}"));
+        }
     }
 }

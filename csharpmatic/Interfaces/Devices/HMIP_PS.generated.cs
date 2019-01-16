@@ -8,7 +8,7 @@ using System.IO;
 
 namespace csharpmatic.Interfaces.Devices
 {
-  public partial class HMIP_PSM : Device, ISingleSwitchControlDevice, IHmIPDevice
+  public partial class HMIP_PS : Device, ISingleSwitchControlDevice, IHmIPDevice
   {
 		public TypedDatapoint<System.Decimal> Actuator_Actual_Temperature { get; private set; }
 
@@ -46,28 +46,14 @@ namespace csharpmatic.Interfaces.Devices
 
 		public TypedDatapoint<System.Boolean> State { get; private set; }
 
-		public TypedDatapoint<Decimal> Current { get; private set; }
+		public TypedDatapoint<Int32> Week_Program_Channel_Locks { get; private set; }
 
-		public TypedDatapoint<Int32> Current_Status { get; private set; }
+		public TypedDatapoint<Int32> Week_Program_Target_Channel_Lock { get; private set; }
 
-		public TypedDatapoint<Decimal> Energy_Counter { get; private set; }
-
-		public TypedDatapoint<Boolean> Energy_Counter_Overflow { get; private set; }
-
-		public TypedDatapoint<Decimal> Frequency { get; private set; }
-
-		public TypedDatapoint<Int32> Frequency_Status { get; private set; }
-
-		public TypedDatapoint<Decimal> Power { get; private set; }
-
-		public TypedDatapoint<Int32> Power_Status { get; private set; }
-
-		public TypedDatapoint<Decimal> Voltage { get; private set; }
-
-		public TypedDatapoint<Int32> Voltage_Status { get; private set; }
+		public TypedDatapoint<Int32> Week_Program_Target_Channel_Locks { get; private set; }
 
 
-      public HMIP_PSM(XMLAPI.DeviceList.Device d, XMLAPI.Client CGIClient, DeviceManager dm) : base(d, CGIClient, dm)
+      public HMIP_PS(XMLAPI.DeviceList.Device d, XMLAPI.Client CGIClient, DeviceManager dm) : base(d, CGIClient, dm)
       {
 			Actuator_Actual_Temperature = new TypedDatapoint<System.Decimal>(base.Channels[0].Datapoints["ACTUATOR_ACTUAL_TEMPERATURE"]);
 
@@ -105,25 +91,11 @@ namespace csharpmatic.Interfaces.Devices
 
 			State = new TypedDatapoint<System.Boolean>(base.Channels[3].Datapoints["STATE"]);
 
-			Current = new TypedDatapoint<Decimal>(base.Channels[6].Datapoints["CURRENT"]);
+			Week_Program_Channel_Locks = new TypedDatapoint<Int32>(base.Channels[6].Datapoints["WEEK_PROGRAM_CHANNEL_LOCKS"]);
 
-			Current_Status = new TypedDatapoint<Int32>(base.Channels[6].Datapoints["CURRENT_STATUS"]);
+			Week_Program_Target_Channel_Lock = new TypedDatapoint<Int32>(base.Channels[6].Datapoints["WEEK_PROGRAM_TARGET_CHANNEL_LOCK"]);
 
-			Energy_Counter = new TypedDatapoint<Decimal>(base.Channels[6].Datapoints["ENERGY_COUNTER"]);
-
-			Energy_Counter_Overflow = new TypedDatapoint<Boolean>(base.Channels[6].Datapoints["ENERGY_COUNTER_OVERFLOW"]);
-
-			Frequency = new TypedDatapoint<Decimal>(base.Channels[6].Datapoints["FREQUENCY"]);
-
-			Frequency_Status = new TypedDatapoint<Int32>(base.Channels[6].Datapoints["FREQUENCY_STATUS"]);
-
-			Power = new TypedDatapoint<Decimal>(base.Channels[6].Datapoints["POWER"]);
-
-			Power_Status = new TypedDatapoint<Int32>(base.Channels[6].Datapoints["POWER_STATUS"]);
-
-			Voltage = new TypedDatapoint<Decimal>(base.Channels[6].Datapoints["VOLTAGE"]);
-
-			Voltage_Status = new TypedDatapoint<Int32>(base.Channels[6].Datapoints["VOLTAGE_STATUS"]);
+			Week_Program_Target_Channel_Locks = new TypedDatapoint<Int32>(base.Channels[6].Datapoints["WEEK_PROGRAM_TARGET_CHANNEL_LOCKS"]);
 
       }
   }

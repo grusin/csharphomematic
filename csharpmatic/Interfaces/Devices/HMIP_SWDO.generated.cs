@@ -22,9 +22,9 @@ namespace csharpmatic.Interfaces.Devices
 
 		public TypedDatapoint<csharpmatic.Interfaces.IHmIP_Operating_Voltage_Status_Enum> Operating_Voltage_Status { get; private set; }
 
-		public TypedDatapoint<System.String> Rssi_Device { get; private set; }
+		public TypedDatapoint<System.Int32> Rssi_Device { get; private set; }
 
-		public TypedDatapoint<System.String> Rssi_Peer { get; private set; }
+		public TypedDatapoint<System.Int32> Rssi_Peer { get; private set; }
 
 		public TypedDatapoint<Boolean> Sabotage { get; private set; }
 
@@ -49,9 +49,9 @@ namespace csharpmatic.Interfaces.Devices
 
 			Operating_Voltage_Status = new TypedDatapoint<csharpmatic.Interfaces.IHmIP_Operating_Voltage_Status_Enum>(base.Channels[0].Datapoints["OPERATING_VOLTAGE_STATUS"]);
 
-			Rssi_Device = new TypedDatapoint<System.String>(base.Channels[0].Datapoints["RSSI_DEVICE"]);
+			Rssi_Device = new TypedDatapoint<System.Int32>(base.Channels[0].Datapoints["RSSI_DEVICE"]);
 
-			Rssi_Peer = new TypedDatapoint<System.String>(base.Channels[0].Datapoints["RSSI_PEER"]);
+			Rssi_Peer = new TypedDatapoint<System.Int32>(base.Channels[0].Datapoints["RSSI_PEER"]);
 
 			Sabotage = new TypedDatapoint<Boolean>(base.Channels[0].Datapoints["SABOTAGE"]);
 

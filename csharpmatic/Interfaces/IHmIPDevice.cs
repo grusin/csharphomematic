@@ -17,9 +17,9 @@ namespace csharpmatic.Interfaces
 
         TypedDatapoint<IHmIP_Operating_Voltage_Status_Enum> Operating_Voltage_Status { get; }
 
-        TypedDatapoint<String> Rssi_Device { get; }
+        TypedDatapoint<int> Rssi_Device { get; }
 
-        TypedDatapoint<String> Rssi_Peer { get; }
+        TypedDatapoint<int> Rssi_Peer { get; }
         
         TypedDatapoint<Boolean> Unreach { get; }
 

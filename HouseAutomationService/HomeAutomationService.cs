@@ -34,7 +34,7 @@ namespace HouseAutomationService
                     //init device manager
                     var dm = new DeviceManager(Settings.Default.HomematicServerAddress);
 
-                    LOGGER.Info($"Starting humidity manager");
+                    LOGGER.Info("Starting humidity automation");
                     //init humidity automation, humidity is int from 0 to 100
                     var humidityAutomation = new ActuatorSensorAutomation<IHumidityControlDevice>(dm, "Humidity", (a, d) => d.Humidity.Value);
                     humidityAutomation.RefencePoint = Settings.Default.HumidityAutomationRefencePoint;
@@ -43,8 +43,7 @@ namespace HouseAutomationService
                     humidityAutomation.MinOnTime = Settings.Default.HumidityAutomationMinOnTime;
                     humidityAutomation.MinOffTime = Settings.Default.HumidityAutomationMinOffTime;
  
-                    LOGGER.Info("Starting heating manager");
-                    
+                    LOGGER.Info("Starting heating automation");                    
                     var heatingAutomation = new ActuatorSensorAutomation<ITempControlDevice>(dm, "Heating", (a, d) =>
                         {                           
                             if (d.Boost_Mode.Value)
@@ -65,6 +64,9 @@ namespace HouseAutomationService
                     heatingAutomation.MaxOnTime = Settings.Default.HeatingAutomationMaxOnTime;
                     heatingAutomation.MinOnTime = Settings.Default.HeatingAutomationMinOnTime;
                     heatingAutomation.MinOffTime = Settings.Default.heatingAutomationMinOffTime;
+
+                    LOGGER.Info("Starting window open/close automation");
+                    var windowAutomation = new WindowOpenAutomation(dm);
 
                     LOGGER.Info("Starting webserver");
                     //init web server
@@ -100,12 +102,12 @@ namespace HouseAutomationService
                             SyncHeatingMasterValuesAutomation.SyncHeatingMastervalues(dm);
                             humidityAutomation.Work();
                             heatingAutomation.Work();
+                            windowAutomation.Work();
                         }
 
                         //refresh data every second
                         new ManualResetEvent(false).WaitOne(1000);
                     }
-
                 }
                 catch (Exception e)
                 {

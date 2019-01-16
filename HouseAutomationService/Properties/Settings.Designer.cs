@@ -133,7 +133,7 @@ namespace HouseAutomationService.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\Users\\G\\npm\\homeui\\build")]
+        [global::System.Configuration.DefaultSettingValueAttribute("www")]
         public string WebServerRoot {
             get {
                 return ((string)(this["WebServerRoot"]));

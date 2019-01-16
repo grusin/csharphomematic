@@ -39,7 +39,7 @@
       <Value Profile="(Default)">81</Value>
     </Setting>
     <Setting Name="WebServerRoot" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">C:\Users\G\npm\homeui\build</Value>
+      <Value Profile="(Default)">www</Value>
     </Setting>
   </Settings>
 </SettingsFile>

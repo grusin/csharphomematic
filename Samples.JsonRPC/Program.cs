@@ -18,6 +18,7 @@ namespace Samples.JsonRPC
             var res2 = rpcClient.Device_listAllDetail();
             var res3 = rpcClient.Device_listAllDetail();
             var res4 = rpcClient.Device_listAllDetail();
+            var res5 = rpcClient.Interface_GetRSSI();
         }
     }
 }

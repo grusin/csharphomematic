@@ -36,7 +36,7 @@ namespace HouseAutomationService
 
                     LOGGER.Info("Starting humidity automation");
                     //init humidity automation, humidity is int from 0 to 100
-                    var humidityAutomation = new ActuatorSensorAutomation<IHumidityControlDevice>(dm, "Humidity", (a, d) => d.Humidity.Value);
+                    var humidityAutomation = new ActuatorSensorAutomation<IHumidityControlDevice>(dm, Function.Humidity, (a, d) => d.Humidity.Value);
                     humidityAutomation.RefencePoint = Settings.Default.HumidityAutomationRefencePoint;
                     humidityAutomation.Hysteresis = Settings.Default.HumidityAutomationHysteresis;
                     humidityAutomation.MaxOnTime = Settings.Default.HumidityAutomationMaxOnTime;
@@ -44,7 +44,7 @@ namespace HouseAutomationService
                     humidityAutomation.MinOffTime = Settings.Default.HumidityAutomationMinOffTime;
  
                     LOGGER.Info("Starting heating automation");                    
-                    var heatingAutomation = new ActuatorSensorAutomation<ITempControlDevice>(dm, "Heating", (a, d) =>
+                    var heatingAutomation = new ActuatorSensorAutomation<ITempControlDevice>(dm, Function.Heating, (a, d) =>
                         {                           
                             if (d.Boost_Mode.Value)
                             {

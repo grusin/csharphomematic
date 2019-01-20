@@ -46,9 +46,9 @@ namespace Samples.Alarm
             if (!Armed)
                 return;
 
-            var devices = DeviceManager.Devices.Where(w => w.Functions.Contains("Alarm")).ToList();
+            var devices = DeviceManager.Devices.Where(w => w.Functions.Contains(Function.Alarm)).ToList();
 
-            var sensors = devices.Where(w => w is HMIP_SWDO && w.Reachable && !w.PendingConfig && !w.Functions.Contains(Device.NoSensorDeviceFunction)).Cast<HMIP_SWDO>();
+            var sensors = devices.Where(w => w is HMIP_SWDO && w.Reachable && !w.PendingConfig && !w.Functions.Contains(Function.Not_Sensor)).Cast<HMIP_SWDO>();
 
             foreach (var s in sensors)
             {

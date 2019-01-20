@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using csharpmatic.Generic;
 using csharpmatic.Interfaces;
 
 namespace csharpmatic.RestApi
@@ -44,11 +45,11 @@ namespace csharpmatic.RestApi
             if (dr.SingleSwitchControlDevices != null)
             {
                 //get heating actuators
-                if (dr.SingleSwitchControlDevices.Where(w => w.Functions.Contains("Heating") && w.State.Value).FirstOrDefault() != null)
+                if (dr.SingleSwitchControlDevices.Where(w => w.Functions.Contains(Function.Heating) && w.State.Value).FirstOrDefault() != null)
                     HeatingActive = true;
 
                 //get dehumidyfier actuators
-                if (dr.SingleSwitchControlDevices.Where(w => w.Functions.Contains("Humidity") && w.State.Value).FirstOrDefault() != null)
+                if (dr.SingleSwitchControlDevices.Where(w => w.Functions.Contains(Function.Humidity) && w.State.Value).FirstOrDefault() != null)
                     DehumidifierActive = true;
             }
 

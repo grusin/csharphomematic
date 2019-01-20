@@ -26,7 +26,7 @@ namespace csharpmatic.Automation
         public void Work()
         {
             //get all window open sensors assigned to heating function
-            var sensor = DeviceManager.Devices.Where(w => w is HMIP_SWDO && w.Functions.Contains("Heating")).Cast<HMIP_SWDO>().ToList();
+            var sensor = DeviceManager.Devices.Where(w => w is HMIP_SWDO && w.Functions.Contains(Function.Heating)).Cast<HMIP_SWDO>().ToList();
                        
             var rooms = sensor.SelectMany(s => s.Rooms).Distinct();
 

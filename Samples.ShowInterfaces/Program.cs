@@ -81,7 +81,7 @@ namespace Samples.ShowInterfaces
                     Console.WriteLine($"- [{d.Name}] Device / Peer: {d.Rssi_Device.Value} / {d.Rssi_Peer.Value}");
 
                 //Get All devies for heating, and print their master values
-                var heatingDevices = dm.Devices.Where(d => d.Functions.Contains("Heating")).OrderBy(o => o.Name);
+                var heatingDevices = dm.Devices.Where(d => d.Functions.Contains(Function.Heating)).OrderBy(o => o.Name);
                 Console.WriteLine("\nHeating devics master values:");
 
                 foreach (var d in heatingDevices)

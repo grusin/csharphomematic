@@ -94,8 +94,8 @@ namespace csharpmatic.Automation
 
             //get list of all sensors in all rooms supporting the interface
             //skip devices which are offline or have their config not up to date
-            //skip devices which are having 'NOSENSOR' function
-            var sensors = devices.Where(w => w is T && w.Reachable && !w.PendingConfig && !w.Functions.Contains(Device.NoSensorDeviceFunction)).Cast<T>();
+            //skip devices which are having 'Not_sensor' function
+            var sensors = devices.Where(w => w is T && w.Reachable && !w.PendingConfig && !w.Functions.Contains(Function.Not_Sensor)).Cast<T>();
 
             //get list of actuators for all rooms for function. Dimmer actuators are not supported.
             //intentionaly we get all actuators, even the 'down' ones.

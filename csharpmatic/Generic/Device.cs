@@ -11,9 +11,6 @@ namespace csharpmatic.Generic
 {
     public class Device : IHmDevice
     {
-        public const String NoSensorDeviceFunction = "NOSENSOR";
-        public const String NoActuatorDeviceFunction = "NOACTUATOR";
-
         public Channel[] Channels { get; private set; }
         [JsonIgnore]
 
@@ -143,21 +140,19 @@ namespace csharpmatic.Generic
         private void FillFromRoomList(XMLAPI.RoomList.RoomList roomList)
         {
             foreach(var room in roomList.Room)
-            {                
-                foreach(var channel in room.Channel)
+            {
+                string rn = room.Name.Trim();
+
+                if (rn.StartsWith("room"))
+                    rn = rn.Substring(4);
+
+                foreach (var channel in room.Channel)
                 {
                     Channel c = null;
                     if (ChannelByISEID.TryGetValue(channel.Ise_id, out c))
                     {
-                        if (!c.Rooms.Contains(room.Name))
-                        {
-                            string r = room.Name.Trim();
-
-                            if (r.StartsWith("room"))
-                                r = r.Substring(4);
-
-                            c.Rooms.Add(r);
-                        }
+                        if (!c.Rooms.Contains(rn))
+                            c.Rooms.Add(rn);
                     }                   
                 }
             }
@@ -167,20 +162,25 @@ namespace csharpmatic.Generic
         {
             foreach(var function in funcList.Function)
             {
+                //make sure function names have "func" stripped from it (legacy homematic setup leaves them like this)
+                //also make sure that the name is capitalized.
+
+                string fn = function.Name.ToLower();
+                if (fn.StartsWith("func"))
+                    fn = fn.Substring(4);
+
+                char[] arr = fn.ToCharArray();
+                arr[0] = Char.ToUpper(arr[0]);
+
+                fn = new string(arr);                
+
                 foreach (var channel in function.Channel)
                 {
                     Channel c = null;
                     if (ChannelByISEID.TryGetValue(channel.Ise_id, out c))
                     {
-                        if(!c.Functions.Contains(function.Name))
-                        {
-                            string f = function.Name;
-
-                            if (f.StartsWith("func"))
-                                f = f.Substring(4);
-
-                            c.Functions.Add(f);
-                        }
+                        if(!c.Functions.Contains(fn))                                                                                   
+                            c.Functions.Add(fn);                        
                     }
                 }
             }
@@ -196,14 +196,6 @@ namespace csharpmatic.Generic
                 var dc = ChannelByISEID[c.Ise_id];
                 dc.UpdateFromXMLAPI(c.Datapoint);
             }
-
-            //Datapoint voltageDp;
-            
-            //if(DatapointByType != null && DatapointByType.TryGetValue("OPERATING_VOLTAGE", out voltageDp))
-            //{
-            //    if (Convert.ToDecimal(voltageDp.Value) == 0.0M)
-            //        Reachable = false;
-            //}
 
             Datapoint rssiDp;
 

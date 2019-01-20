@@ -44,6 +44,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "csharpmaticAutomations", "c
 		{D3C127BA-763D-41C8-84A2-6A4677588767} = {D3C127BA-763D-41C8-84A2-6A4677588767}
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Samples.AsyncTests", "Samples.AsyncTests\Samples.AsyncTests.csproj", "{471CA56D-DEE9-4841-A39D-0FA93C70412A}"
+EndProject
 Global
 	GlobalSection(Performance) = preSolution
 		HasPerformanceSessions = true
@@ -109,6 +111,10 @@ Global
 		{E4F38E95-3C81-4BE9-9E1A-7665C9210F18}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E4F38E95-3C81-4BE9-9E1A-7665C9210F18}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E4F38E95-3C81-4BE9-9E1A-7665C9210F18}.Release|Any CPU.Build.0 = Release|Any CPU
+		{471CA56D-DEE9-4841-A39D-0FA93C70412A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{471CA56D-DEE9-4841-A39D-0FA93C70412A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{471CA56D-DEE9-4841-A39D-0FA93C70412A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{471CA56D-DEE9-4841-A39D-0FA93C70412A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -123,9 +129,13 @@ Global
 		{8F19B03E-FF0D-47AC-BEF4-6353565403E8} = {00178263-1F68-4E6B-99D2-C91570495BF1}
 		{16CF27E3-59A3-4BE0-B203-5730AB7AFF9B} = {00178263-1F68-4E6B-99D2-C91570495BF1}
 		{78F8739E-48EC-45DA-8A98-A3DC96851079} = {00178263-1F68-4E6B-99D2-C91570495BF1}
+		{471CA56D-DEE9-4841-A39D-0FA93C70412A} = {00178263-1F68-4E6B-99D2-C91570495BF1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {A7A4F988-4410-461B-AAC9-E9A3F9533F73}
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
 	EndGlobalSection
 	GlobalSection(Performance) = preSolution
 		HasPerformanceSessions = true

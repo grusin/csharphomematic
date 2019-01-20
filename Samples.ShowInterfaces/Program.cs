@@ -16,7 +16,7 @@ namespace Samples.ShowInterfaces
             //replace with IP of your rasperymatic with XML API addon
             DeviceManager dm = new DeviceManager("192.168.1.200");
 
-            for (;;)
+            for (; ; )
             {
                 dm.Refresh();
                 Console.Clear();
@@ -33,8 +33,17 @@ namespace Samples.ShowInterfaces
                 var hmValve = dm.GetDevicesImplementingInterface<IValveControlDevice>();
                 Console.WriteLine("\nDevices implementing IValveControlDevice interface: {0}", hmValve.Count);
 
-                foreach (var d in hmValve)
-                    Console.WriteLine($"- [{d.Name}]: Device Type: {d.DeviceType}; Valve%: {d.Level.Value}; Valve Status: {d.Level_Status.Value}; Valve Adaptation: {d.Valve_Adaption.Value}; Valve State: {d.Valve_State.Value}");
+                foreach (var d in hmValve.OrderBy(o => o.Name))
+                {
+                    Console.WriteLine($"- [{d.Name}]: Device Type: {d.DeviceType}; Valve%: {d.Level.Value}");
+                    var t = d as ITempControlDevice;
+                    if (t != null)
+                    {
+                        Console.WriteLine($"    - Set Temp: {t.Set_Point_Temperature.Value}, Actual Temp: {t.Actual_Temperature.Value}");
+                        if (d.Channels.Length > 2 && d.Channels[1].MasterValues.ContainsKey("VALVE_OFFSET"))
+                            Console.WriteLine($"    - Valve Offset: {d.Channels[1].MasterValues["VALVE_OFFSET"].Value}; Channel address: {d.Channels[1].Address}");
+                    }
+                }
 
                 //ITempControlDevice 
                 var hmTemp = dm.GetDevicesImplementingInterface<ITempControlDevice>();
@@ -64,8 +73,24 @@ namespace Samples.ShowInterfaces
                 foreach (var d in hmHumidity)
                     Console.WriteLine($"- [{d.Name}]: Device Type: {d.DeviceType}; Humidity: {d.Humidity.Value}{d.Humidity.ValueUnit}; Humidity Status: {d.Humidity_Status.Value}");
 
-                Thread.Sleep(1000);
-                Console.WriteLine("\n\n");
+                //Get All Devies by RSSI
+                var rssiList = dm.GetDevicesImplementingInterface<IHmIPDevice>().OrderByDescending(o => o.Rssi_Device.Value);
+                Console.WriteLine("\nDevice RSSI List (Descending):");
+
+                foreach (var d in rssiList)
+                    Console.WriteLine($"- [{d.Name}] Device / Peer: {d.Rssi_Device.Value} / {d.Rssi_Peer.Value}");
+
+                //Get All devies for heating, and print their master values
+                var heatingDevices = dm.Devices.Where(d => d.Functions.Contains("Heating")).OrderBy(o => o.Name);
+                Console.WriteLine("\nHeating devics master values:");
+
+                foreach (var d in heatingDevices)
+                {
+
+                }
+
+                Console.WriteLine("Press any key to refresh...");
+                Console.ReadKey();
             }
         }
     }

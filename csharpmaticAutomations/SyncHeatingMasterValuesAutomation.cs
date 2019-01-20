@@ -56,8 +56,9 @@ namespace csharpmatic.Automation
         {
             var allDevices = dm.GetDevicesImplementingInterface<ITempControlDevice>();
             var houseLeader = allDevices.Where(w => w.ISEID == allDevices.Min(min => min.ISEID)).FirstOrDefault();
-            var houseMasterValues = new HashSet<string>(houseLeader.Channels[1].MasterValues.Values.Where(w => !w.Name.Contains("TEMPERATURE")).Select(s => s.Name));
-            var roomMasterValues = new HashSet<string>(houseLeader.Channels[1].MasterValues.Values.Where(w => w.Name.Contains("TEMPERATURE") && w.Name != "TEMPERATURE_OFFSET").Select(s => s.Name));
+            var houseMasterValues = new HashSet<string>(
+                houseLeader.Channels[1].MasterValues.Values.Where(w => IsSchedulerEndTime(w)).Select(s => s.Name));
+
 
             LOGGER.Debug("Syncing house mastervalues...");
             SyncHeatingMastervalues(houseLeader, allDevices, houseMasterValues);
@@ -69,7 +70,13 @@ namespace csharpmatic.Automation
                 var roomDevices = allDevices.Where(w => w.Rooms.Contains(r)).ToList();
                 var roomLeader = allDevices.Where(w => w.ISEID == roomDevices.Min(min => min.ISEID)).FirstOrDefault();
 
-                if(!RoomLeadersCache.ContainsKey(r))
+                var roomMasterValues = new HashSet<string>(roomLeader.Channels[1].MasterValues.Values.Where(w =>
+                    IsSchedulerTemperature(w)
+                    || w.Name == "BOOST_TIME_PERIOD"
+                    || w.Name == "OPTIMUM_START_STOP"
+                ).Select(s => s.Name));
+
+                if (!RoomLeadersCache.ContainsKey(r))
                 {
                     RoomLeadersCache.Add(r, roomLeader.ISEID);
                     LOGGER.InfoFormat($"Room '{r}' leader is: '{roomLeader.Name}'");
@@ -80,6 +87,22 @@ namespace csharpmatic.Automation
             }
 
             LOGGER.Debug("Mastervalues across devices are in sync!");
+        }
+
+        public static bool IsSchedulerEndTime(MasterValue v)
+        {
+            return v.Name.Length > 2
+                    && v.Name[0] == 'P'
+                    && v.Name[1] >= '1' && v.Name[1] <= '9'
+                    && v.Name.Substring(2).StartsWith("_ENDTIME_");
+        }
+
+        public static bool IsSchedulerTemperature(MasterValue v)
+        {
+            return v.Name.Length > 2
+                    && v.Name[0] == 'P'
+                     && v.Name[1] >= '1' && v.Name[1] <= '9'
+                    && v.Name.Substring(2).StartsWith("_TEMPERATURE_");
         }
     }
 }

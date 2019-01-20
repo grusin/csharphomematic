@@ -114,24 +114,24 @@ namespace csharpmatic.JsonAPI
             return Session_RpcCall("Device.listAllDetail");
         }
 
-        public JToken Channel_SetMasterValues(Channel c, List<MasterValue> list)
+        public JToken Channel_SetMasterValues(string channelAddress, List<MasterValue> list, string interfaceName = "HmIP-RF")
         {
             Session_Login();
 
             //not excaly json RPC call, but it's dependent on session id, so it fits there
             //http://192.168.1.200/config/ic_ifacecmd.cgi?sid=%40U24JE4vSTI%40&iface=HmIP-RF&address=000A1709AB4C94%3A1&peer=MASTER&ps_type=MASTER&paramid=&pnr=&cmd=set_profile&P1_TEMPERATURE_MONDAY_5=16.5
 
-            var par = HttpUtility.ParseQueryString("");           
+            var par = HttpUtility.ParseQueryString("");
             par.Add("sid", "@" + SessionID + "@");
-            par.Add("iface", c.Device.Interface);
-            par.Add("address", c.Address);
+            par.Add("iface", interfaceName);
+            par.Add("address", channelAddress);
             par.Add("peer", "MASTER");
             par.Add("ps_type", "MASTER");
             par.Add("paramid", "");
             par.Add("pnr", "");
             par.Add("cmd", "set_profile");
 
-            foreach(var mv in list)
+            foreach (var mv in list)
                 par.Add(mv.Name, mv.Value.ToString());
 
             var b = new UriBuilder();
@@ -147,6 +147,11 @@ namespace csharpmatic.JsonAPI
             }
 
             return null;
+        }
+
+        public JToken Channel_SetMasterValues(Channel c, List<MasterValue> list)
+        {
+            return Channel_SetMasterValues(c.Address, list, c.Device.Interface);
         }
 
         public JToken Device_startCommunicationTest(Device d)

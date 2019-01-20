@@ -103,6 +103,10 @@ namespace csharpmatic.Generic
             if (Type == "LEVEL" && Channel.Device.DeviceType == "HmIP-BDT")
                 _InternalValueType = "4"; //decimal
 
+            //special handling of RSSI_DEVICE and RSSI_PEER, some devices report it as string
+            if (Type == "RSSI_DEVICE" || Type == "RSSI_PEER")
+                _InternalValueType = "16"; //integer
+
             switch (_InternalValueType)
             {
                 //boolean

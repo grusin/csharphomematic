@@ -47,9 +47,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Alarm.cs" />
-    <Compile Include="AlarmStateChangeResult.cs" />
-    <Compile Include="AlarmStatus.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -58,6 +55,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\csharpmaticAutomations\csharpmaticAutomations.csproj">
+      <Project>{E4F38E95-3C81-4BE9-9E1A-7665C9210F18}</Project>
+      <Name>csharpmaticAutomations</Name>
+    </ProjectReference>
     <ProjectReference Include="..\csharpmatic\csharpmatic.csproj">
       <Project>{d3c127ba-763d-41c8-84a2-6a4677588767}</Project>
       <Name>csharpmatic</Name>

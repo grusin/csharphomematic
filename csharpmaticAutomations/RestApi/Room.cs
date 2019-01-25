@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using csharpmatic.Generic;
 using csharpmatic.Interfaces;
 
-namespace csharpmatic.RestApi
+namespace csharpmaticAutomation.RestApi
 {
     public class Room
     {
@@ -88,10 +88,8 @@ namespace csharpmatic.RestApi
 
             //get warnings
             Warnings.AddRange(
-                dr.HmIPDevices.Where(w => 
-                        (w.Operating_Voltage.Value > 1.6M && w.Operating_Voltage.Value < 2.2M) || //3V norminal
-                        (w.Operating_Voltage.Value > 0.0M && w.Operating_Voltage.Value < 1.1M)) //1.5V nominal
-                    .Select(s => String.Format($"{s.Name}: low voltage: {s.Operating_Voltage.Value}"))
+                dr.HmIPDevices.Where(w => w is ILowBatteryInfo).Cast<ILowBatteryInfo>().Where(w => (w.Low_Bat.Value))
+                    .Select(s => String.Format($"{s.Name}: low voltage"))
                     .ToList()
                     );
 

@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace csharpmatic.Automation
+namespace csharpmaticAutomation
 {
     public class ActuatorSensorAutomation<T> where T : IHmDevice
     {
@@ -34,7 +34,7 @@ namespace csharpmatic.Automation
             DeviceManager = dm;
             DatapointGetter = datapointGetter;            
 
-            UsageTracker = new Dictionary<string, Automation.UsageTracker>();
+            UsageTracker = new Dictionary<string, UsageTracker>();
             UsageLimits = new List<UsageLimit>();
             UsageLimits.Add(new UsageLimit(new TimeSpan(0, 7, 0), 5)); 
             UsageLimits.Add(new UsageLimit(new TimeSpan(0, 15, 0), 10));

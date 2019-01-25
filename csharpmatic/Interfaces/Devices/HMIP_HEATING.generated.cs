@@ -8,7 +8,7 @@ using System.IO;
 
 namespace csharpmatic.Interfaces.Devices
 {
-  public partial class HMIP_HEATING : Device, IHumidityControlDevice, ITempControlDevice, IValveControlDevice
+  public partial class HMIP_HEATING : Device, ILowBatteryInfo, IHumidityControlDevice, ITempControlDevice, IValveControlDevice
   {
 		public TypedDatapoint<Int32> Actuator_Actual_Temperature_Status { get; private set; }
 
@@ -20,7 +20,7 @@ namespace csharpmatic.Interfaces.Devices
 
 		public TypedDatapoint<Boolean> Error_Overheat { get; private set; }
 
-		public TypedDatapoint<Boolean> Low_Bat { get; private set; }
+		public TypedDatapoint<System.Boolean> Low_Bat { get; private set; }
 
 		public TypedDatapoint<Int32> Operating_Voltage_Status { get; private set; }
 
@@ -105,7 +105,7 @@ namespace csharpmatic.Interfaces.Devices
 
 			Error_Overheat = new TypedDatapoint<Boolean>(base.Channels[0].Datapoints["ERROR_OVERHEAT"]);
 
-			Low_Bat = new TypedDatapoint<Boolean>(base.Channels[0].Datapoints["LOW_BAT"]);
+			Low_Bat = new TypedDatapoint<System.Boolean>(base.Channels[0].Datapoints["LOW_BAT"]);
 
 			Operating_Voltage_Status = new TypedDatapoint<Int32>(base.Channels[0].Datapoints["OPERATING_VOLTAGE_STATUS"]);
 

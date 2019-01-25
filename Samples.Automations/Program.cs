@@ -1,6 +1,6 @@
-﻿using csharpmatic.Automation;
-using csharpmatic.Generic;
+﻿using csharpmatic.Generic;
 using csharpmatic.Interfaces;
+using csharpmaticAutomation;
 using System;
 using System.Collections.Generic;
 using System.Linq;

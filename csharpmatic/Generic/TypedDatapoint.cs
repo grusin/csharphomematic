@@ -25,6 +25,8 @@ namespace csharpmatic.Generic
 
         public Datapoint UnderlyingDatapoint { get; private set; }
 
+        public Channel Channel { get { return UnderlyingDatapoint.Channel; } }
+
         public TypedDatapoint(Datapoint dp)
         {
             UnderlyingDatapoint = dp;
@@ -33,6 +35,16 @@ namespace csharpmatic.Generic
         public void SetRoomValue(object value, Type interfaceFilter = null)
         {
             UnderlyingDatapoint.SetRoomValue(value, interfaceFilter);
+        }
+
+        public void SetState(object value)
+        {
+            UnderlyingDatapoint.SetValue(value);
+        }
+
+        public async Task SetValueAsync(object value)
+        {
+            await UnderlyingDatapoint.SetValueAsync(value);
         }
     }
 }

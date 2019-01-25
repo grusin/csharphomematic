@@ -16,7 +16,7 @@ namespace csharpmatic.JsonAPI
     {
         public string SessionID { get; private set; }
         public Uri Endpoint { get; private set; }
-        
+
         private JsonRPC.Client RpcClient { get; }
 
         public TimeSpan SessionRenewFrequency { get; set; }
@@ -87,7 +87,7 @@ namespace csharpmatic.JsonAPI
             else
                 parameters.Add("_session_id_", SessionID);
 
-            var request = RpcClient.NewRequest(method, parameters);
+            var request = RpcClient.NewRequest(method, parameters);           
             var response = RpcClient.Rpc(request);
 
             if (response.Error != null)
@@ -142,7 +142,7 @@ namespace csharpmatic.JsonAPI
             Uri uri = b.Uri;
 
             using (WebClient wc = new WebClient())
-            {
+            {               
                 string str = wc.DownloadString(uri);
             }
 
@@ -159,11 +159,71 @@ namespace csharpmatic.JsonAPI
             return Session_RpcCall("Device.startComTest", JObject.Parse(@"{ id: '" + d.ISEID + "'}"));
         }
 
-        public JToken Interface_GetRSSI(string interfaceName="HmIP-RF")
+        public JToken Interface_GetRSSI(string interfaceName = "HmIP-RF")
         {
             Session_Login();
 
             return Session_RpcCall("Interface.rssiInfo", JObject.Parse(@"{ interface: '" + interfaceName + "'}"));
+        }
+
+
+
+        public JToken GetSystemVariables()
+        {
+            Session_Login();
+
+            return Session_RpcCall("SysVar.getAll");
+        }
+
+        public bool GetOrCreateSystemBoolVariable(string name, bool defaultValue)
+        {
+            bool? v = GetSystemBoolVariable(name);
+            if (v == null)
+                CreateSystemBoolVariable(name, defaultValue);
+
+            return (bool)GetSystemBoolVariable(name);
+        }
+
+        public bool? GetSystemBoolVariable(string name)
+        {
+            JToken ret = GetSystemVariable(name);
+
+            string s = ret.Value<string>();
+
+            if (s == "")
+                return null;
+
+            return Boolean.Parse(s);
+        }
+
+        public JToken GetSystemVariable(string name)
+        {
+            Session_Login();
+
+            return Session_RpcCall("SysVar.getValueByName", JObject.Parse(@"{ name: '" + name + "'}"));
+        }
+
+        public JToken DeleteSystemVariable(string name)
+        {
+            Session_Login();
+
+            return Session_RpcCall("SysVar.deleteSysVarByName", JObject.Parse(@"{ name: '" + name + "'}"));
+        }
+
+
+        public JToken CreateSystemBoolVariable(string name, bool defaultValue)
+        {
+            Session_Login();
+
+            return Session_RpcCall("SysVar.createBool", JObject.Parse(@"{ name: '" + name + "', init_val: '" + defaultValue + "', internal: 0, chnID: -1 }"));
+        }
+
+        public JToken SetSystemVariable(string name, string value)
+        {
+            Session_Login();
+
+            //seems that set float can set everything :)
+            return Session_RpcCall("SysVar.setFloat", JObject.Parse(@"{ name: '" + name + "', value: '" + value + "' }"));
         }
     }
 }

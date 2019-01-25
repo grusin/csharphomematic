@@ -182,13 +182,21 @@ namespace csharpmatic.Generic
 
         public void SetValue(object value)
         {
-            SetInternalValue(value);
-                       
+            SetInternalValue(value);                       
 
             XMLAPI.Client cgi = new XMLAPI.Client(Channel.Device.DeviceManager.HttpServerUri);
 
             //FIXME: this should use async logic
             cgi.SetISEIDValue(ISEID, GetValueString());
+        }
+
+        public async Task SetValueAsync(object value)
+        {
+            SetInternalValue(value);
+
+            XMLAPI.Client cgi = new XMLAPI.Client(Channel.Device.DeviceManager.HttpServerUri);
+
+            await cgi.SetISEIDValueAsync(ISEID, GetValueString());
         }
 
         public void SetRoomValue(object value, Type interfaceFilter = null)

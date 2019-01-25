@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace csharpmatic.Automation
+namespace csharpmaticAutomation
 {
     public class SyncHeatingMasterValuesAutomation
     {

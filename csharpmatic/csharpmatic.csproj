@@ -85,16 +85,18 @@
     <Compile Include="Interfaces\Devices\HMIP_PS.generated.cs" />
     <Compile Include="Interfaces\Devices\HMIP_PSM.generated.cs" />
     <Compile Include="Interfaces\Devices\HMIP_SWDO.generated.cs" />
+    <Compile Include="Interfaces\Devices\HMIP_SWSD.generated.cs" />
     <Compile Include="Interfaces\Devices\HMIP_WTH_2.generated.cs" />
+    <Compile Include="Interfaces\ILowBatteryInfo.cs" />
+    <Compile Include="Interfaces\IOperatingVoltageInfo.cs" />
+    <Compile Include="Interfaces\ISmokeDetectorDevice.cs" />
     <Compile Include="JsonAPI\Client.cs" />
+    <Compile Include="Notify\Slack.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="RestApi\RoomContoller.cs" />
-    <Compile Include="RestApi\Room.cs" />
-    <Compile Include="RestApi\Server.cs" />
     <Compile Include="XMLAPI\mastervalue.cs" />
     <Compile Include="XMLAPI\statechange.cs" />
     <Compile Include="XMLAPI\sysvarlist.cs" />

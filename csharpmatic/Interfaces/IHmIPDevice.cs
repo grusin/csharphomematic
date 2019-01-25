@@ -12,11 +12,7 @@ namespace csharpmatic.Interfaces
         TypedDatapoint<Boolean> Config_Pending { get; }
 
         TypedDatapoint<Boolean> Duty_Cycle { get; }
-
-        TypedDatapoint<Decimal> Operating_Voltage { get; }
-
-        TypedDatapoint<IHmIP_Operating_Voltage_Status_Enum> Operating_Voltage_Status { get; }
-
+        
         TypedDatapoint<int> Rssi_Device { get; }
 
         TypedDatapoint<int> Rssi_Peer { get; }
@@ -24,12 +20,5 @@ namespace csharpmatic.Interfaces
         TypedDatapoint<Boolean> Unreach { get; }
 
         TypedDatapoint<Boolean> Update_Pending { get; }
-    }
-
-    public enum IHmIP_Operating_Voltage_Status_Enum
-    {
-        NORMAL,
-        UNKNOWN,
-        OVERFLOW,
     }
 }

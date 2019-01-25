@@ -8,7 +8,7 @@ using System.IO;
 
 namespace csharpmatic.Interfaces.Devices
 {
-  public partial class HMIP_PCBS : Device, ISingleSwitchControlDevice, IHmIPDevice
+  public partial class HMIP_PCBS : Device, IOperatingVoltageInfo, ISingleSwitchControlDevice, IHmIPDevice
   {
 		public TypedDatapoint<System.Decimal> Actuator_Actual_Temperature { get; private set; }
 
@@ -24,7 +24,7 @@ namespace csharpmatic.Interfaces.Devices
 
 		public TypedDatapoint<System.Decimal> Operating_Voltage { get; private set; }
 
-		public TypedDatapoint<csharpmatic.Interfaces.IHmIP_Operating_Voltage_Status_Enum> Operating_Voltage_Status { get; private set; }
+		public TypedDatapoint<csharpmatic.Interfaces.IOperating_Voltage_Status_Enum> Operating_Voltage_Status { get; private set; }
 
 		public TypedDatapoint<System.Int32> Rssi_Device { get; private set; }
 
@@ -63,7 +63,7 @@ namespace csharpmatic.Interfaces.Devices
 
 			Operating_Voltage = new TypedDatapoint<System.Decimal>(base.Channels[0].Datapoints["OPERATING_VOLTAGE"]);
 
-			Operating_Voltage_Status = new TypedDatapoint<csharpmatic.Interfaces.IHmIP_Operating_Voltage_Status_Enum>(base.Channels[0].Datapoints["OPERATING_VOLTAGE_STATUS"]);
+			Operating_Voltage_Status = new TypedDatapoint<csharpmatic.Interfaces.IOperating_Voltage_Status_Enum>(base.Channels[0].Datapoints["OPERATING_VOLTAGE_STATUS"]);
 
 			Rssi_Device = new TypedDatapoint<System.Int32>(base.Channels[0].Datapoints["RSSI_DEVICE"]);
 

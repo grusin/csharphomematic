@@ -1,7 +1,7 @@
-﻿using csharpmatic.Automation;
-using csharpmatic.Generic;
+﻿using csharpmatic.Generic;
 using csharpmatic.Interfaces;
-using csharpmatic.RestApi;
+using csharpmaticAutomation;
+using csharpmaticAutomation.RestApi;
 using HouseAutomationService.Properties;
 using log4net;
 using Newtonsoft.Json;

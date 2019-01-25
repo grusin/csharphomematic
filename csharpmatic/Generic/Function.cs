@@ -13,6 +13,7 @@ namespace csharpmatic.Generic
         public static readonly string Alarm = "Alarm";
         public static readonly string Humidity = "Humidity";
         public static readonly string Alarm_Delay = "Alarm_delay";
+        public static readonly string Alarm_Constant_On = "Alarm_constant_on";
         public static readonly string Not_Sensor = "Not_sensor";
         public static readonly string Not_Actuator = "Not_actuator";
     }

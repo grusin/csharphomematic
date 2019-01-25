@@ -27,7 +27,7 @@ namespace Samples.ShowInterfaces
                 Console.WriteLine("Devices implementing IHmIPDevice interface: {0}", hmIp.Count);
 
                 foreach (var d in hmIp)
-                    Console.WriteLine($"- [{d.Name}]: Room: {d.Rooms.FirstOrDefault()}; Function: {d.Functions.FirstOrDefault()}; Device Type: {d.DeviceType}; RSSI: {d.Rssi_Device.Value}; Voltage: {d.Operating_Voltage.Value}");
+                    Console.WriteLine($"- [{d.Name}]: Room: {d.Rooms.FirstOrDefault()}; Function: {d.Functions.FirstOrDefault()}; Device Type: {d.DeviceType}; RSSI: {d.Rssi_Device.Value}");
 
                 //IValveControlDevice 
                 var hmValve = dm.GetDevicesImplementingInterface<IValveControlDevice>();

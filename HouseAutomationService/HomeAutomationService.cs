@@ -94,7 +94,6 @@ namespace HouseAutomationService
                         dm.Work();
 
                         //log events
-                        List<DatapointEvent> eventsSinceLastRefresh = dm.Refresh();
                         foreach (var e in dm.Events)
                         {
                             LOGGER.InfoFormat("{0} EVENT {1}: ({2}) => ({3})",

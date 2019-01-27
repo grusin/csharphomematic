@@ -3,6 +3,7 @@ using csharpmatic.Automation.Alarm;
 using csharpmatic.Automation.RestApi;
 using csharpmatic.Generic;
 using log4net;
+using log4net.Config;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +22,8 @@ namespace Samples.WebServer
 
         static void Main(string[] args)
         {
+            BasicConfigurator.Configure();
+
             var dm = new DeviceManager("192.168.1.200");
             
             //register automations
@@ -38,12 +41,12 @@ namespace Samples.WebServer
             server.Module<CorsModule>();
             RoomController.DeviceManager = dm;
             server.Module<WebApiModule>().RegisterController<RoomController>();
-
-
+            
             server.RunAsync();
             
             for(;;)
             {
+                dm.Work();
                 new ManualResetEvent(false).WaitOne(200);
             }
         }

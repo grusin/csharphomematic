@@ -273,6 +273,8 @@ namespace csharpmatic.XMLAPI
                     if (i + 1 >= tries)
                         throw new Exception(String.Format("State change failed for {0}={1}. Got {2}={3} instead.", iseid, newvalue, res.Changed.Id, res.Changed.New_value));
                 }
+                else
+                    break;
             }
         }
 
@@ -293,6 +295,8 @@ namespace csharpmatic.XMLAPI
                     if (i + 1 >= tries)
                         throw new Exception(String.Format("State change failed for {0}={1}. Got {2}={3} instead.", iseid, newvalue, res.Changed.Id, res.Changed.New_value));
                 }
+                else
+                    break;
             }
         }
     }

@@ -24,6 +24,7 @@ namespace csharpmatic.Automation.RestApi
             this.JsonResponse(AlarmAutomation);
         }
 
+        [WebApiHandler(HttpVerbs.Get, "/api/alarm/arm")]
         public bool Arm()
         {
             var armOK = AlarmAutomation.Arm();
@@ -33,7 +34,8 @@ namespace csharpmatic.Automation.RestApi
             return armOK;
         }
 
-        public void Disarm()
+        [WebApiHandler(HttpVerbs.Get, "/api/alarm/disarm/{code}")]
+        public void Disarm(string code)
         {
             AlarmAutomation.Disarm();
 

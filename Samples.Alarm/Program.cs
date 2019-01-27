@@ -1,7 +1,7 @@
 ﻿using csharpmatic.Automation;
 using csharpmatic.Generic;
 using csharpmatic.Interfaces.Devices;
-using csharpmaticAutomation.Alarm;
+using csharpmatic.Automation.Alarm;
 using log4net;
 using log4net.Config;
 using System;

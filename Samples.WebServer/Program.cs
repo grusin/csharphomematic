@@ -1,4 +1,8 @@
-﻿using log4net;
+﻿using csharpmatic.Automation;
+using csharpmatic.Automation.Alarm;
+using csharpmatic.Automation.RestApi;
+using csharpmatic.Generic;
+using log4net;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,18 +21,30 @@ namespace Samples.WebServer
 
         static void Main(string[] args)
         {
+            var dm = new DeviceManager("192.168.1.200");
+            
+            //register automations
+            var alarmAutomation = new AlarmAutomation(dm, AutomationNames.AlarmAutomation);
+
+            //register web server
             var server = new Unosquare.Labs.EmbedIO.WebServer(4000);
+
+            //serve .js mobile site
             server.RegisterModule(new StaticFilesModule(@"C:\Users\G\npm\homeui\build"));
-            // The static files module will cache small files in ram until it detects they have been modified.
             server.Module<StaticFilesModule>().UseRamCache = true;
             server.Module<StaticFilesModule>().DefaultExtension = ".html";
+
+            server.RegisterModule(new WebApiModule());
+            server.Module<CorsModule>();
+            RoomController.DeviceManager = dm;
+            server.Module<WebApiModule>().RegisterController<RoomController>();
+
+
             server.RunAsync();
             
-
-
             for(;;)
             {
-                new ManualResetEvent(false).WaitOne(1000);
+                new ManualResetEvent(false).WaitOne(200);
             }
         }
     }

@@ -10,7 +10,7 @@ using Unosquare.Labs.EmbedIO.Constants;
 using Unosquare.Labs.EmbedIO.Modules;
 using Unosquare.Net;
 
-namespace csharpmaticAutomation.RestApi
+namespace csharpmatic.Automation.RestApi
 {
     public class RoomController : WebApiController
     {

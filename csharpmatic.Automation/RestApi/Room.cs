@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using csharpmatic.Generic;
 using csharpmatic.Interfaces;
 
-namespace csharpmaticAutomation.RestApi
+namespace csharpmatic.Automation.RestApi
 {
     public class Room
     {

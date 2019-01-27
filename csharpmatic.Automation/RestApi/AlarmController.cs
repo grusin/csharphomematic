@@ -1,4 +1,4 @@
-﻿using csharpmaticAutomation.Alarm;
+﻿using csharpmatic.Automation.Alarm;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ using Unosquare.Labs.EmbedIO;
 using Unosquare.Labs.EmbedIO.Constants;
 using Unosquare.Labs.EmbedIO.Modules;
 
-namespace csharpmaticAutomations.RestApi
+namespace csharpmatic.Automation.RestApi
 {
     public class AlarmControler : WebApiController
     {

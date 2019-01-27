@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace csharpmaticAutomation.Alarm
+namespace csharpmatic.Automation.Alarm
 {
     public class AlarmSensorScanOutput
     {

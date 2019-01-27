@@ -11,7 +11,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace csharpmaticAutomation.Alarm
+namespace csharpmatic.Automation.Alarm
 {
     public class AlarmAutomation: IAutomation
     {
@@ -30,8 +30,7 @@ namespace csharpmaticAutomation.Alarm
         public AlarmAutomation(DeviceManager dm, string name)
         {
             DeviceManager = dm;
-            Name = name;
-                      
+            Name = name;                      
             
             AlarmTriggerEvents = new Dictionary<string, AlarmSensorScanOutput>();
 

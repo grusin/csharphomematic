@@ -1,5 +1,5 @@
 ﻿using csharpmatic.Generic;
-using csharpmaticAutomation.RestApi;
+using csharpmatic.Automation.RestApi;
 using System;
 using System.Collections.Generic;
 using System.Linq;

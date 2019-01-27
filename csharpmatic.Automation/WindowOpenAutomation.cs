@@ -20,6 +20,8 @@ namespace csharpmatic.Automation
 
         private static ILog LOGGER = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
+        private DateTime lastWork;
+
         public WindowOpenAutomation(DeviceManager dm, string name)
         {
             Name = name;
@@ -30,6 +32,11 @@ namespace csharpmatic.Automation
 
         public void Work()
         {
+            if ((DateTime.Now - lastWork).TotalSeconds < 1)
+                return;
+
+            lastWork = DateTime.Now;
+
             //get all window open sensors assigned to heating function
             var sensor = DeviceManager.Devices.Where(w => w is HMIP_SWDO && w.Functions.Contains(Function.Heating)).Cast<HMIP_SWDO>().ToList();
                        

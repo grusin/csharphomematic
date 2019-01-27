@@ -18,6 +18,8 @@ namespace csharpmatic.Automation
 
         private static ILog LOGGER = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
+        private DateTime lastWork;
+
         public SyncHeatingMasterValuesAutomation(DeviceManager dm, string name)
         {
             Name = name;
@@ -27,6 +29,11 @@ namespace csharpmatic.Automation
 
         public void Work()
         {
+            if((DateTime.Now - lastWork).TotalSeconds < 15)
+                return;
+
+            lastWork = DateTime.Now;
+
             var allDevices = DeviceManager.GetDevicesImplementingInterface<ITempControlDevice>();
             var houseLeader = allDevices.Where(w => w.ISEID == allDevices.Min(min => min.ISEID)).FirstOrDefault();
             var houseMasterValues = new HashSet<string>(

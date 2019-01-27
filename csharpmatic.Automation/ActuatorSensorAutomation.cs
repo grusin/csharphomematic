@@ -29,6 +29,7 @@ namespace csharpmatic.Automation
         private static ILog LOGGER = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         public bool IgnoreLimits = false;
+        private DateTime lastWork;
 
         public ActuatorSensorAutomation(DeviceManager dm, string name, string deviceFunction, Func<ActuatorSensorAutomation<T>, T, int> datapointGetter)
         {
@@ -83,6 +84,11 @@ namespace csharpmatic.Automation
         {
             if (RefencePoint == 0)
                 throw new Exception("Reference point not set!");
+
+            if ((DateTime.Now - lastWork).TotalSeconds < 3)
+                return;
+
+            lastWork = DateTime.Now;
 
             IgnoreLimits = false;
             

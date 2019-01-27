@@ -1,6 +1,7 @@
-﻿using csharpmatic.Generic;
+﻿using csharpmatic.Automation;
+using csharpmatic.Generic;
 using csharpmatic.Interfaces.Devices;
-using csharpmaticAutomations.Alarm;
+using csharpmaticAutomation.Alarm;
 using log4net;
 using log4net.Config;
 using System;
@@ -22,19 +23,7 @@ namespace Samples.Alarm
 
             DeviceManager dm = new DeviceManager("192.168.1.200");
 
-            AlarmAutomation a = new AlarmAutomation(dm);
-
-
-            //dm.Refresh();
-            //a.Disarm();
-
-            var x = dm.GetDevicesImplementingInterface<HMIP_SWSD>().FirstOrDefault();
-
-            x.Smoke_Detector_Command.Value = csharpmatic.Interfaces.ISmokeDetectorDevice_Smoke_Detector_Command_Enum.INTRUSION_ALARM;
-
-            Thread.Sleep(5000);
-
-            x.Smoke_Detector_Command.Value = csharpmatic.Interfaces.ISmokeDetectorDevice_Smoke_Detector_Command_Enum.INTRUSION_ALARM_OFF;
+            AlarmAutomation a = new AlarmAutomation(dm, AutomationNames.AlarmAutomation);
 
             for (; ; )
             {
@@ -42,7 +31,8 @@ namespace Samples.Alarm
                 {
                     for (; ; )
                     {
-                        dm.Refresh();
+                        dm.Work();
+
                         var list = a.Arm();
 
                         if (a.AlarmArmed)
@@ -58,8 +48,7 @@ namespace Samples.Alarm
 
                 for (; ; )
                 {
-                    dm.Refresh();
-                    a.Work();
+                    dm.Work();
 
                     if(a.AlarmArmed)
                         counter++;

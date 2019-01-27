@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\csharpmaticAutomations\csharpmaticAutomations.csproj" />
+    <ProjectReference Include="..\csharpmatic.Automation\csharpmatic.Automation.csproj" />
     <ProjectReference Include="..\csharpmatic\csharpmatic.csproj" />
   </ItemGroup>
 

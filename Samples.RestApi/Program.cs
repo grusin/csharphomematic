@@ -23,8 +23,11 @@ namespace Samples.RestApi
 
             server.RegisterModule(new WebApiModule());
             server.Module<CorsModule>();
+
             RoomController.DeviceManager = dm;
-            server.Module<WebApiModule>().RegisterController<RoomController>();
+            server.Module<WebApiModule>().RegisterController<RoomController>();                      
+
+            //AlarmControler.AlarmAutomation = 
 
             server.RegisterModule(new StaticFilesModule(@"C:\Users\G\npm\homeui\build"));
 

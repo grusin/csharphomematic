@@ -77,6 +77,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Generic\Function.cs" />
+    <Compile Include="Generic\IAutomation.cs" />
     <Compile Include="Interfaces\Devices\HMIP_BDT.generated.cs" />
     <Compile Include="Interfaces\Devices\HMIP_ETRV.generated.cs" />
     <Compile Include="Interfaces\Devices\HMIP_ETRV_2.generated.cs" />

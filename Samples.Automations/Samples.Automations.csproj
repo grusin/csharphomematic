@@ -51,9 +51,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\csharpmaticAutomations\csharpmaticAutomations.csproj">
-      <Project>{E4F38E95-3C81-4BE9-9E1A-7665C9210F18}</Project>
-      <Name>csharpmaticAutomations</Name>
+    <ProjectReference Include="..\csharpmatic.Automation\csharpmatic.Automation.csproj">
+      <Project>{54B971E0-A3DC-45C5-B8DC-158D33296D26}</Project>
+      <Name>csharpmatic.Automation</Name>
     </ProjectReference>
     <ProjectReference Include="..\csharpmatic\csharpmatic.csproj">
       <Project>{d3c127ba-763d-41c8-84a2-6a4677588767}</Project>

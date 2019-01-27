@@ -22,8 +22,7 @@ namespace csharpmaticAutomation.RestApi
         public decimal? ValveOpenAvg { get; set; }
         public decimal? ValveOpenMin { get; set; }
         public decimal? ValveOpenMax { get; set; }
-
-
+        
         public bool DehumidifierActive { get; set; }
         public bool HeatingActive { get; set; }
         public bool WindowOpen { get; set; }

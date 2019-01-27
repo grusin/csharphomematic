@@ -1,4 +1,5 @@
-﻿using csharpmatic.Generic;
+﻿using csharpmatic.Automation;
+using csharpmatic.Generic;
 using csharpmatic.Interfaces;
 using csharpmaticAutomation;
 using csharpmaticAutomation.RestApi;
@@ -28,15 +29,11 @@ namespace HouseAutomationService
             for (;;)
             {
                 try
-                {
-                    LOGGER.Info($"Starting device manager for {Settings.Default.HomematicServerAddress}");
-                    
-                    //init device manager
+                {                   
                     var dm = new DeviceManager(Settings.Default.HomematicServerAddress);
 
-                    LOGGER.Info("Starting humidity automation");
-                    //init humidity automation, humidity is int from 0 to 100
-                    var humidityAutomation = new ActuatorSensorAutomation<IHumidityControlDevice>(dm, Function.Humidity, (a, d) => d.Humidity.Value);
+                    LOGGER.Info("Starting humidity automation");                    
+                    var humidityAutomation = new ActuatorSensorAutomation<IHumidityControlDevice>(dm, AutomationNames.HumidityAutomation, Function.Humidity, (a, d) => d.Humidity.Value);
                     humidityAutomation.RefencePoint = Settings.Default.HumidityAutomationRefencePoint;
                     humidityAutomation.Hysteresis = Settings.Default.HumidityAutomationHysteresis;
                     humidityAutomation.MaxOnTime = Settings.Default.HumidityAutomationMaxOnTime;
@@ -44,7 +41,7 @@ namespace HouseAutomationService
                     humidityAutomation.MinOffTime = Settings.Default.HumidityAutomationMinOffTime;
  
                     LOGGER.Info("Starting heating automation");                    
-                    var heatingAutomation = new ActuatorSensorAutomation<ITempControlDevice>(dm, Function.Heating, (a, d) =>
+                    var heatingAutomation = new ActuatorSensorAutomation<ITempControlDevice>(dm, AutomationNames.HeatingAutomation, Function.Heating, (a, d) =>
                         {                           
                             if (d.Boost_Mode.Value)
                             {
@@ -66,7 +63,10 @@ namespace HouseAutomationService
                     heatingAutomation.MinOffTime = Settings.Default.heatingAutomationMinOffTime;
 
                     LOGGER.Info("Starting window open/close automation");
-                    var windowAutomation = new WindowOpenAutomation(dm);
+                    var windowAutomation = new WindowOpenAutomation(dm, AutomationNames.WindowOpenAutomation);
+
+                    LOGGER.Info("Starting heating master valus sync automation");
+                    var syncHeatingMastervaluesAutomation = new SyncHeatingMasterValuesAutomation(dm, AutomationNames.SyncHeatingMastervaluesAutomation);
 
                     LOGGER.Info("Starting webserver");
                     //init web server
@@ -96,23 +96,17 @@ namespace HouseAutomationService
                             );
                         }
 
-                        //dumb locking for now
-                        lock (dm.RefreshLock)
-                        {
-                            SyncHeatingMasterValuesAutomation.SyncHeatingMastervalues(dm);
-                            humidityAutomation.Work();
-                            heatingAutomation.Work();
-                            windowAutomation.Work();
-                        }
+                        //this will refresh data from HM api and run all automations
+                        dm.Work();
 
-                        //refresh data every second
-                        new ManualResetEvent(false).WaitOne(1000);
+                        //refresh data every so often
+                        new ManualResetEvent(false).WaitOne(200);
                     }
                 }
                 catch (Exception e)
                 {
-                    LOGGER.Error("Error. Restarting device manager in 10s..", e);
-                    new ManualResetEvent(false).WaitOne(10000);
+                    LOGGER.Error("Error. Restarting device manager in 3s..", e);
+                    new ManualResetEvent(false).WaitOne(3000);
                 }
             }
         }

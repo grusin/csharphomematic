@@ -92,9 +92,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\csharpmaticAutomations\csharpmaticAutomations.csproj">
-      <Project>{e4f38e95-3c81-4be9-9e1a-7665c9210f18}</Project>
-      <Name>csharpmaticAutomations</Name>
+    <ProjectReference Include="..\csharpmatic.Automation\csharpmatic.Automation.csproj">
+      <Project>{54B971E0-A3DC-45C5-B8DC-158D33296D26}</Project>
+      <Name>csharpmatic.Automation</Name>
     </ProjectReference>
     <ProjectReference Include="..\csharpmatic\csharpmatic.csproj">
       <Project>{d3c127ba-763d-41c8-84a2-6a4677588767}</Project>

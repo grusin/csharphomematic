@@ -1,4 +1,5 @@
 ﻿using csharpmatic.Interfaces;
+using log4net;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,16 +21,45 @@ namespace csharpmatic.Generic
         public List<Room> Rooms { get; private set; }
         public Dictionary<string, Room> RoomsByName { get; private set; }
 
+        private Dictionary<string, IAutomation> RegisteredAutomations;
+
+        private static ILog LOGGER = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+
         public object RefreshLock { get; set; }
                 
         public DeviceManager(string serverAddress)
         {
+            LOGGER.Info($"Starting device manager for {serverAddress}");
             RefreshLock = new object();
-
             XMLAPIClient = new XMLAPI.Client("http://" + serverAddress);
             JsonAPIClient = new JsonAPI.Client(serverAddress);
+
+            RegisteredAutomations = new Dictionary<string, IAutomation>();
             Devices = new List<Device>();
+
             Refresh();
+        }
+
+        public IAutomation RegisterAutomation(IAutomation a)
+        {
+            if (a == null)
+                throw new ArgumentNullException();
+
+            if(RegisteredAutomations.ContainsKey(a.Name))
+                throw new ArgumentException($"Canot register automation {a.Name} of type {a.GetType()}. It's already registered.");
+
+            RegisteredAutomations.Add(a.Name, a);
+
+            LOGGER.Info($"Registered automation {a.Name} of type {a.GetType()}");
+
+            return a;
+        }
+
+        public IAutomation GetAutomation(string name)
+        {
+            RegisteredAutomations.TryGetValue(name, out IAutomation a);
+
+            return a;
         }
 
         public List<T> GetDevicesImplementingInterface<T>() where T : class
@@ -69,6 +99,17 @@ namespace csharpmatic.Generic
             }
 
             return GetEvents();
+        }
+
+        public void Work()
+        {
+            var events = Refresh();
+
+            lock (RefreshLock)
+            {
+                foreach (var a in RegisteredAutomations.Values)
+                    a.Work();
+            }
         }
 
         private List<DatapointEvent> GetEvents()

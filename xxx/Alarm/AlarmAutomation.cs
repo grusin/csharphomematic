@@ -3,6 +3,7 @@ using csharpmatic.Interfaces;
 using csharpmatic.Interfaces.Devices;
 using csharpmatic.JsonAPI;
 using log4net;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -10,32 +11,31 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace csharpmaticAutomations.Alarm
+namespace csharpmaticAutomation.Alarm
 {
     public class AlarmAutomation
     {
-        public bool AlarmArmed { get { return _alarmArmed; } }
-        public bool AlarmTriggered { get { return _alarmTriggered; } }
+        public bool AlarmArmed { get; private set; }
+        public bool AlarmTriggered { get; private set; }
+
+        [JsonIgnore]
         public DeviceManager DeviceManager { get; private set; }
-
-        public Dictionary<string, DateTime> ISEIDModify;
-
+                
         private static ILog LOGGER = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
-        private bool _alarmArmed;
-        private bool _alarmTriggered;
-        //private bool lightFlickerState;
-        //private DateTime nextLightFlickerStateChange;
         private Client rpcClient;
+
+        public Dictionary<string, AlarmSensorScanOutput> AlarmTriggerEvents;
 
         public AlarmAutomation(DeviceManager dm)
         {
             DeviceManager = dm;
-            ISEIDModify = new Dictionary<string, DateTime>();
+            
+            AlarmTriggerEvents = new Dictionary<string, AlarmSensorScanOutput>();
 
             rpcClient = new Client(dm.HttpServerUri.Host);
 
-            _alarmArmed = rpcClient.GetOrCreateSystemBoolVariable("Alarm Armed", false);
-            _alarmTriggered = rpcClient.GetOrCreateSystemBoolVariable("Alarm Triggered", false);
+            AlarmArmed = rpcClient.GetOrCreateSystemBoolVariable("Alarm Armed", false);
+            AlarmTriggered = rpcClient.GetOrCreateSystemBoolVariable("Alarm Triggered", false);
             
             LOGGER.Info($"Initalized alarm: {ToString()}");
         }
@@ -52,10 +52,10 @@ namespace csharpmaticAutomations.Alarm
 
         public override string ToString()
         {
-            if (_alarmTriggered)
+            if (AlarmTriggered)
                 return "ALARM TRIGGERED";
 
-            if (_alarmArmed)
+            if (AlarmArmed)
                 return "Alarm ARMED";
 
             return "Alarm DISARMED";
@@ -72,8 +72,8 @@ namespace csharpmaticAutomations.Alarm
             foreach (var s in sensors)
             {
                 //alwasy check both, as it initalizes the iseid array
-                var t1 = IsDatapointTriggered(s.Sabotage, false, false);
-                var t2 = IsDatapointTriggered(s.State, 0, false);
+                var t1 = IsDatapointTriggered(s.Sabotage, false);
+                var t2 = IsDatapointTriggered(s.State, 0);
 
                 if (t1 != null)
                     ret.Add(t1);
@@ -86,26 +86,10 @@ namespace csharpmaticAutomations.Alarm
             return ret;
         }
 
-        private AlarmSensorScanOutput IsDatapointTriggered<T>(TypedDatapoint<T> dp, T notTrippedValue, bool checkTimestamp)
+        private AlarmSensorScanOutput IsDatapointTriggered<T>(TypedDatapoint<T> dp, T notTrippedValue)
         {
             if (dp.Value == null || !dp.Value.Equals(notTrippedValue))
                 return new AlarmSensorScanOutput(dp.Channel.Device, dp.UnderlyingDatapoint);
-
-            if (checkTimestamp)
-            {
-
-                if (ISEIDModify.ContainsKey(dp.ISEID))
-                {
-                    var lastTimestamp = ISEIDModify[dp.ISEID];
-                    if (lastTimestamp != dp.Timestamp)
-                    {
-                        ISEIDModify[dp.ISEID] = dp.Timestamp;
-                        return new AlarmSensorScanOutput(dp.Channel.Device, dp.UnderlyingDatapoint);
-                    }
-                }
-                else
-                    ISEIDModify.Add(dp.ISEID, dp.Timestamp);
-            }
 
             return null;
         }
@@ -121,9 +105,13 @@ namespace csharpmaticAutomations.Alarm
             if (triggered.Count > 0)
             {
                 foreach (var t in triggered)
+                {
                     LOGGER.Warn($"ALARM {t.GetTriggeredMessage()}");
+                    if (!AlarmTriggerEvents.ContainsKey(t.DeviceISEID))
+                        AlarmTriggerEvents.Add(t.DeviceISEID, t);
+                }                               
 
-                _setAlarmTriggered(true);
+                SetAlarmTriggered(true);
             }
         }
 
@@ -162,7 +150,7 @@ namespace csharpmaticAutomations.Alarm
                 }
 
 
-                /*
+                /* LAUD!
                  
                 //smoke detectors
                 HMIP_SWSD smokeDetector = d as HMIP_SWSD;
@@ -173,6 +161,7 @@ namespace csharpmaticAutomations.Alarm
                     if (smokeDetector.Smoke_Detector_Command.Value != newState)
                         taskList.Add(smokeDetector.Smoke_Detector_Command.SetValueAsync(newState));
                 }
+
                 */
             }
 
@@ -180,35 +169,41 @@ namespace csharpmaticAutomations.Alarm
                 Task.WaitAll(taskList.ToArray());
         }
 
-        public List<AlarmSensorScanOutput> Arm()
+        public bool Arm()
         {
             LOGGER.Info("Alarm arm requested...");
 
             if (AlarmArmed)
                 throw new InvalidOperationException("Alarm is already ARMED");
 
-            ISEIDModify.Clear();
-
             var res = ScanSensors(true);
+
+            AlarmTriggerEvents.Clear();
 
             if (res.Count == 0)
             {
-                _setAlarmArmed(true);
-                _setAlarmTriggered(false);                                          
+                SetAlarmArmed(true);
+                SetAlarmTriggered(false);
+
+                return true;
             }
             else
-            {
+            {                
                 LOGGER.Info($"Alarm arming aborted. {res.Count} device(s) are triggered:");
                 foreach (var d in res)
+                {
                     LOGGER.Warn($"  Arm aborted: {d.GetTriggeredMessage()}");
-            }
+                    if (!AlarmTriggerEvents.ContainsKey(d.DeviceISEID))
+                        AlarmTriggerEvents.Add(d.DeviceISEID, d);
+                }
 
-            return res;
+                return false;
+            }           
         }
 
-        private void _setAlarmArmed(bool value)
+        private void SetAlarmArmed(bool value)
         {
-            _alarmArmed = value;
+            AlarmArmed = value;
             JToken ret = null;
 
             if (value)
@@ -226,9 +221,9 @@ namespace csharpmaticAutomations.Alarm
             }
         }
 
-        private void _setAlarmTriggered(bool value)
+        private void SetAlarmTriggered(bool value)
         {
-            _alarmTriggered = value;
+            AlarmTriggered = value;
             JToken ret = null;
 
             if(value)
@@ -246,15 +241,17 @@ namespace csharpmaticAutomations.Alarm
 
         public void Disarm()
         {
-            LOGGER.Info("Alarm disarm requested");
+            LOGGER.Info("Alarm disarm requested");                       
 
             if (!AlarmArmed)
                 LOGGER.Info("Alarm is already DISARMED, disarming all devices one more time anyway");
 
-            _setAlarmArmed(false);
-            _setAlarmTriggered(false);
+            SetAlarmArmed(false);
+            SetAlarmTriggered(false);
 
             SetAlarmOutputDevicesSate(false);
+
+            AlarmTriggerEvents.Clear();
 
             LOGGER.Info("Alarm DISARMED");
         }

@@ -2,6 +2,7 @@
 using csharpmatic.Generic;
 using csharpmatic.Interfaces;
 using csharpmaticAutomation;
+using csharpmaticAutomation.Alarm;
 using csharpmaticAutomation.RestApi;
 using HouseAutomationService.Properties;
 using log4net;
@@ -31,6 +32,10 @@ namespace HouseAutomationService
                 try
                 {                   
                     var dm = new DeviceManager(Settings.Default.HomematicServerAddress);
+
+                    //DEBUG - still WIP
+                    //LOGGER.Info("Starting alarm automation");
+                    //var alarmAutomation = new AlarmAutomation(dm, AutomationNames.AlarmAutomation);
 
                     LOGGER.Info("Starting humidity automation");                    
                     var humidityAutomation = new ActuatorSensorAutomation<IHumidityControlDevice>(dm, AutomationNames.HumidityAutomation, Function.Humidity, (a, d) => d.Humidity.Value);
@@ -85,9 +90,12 @@ namespace HouseAutomationService
                     LOGGER.Info("Starting entering main loop");
                     for (;;)
                     {
-                        //has internal smart locking (only locks when data structures are modified, not during xmlapi queries)
+                        //this will refresh data from HM api and run all automations
+                        dm.Work();
+
+                        //log events
                         List<DatapointEvent> eventsSinceLastRefresh = dm.Refresh();
-                        foreach (var e in eventsSinceLastRefresh)
+                        foreach (var e in dm.Events)
                         {
                             LOGGER.InfoFormat("{0} EVENT {1}: ({2}) => ({3})",
                                 e.EventTimestamp.ToString("o"),
@@ -95,9 +103,6 @@ namespace HouseAutomationService
                                 e.Previous == null ? "" : e.Previous.Value, e.Current.Value
                             );
                         }
-
-                        //this will refresh data from HM api and run all automations
-                        dm.Work();
 
                         //refresh data every so often
                         new ManualResetEvent(false).WaitOne(200);

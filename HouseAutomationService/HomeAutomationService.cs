@@ -14,6 +14,8 @@ using System.Threading.Tasks;
 using Unosquare.Labs.EmbedIO;
 using Unosquare.Labs.EmbedIO.Constants;
 using Unosquare.Labs.EmbedIO.Modules;
+using csharpmatic.Notify;
+using csharpmatic.Automation.Alarm;
 
 namespace HouseAutomationService
 {
@@ -25,15 +27,21 @@ namespace HouseAutomationService
         {
             log4net.Config.XmlConfigurator.Configure();
 
+            int restartTries = 0;
+
             for (;;)
             {
                 try
                 {                   
                     var dm = new DeviceManager(Settings.Default.HomematicServerAddress);
 
-                    //DEBUG - still WIP
-                    //LOGGER.Info("Starting alarm automation");
-                    //var alarmAutomation = new AlarmAutomation(dm, AutomationNames.AlarmAutomation);
+                    LOGGER.Info("Starting external Slack notification service");
+                    Slack s = Slack.TryFromCCU(dm);
+                    if (s != null)
+                        dm.RegisterNotificationService(s);
+
+                    LOGGER.Info("Starting alarm automation");
+                    var alarmAutomation = new AlarmAutomation(dm, AutomationNames.AlarmAutomation);
 
                     LOGGER.Info("Starting humidity automation");                    
                     var humidityAutomation = new ActuatorSensorAutomation<IHumidityControlDevice>(dm, AutomationNames.HumidityAutomation, Function.Humidity, (a, d) => d.Humidity.Value);
@@ -77,8 +85,13 @@ namespace HouseAutomationService
                     var server = new WebServer(Settings.Default.WebServerListenPort, RoutingStrategy.Regex);
                     server.RegisterModule(new WebApiModule());
                     server.Module<CorsModule>();
+                                        
                     RoomController.DeviceManager = dm;
                     server.Module<WebApiModule>().RegisterController<RoomController>();
+
+                    AlarmControler.AlarmAutomation = alarmAutomation;
+                    server.Module<WebApiModule>().RegisterController<AlarmControler>();
+
                     server.RegisterModule(new StaticFilesModule(Settings.Default.WebServerRoot));
                     server.Module<StaticFilesModule>().UseRamCache = true;
                     server.Module<StaticFilesModule>().DefaultExtension = ".html";
@@ -103,12 +116,23 @@ namespace HouseAutomationService
 
                         //refresh data every so often
                         new ManualResetEvent(false).WaitOne(200);
+
+                        restartTries = 0;
                     }
                 }
                 catch (Exception e)
                 {
-                    LOGGER.Error("Error. Restarting device manager in 3s..", e);
-                    new ManualResetEvent(false).WaitOne(3000);
+                    restartTries++;
+
+                    if (restartTries < 5)
+                    {
+                        LOGGER.Error($"Got unhandled exception {restartTries} in a row. Restarting imediately", e);
+                    }
+                    else
+                    {
+                        LOGGER.Error($"Got unhandled exception {restartTries} in a row. Restarting in 3s..", e);
+                        new ManualResetEvent(false).WaitOne(3000);
+                    }
                 }
             }
         }

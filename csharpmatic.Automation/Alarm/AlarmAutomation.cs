@@ -13,26 +13,28 @@ using System.Threading.Tasks;
 
 namespace csharpmatic.Automation.Alarm
 {
-    public class AlarmAutomation: IAutomation
+    public class AlarmAutomation : IAutomation
     {
         public string Name { get; private set; }
         public bool AlarmArmed { get; private set; }
         public bool AlarmTriggered { get; private set; }
-       
-        [JsonIgnore]
+
+        [Unosquare.Swan.Attributes.JsonProperty("ignoredData", true)]
         public DeviceManager DeviceManager { get; private set; }
-                
+
         private static ILog LOGGER = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private Client rpcClient;
 
-        public Dictionary<string, AlarmSensorScanOutput> AlarmTriggerEvents;
+        private Dictionary<string, AlarmSensorScanOutput> _alarmTriggeredEvents;
+
+        public List<AlarmSensorScanOutput> AlarmTriggeredEvents { get { return _alarmTriggeredEvents.Values.ToList(); } }
 
         public AlarmAutomation(DeviceManager dm, string name)
         {
             DeviceManager = dm;
             Name = name;                      
             
-            AlarmTriggerEvents = new Dictionary<string, AlarmSensorScanOutput>();
+            _alarmTriggeredEvents = new Dictionary<string, AlarmSensorScanOutput>();
 
             rpcClient = new Client(dm.HttpServerUri.Host);
 
@@ -48,12 +50,14 @@ namespace csharpmatic.Automation.Alarm
         {
             if (AlarmArmed)
                 Work_Armed();
+            else
+                Work_Disarmed();
 
             if (AlarmTriggered)
                 Work_AlarmTriggered();
 
         }
-
+               
         public override string ToString()
         {
             if (AlarmTriggered)
@@ -98,6 +102,24 @@ namespace csharpmatic.Automation.Alarm
             return null;
         }
 
+        private void Work_Disarmed()
+        {
+            if (AlarmArmed)
+                return;
+
+            _alarmTriggeredEvents.Clear();
+
+            var triggered = ScanSensors(true);
+
+            if (triggered.Count > 0)
+            {
+                foreach (var t in triggered)
+                {
+                    if (!_alarmTriggeredEvents.ContainsKey(t.DeviceISEID))
+                        _alarmTriggeredEvents.Add(t.DeviceISEID, t);
+                }               
+            }
+        }
 
         private void Work_Armed()
         {
@@ -108,14 +130,22 @@ namespace csharpmatic.Automation.Alarm
 
             if (triggered.Count > 0)
             {
+                StringBuilder notifyMsg = new StringBuilder();
+
+                notifyMsg.AppendLine("ALARM Has been TRIGGERED");
+
                 foreach (var t in triggered)
                 {
                     LOGGER.Warn($"ALARM {t.GetTriggeredMessage()}");
-                    if (!AlarmTriggerEvents.ContainsKey(t.DeviceISEID))
-                        AlarmTriggerEvents.Add(t.DeviceISEID, t);
-                }                               
+                    notifyMsg.AppendLine($"ALARM {t.GetTriggeredMessage()}");
 
+                    if (!_alarmTriggeredEvents.ContainsKey(t.DeviceISEID))
+                        _alarmTriggeredEvents.Add(t.DeviceISEID, t);
+                }                               
+                               
                 SetAlarmTriggered(true);
+
+                Task s = DeviceManager.SendNotificationAsync(notifyMsg.ToString());
             }
         }
 
@@ -140,9 +170,13 @@ namespace csharpmatic.Automation.Alarm
                     bool newState = turnOn;
 
                     if (switchDevice.State.Value != newState)
+                    {
+                        LOGGER.Info($"ALARM Activating '{switchDevice.Name}'");
                         taskList.Add(switchDevice.State.SetValueAsync(newState));
+                    }
                 }
 
+                /*
                 //dimmer devices
                 HMIP_BDT dimmerDevice = d as HMIP_BDT;
                 if (dimmerDevice != null)
@@ -152,7 +186,7 @@ namespace csharpmatic.Automation.Alarm
                     if (dimmerDevice.Level.Value != newState)
                         taskList.Add(dimmerDevice.Level.SetValueAsync(newState));
                 }
-
+                */
 
                 /* LAUD!
                  
@@ -182,7 +216,7 @@ namespace csharpmatic.Automation.Alarm
 
             var res = ScanSensors(true);
 
-            AlarmTriggerEvents.Clear();
+            _alarmTriggeredEvents.Clear();
 
             if (res.Count == 0)
             {
@@ -197,8 +231,8 @@ namespace csharpmatic.Automation.Alarm
                 foreach (var d in res)
                 {
                     LOGGER.Warn($"  Arm aborted: {d.GetTriggeredMessage()}");
-                    if (!AlarmTriggerEvents.ContainsKey(d.DeviceISEID))
-                        AlarmTriggerEvents.Add(d.DeviceISEID, d);
+                    if (!_alarmTriggeredEvents.ContainsKey(d.DeviceISEID))
+                        _alarmTriggeredEvents.Add(d.DeviceISEID, d);
                 }
 
                 return false;
@@ -211,9 +245,15 @@ namespace csharpmatic.Automation.Alarm
             JToken ret = null;
 
             if (value)
+            {
                 LOGGER.Info("Alarm has been ARMED");
+                Task s = DeviceManager.SendNotificationAsync("Alarm has been ARMED");
+            }
             else
+            {
                 LOGGER.Info("Alarm has been DISARMED");
+                Task s = DeviceManager.SendNotificationAsync("Alarm has been DISARMED");
+            }
 
             try
             {
@@ -227,11 +267,11 @@ namespace csharpmatic.Automation.Alarm
 
         private void SetAlarmTriggered(bool value)
         {
-            AlarmTriggered = value;
-            JToken ret = null;
+            if (value && !AlarmTriggered)
+                LOGGER.Warn($"ALARM Has been TRIGGERED");
 
-            if(value)
-                LOGGER.Warn($"ALARM Has been TRIGGERED");              
+            AlarmTriggered = value;
+            JToken ret = null;                       
 
             try
             {
@@ -255,7 +295,7 @@ namespace csharpmatic.Automation.Alarm
 
             SetAlarmOutputDevicesSate(false);
 
-            AlarmTriggerEvents.Clear();
+            _alarmTriggeredEvents.Clear();
 
             LOGGER.Info("Alarm DISARMED");
         }

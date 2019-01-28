@@ -92,6 +92,7 @@
     <Compile Include="Interfaces\IOperatingVoltageInfo.cs" />
     <Compile Include="Interfaces\ISmokeDetectorDevice.cs" />
     <Compile Include="JsonAPI\Client.cs" />
+    <Compile Include="Notify\INotify.cs" />
     <Compile Include="Notify\Slack.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>

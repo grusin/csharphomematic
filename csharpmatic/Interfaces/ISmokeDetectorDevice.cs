@@ -9,7 +9,7 @@ namespace csharpmatic.Interfaces
 {
     public interface ISmokeDetectorDevice
     {
-        TypedDatapoint<String> Error_Code { get; }
+        TypedDatapoint<Int32> Error_Code { get; }
 
         TypedDatapoint<ISmokeDetectorDevice_Smoke_Detector_Alarm_Status_Enum> Smoke_Detector_Alarm_Status { get; }
 

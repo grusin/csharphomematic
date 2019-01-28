@@ -165,9 +165,7 @@ namespace csharpmatic.JsonAPI
 
             return Session_RpcCall("Interface.rssiInfo", JObject.Parse(@"{ interface: '" + interfaceName + "'}"));
         }
-
-
-
+               
         public JToken GetSystemVariables()
         {
             Session_Login();

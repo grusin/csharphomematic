@@ -2,6 +2,7 @@
 using csharpmatic.Automation.Alarm;
 using csharpmatic.Automation.RestApi;
 using csharpmatic.Generic;
+using csharpmatic.Notify;
 using log4net;
 using log4net.Config;
 using System;
@@ -25,7 +26,13 @@ namespace Samples.WebServer
             BasicConfigurator.Configure();
 
             var dm = new DeviceManager("192.168.1.200");
-            
+
+            //register notifcation service
+            Slack s = Slack.TryFromCCU(dm);
+            if(s != null)
+                dm.RegisterNotificationService(s);
+            //dm.SendNotificationAsync("started!");
+
             //register automations
             var alarmAutomation = new AlarmAutomation(dm, AutomationNames.AlarmAutomation);
 
@@ -39,8 +46,12 @@ namespace Samples.WebServer
 
             server.RegisterModule(new WebApiModule());
             server.Module<CorsModule>();
+
             RoomController.DeviceManager = dm;
             server.Module<WebApiModule>().RegisterController<RoomController>();
+
+            AlarmControler.AlarmAutomation = alarmAutomation;
+            server.Module<WebApiModule>().RegisterController<AlarmControler>();
             
             server.RunAsync();
             

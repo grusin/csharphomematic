@@ -19,9 +19,10 @@ namespace csharpmatic.Automation.RestApi
         }
 
         [WebApiHandler(HttpVerbs.Get, "/api/alarm")]
-        public void GetAlarm()
+        public bool GetAlarm()
         {
             this.JsonResponse(AlarmAutomation);
+            return true;
         }
 
         [WebApiHandler(HttpVerbs.Get, "/api/alarm/arm")]
@@ -35,11 +36,19 @@ namespace csharpmatic.Automation.RestApi
         }
 
         [WebApiHandler(HttpVerbs.Get, "/api/alarm/disarm/{code}")]
-        public void Disarm(string code)
+        public bool Disarm(string code)
         {
             AlarmAutomation.Disarm();
 
             this.JsonResponse(AlarmAutomation);
+            return true;
+        }
+
+        // You can override the default headers and add custom headers to each API Response.
+        public override void SetDefaultHeaders()
+        {
+            this.NoCache();
+            this.Response.Headers.Add("Access-Control-Allow-Origin", "*");
         }
     }
 }

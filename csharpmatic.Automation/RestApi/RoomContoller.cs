@@ -18,6 +18,7 @@ namespace csharpmatic.Automation.RestApi
 
         public RoomController(IHttpContext context) : base(context)
         {
+           
         }
         
         [WebApiHandler(HttpVerbs.Get, "/api/rooms")]

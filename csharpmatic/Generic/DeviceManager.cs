@@ -1,4 +1,5 @@
 ﻿using csharpmatic.Interfaces;
+using csharpmatic.Notify;
 using log4net;
 using System;
 using System.Collections.Generic;
@@ -14,19 +15,20 @@ namespace csharpmatic.Generic
         internal JsonAPI.Client JsonAPIClient;
         //private 
         public List<Device> Devices { get; private set; }
-        public Dictionary<string, Device> DevicesByISEID { get; private set ;}
+        public Dictionary<string, Device> DevicesByISEID { get; private set; }
         private Dictionary<string, Datapoint> PrevDataPointsByISEID { get; set; }
         public List<DatapointEvent> Events { get; private set; }
-        public Uri HttpServerUri { get { return XMLAPIClient.HttpServerUri; } }        
+        public Uri HttpServerUri { get { return XMLAPIClient.HttpServerUri; } }
         public List<Room> Rooms { get; private set; }
         public Dictionary<string, Room> RoomsByName { get; private set; }
 
         private Dictionary<string, IAutomation> RegisteredAutomations;
+        private Dictionary<string, INotify> RegisteredNotificationServices;
 
         private static ILog LOGGER = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         public object RefreshLock { get; set; }
-                
+
         public DeviceManager(string serverAddress)
         {
             LOGGER.Info($"Starting device manager for {serverAddress}");
@@ -35,6 +37,7 @@ namespace csharpmatic.Generic
             JsonAPIClient = new JsonAPI.Client(serverAddress);
 
             RegisteredAutomations = new Dictionary<string, IAutomation>();
+            RegisteredNotificationServices = new Dictionary<string, INotify>();
             Devices = new List<Device>();
 
             Refresh();
@@ -45,14 +48,42 @@ namespace csharpmatic.Generic
             if (a == null)
                 throw new ArgumentNullException();
 
-            if(RegisteredAutomations.ContainsKey(a.Name))
-                throw new ArgumentException($"Canot register automation {a.Name} of type {a.GetType()}. It's already registered.");
+            if (RegisteredAutomations.ContainsKey(a.Name))
+                throw new ArgumentException($"Canot register automation '{a.Name}' of type '{a.GetType()}'. It's already registered.");
 
             RegisteredAutomations.Add(a.Name, a);
 
-            LOGGER.Info($"Registered automation {a.Name} of type {a.GetType()}");
+            LOGGER.Info($"Registered automation '{a.Name}' of type '{a.GetType()}'");
 
             return a;
+        }
+
+        public INotify RegisterNotificationService(INotify n)
+        {
+            if (n == null)
+                throw new ArgumentNullException();
+
+            if (RegisteredAutomations.ContainsKey(n.Name))
+                throw new ArgumentException($"Canot register notification service '{n.Name}' of type '{n.GetType()}'. It's already registered.");
+
+            RegisteredNotificationServices.Add(n.Name, n);
+
+            LOGGER.Info($"Registered automation '{n.Name}' of type '{n.GetType()}'");
+
+            return n;
+        }
+
+        public async Task SendNotificationAsync(string message)
+        {
+            if (RegisteredNotificationServices.Count == 0)
+                return;
+
+            List<Task> list = new List<Task>();
+
+            foreach (var ns in RegisteredNotificationServices)
+                list.Add(ns.Value.SendTextMessageAsync(message));
+            
+            await Task.WhenAll(list);
         }
 
         public IAutomation GetAutomation(string name)

@@ -28,7 +28,7 @@ namespace csharpmatic.Interfaces.Devices
 
 		public TypedDatapoint<System.Boolean> Update_Pending { get; private set; }
 
-		public TypedDatapoint<System.String> Error_Code { get; private set; }
+		public TypedDatapoint<System.Int32> Error_Code { get; private set; }
 
 		public TypedDatapoint<csharpmatic.Interfaces.ISmokeDetectorDevice_Smoke_Detector_Alarm_Status_Enum> Smoke_Detector_Alarm_Status { get; private set; }
 
@@ -57,7 +57,7 @@ namespace csharpmatic.Interfaces.Devices
 
 			Update_Pending = new TypedDatapoint<System.Boolean>(base.Channels[0].Datapoints["UPDATE_PENDING"]);
 
-			Error_Code = new TypedDatapoint<System.String>(base.Channels[1].Datapoints["ERROR_CODE"]);
+			Error_Code = new TypedDatapoint<System.Int32>(base.Channels[1].Datapoints["ERROR_CODE"]);
 
 			Smoke_Detector_Alarm_Status = new TypedDatapoint<csharpmatic.Interfaces.ISmokeDetectorDevice_Smoke_Detector_Alarm_Status_Enum>(base.Channels[1].Datapoints["SMOKE_DETECTOR_ALARM_STATUS"]);
 

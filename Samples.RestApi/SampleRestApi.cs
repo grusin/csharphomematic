@@ -12,7 +12,7 @@ using Unosquare.Labs.EmbedIO.Modules;
 
 namespace Samples.RestApi
 {
-    class Program
+    class SampleRestApi
     {
         static void Main(string[] args)
         {

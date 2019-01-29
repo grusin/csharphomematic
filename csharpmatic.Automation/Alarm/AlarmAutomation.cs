@@ -29,17 +29,19 @@ namespace csharpmatic.Automation.Alarm
 
         public List<AlarmSensorScanOutput> AlarmTriggeredEvents { get { return _alarmTriggeredEvents.Values.ToList(); } }
 
+        public Object lockObject = new object();
+
         public AlarmAutomation(DeviceManager dm, string name)
         {
             DeviceManager = dm;
-            Name = name;                      
-            
+            Name = name;
+
             _alarmTriggeredEvents = new Dictionary<string, AlarmSensorScanOutput>();
 
             rpcClient = new Client(dm.HttpServerUri.Host);
 
             AlarmArmed = rpcClient.GetOrCreateSystemBoolVariable("Alarm Armed", false);
-            AlarmTriggered = rpcClient.GetOrCreateSystemBoolVariable("Alarm Triggered", false);                      
+            AlarmTriggered = rpcClient.GetOrCreateSystemBoolVariable("Alarm Triggered", false);
 
             LOGGER.Info($"Initalized alarm: {ToString()}");
 
@@ -48,16 +50,11 @@ namespace csharpmatic.Automation.Alarm
 
         public void Work()
         {
-            if (AlarmArmed)
-                Work_Armed();
-            else
-                Work_Disarmed();
-
-            if (AlarmTriggered)
-                Work_AlarmTriggered();
-
+            Work_Armed();
+            Work_Disarmed();
+            Work_AlarmTriggered();
         }
-               
+
         public override string ToString()
         {
             if (AlarmTriggered)
@@ -132,15 +129,18 @@ namespace csharpmatic.Automation.Alarm
             {
                 StringBuilder notifyMsg = new StringBuilder();
 
-                notifyMsg.AppendLine("ALARM Has been TRIGGERED");
+                if(!AlarmTriggered)
+                    notifyMsg.AppendLine("ALARM Has been just TRIGGERED");
 
                 foreach (var t in triggered)
-                {
-                    LOGGER.Warn($"ALARM {t.GetTriggeredMessage()}");
-                    notifyMsg.AppendLine($"ALARM {t.GetTriggeredMessage()}");
-
+                {                    
                     if (!_alarmTriggeredEvents.ContainsKey(t.DeviceISEID))
+                    {
+                        LOGGER.Warn($"ALARM {t.GetTriggeredMessage()}");
+                        notifyMsg.AppendLine($"ALARM {t.GetTriggeredMessage()}");
+
                         _alarmTriggeredEvents.Add(t.DeviceISEID, t);
+                    }
                 }                               
                                
                 SetAlarmTriggered(true);
@@ -151,7 +151,9 @@ namespace csharpmatic.Automation.Alarm
 
         private void Work_AlarmTriggered()
         {
-            //turn on all switches, dimmers in alarm group, make sure they are constantly triggered
+            if (!AlarmTriggered)
+                return;
+
             SetAlarmOutputDevicesSate(true);
         }
 
@@ -296,43 +298,11 @@ namespace csharpmatic.Automation.Alarm
             SetAlarmOutputDevicesSate(false);
 
             _alarmTriggeredEvents.Clear();
-
-            LOGGER.Info("Alarm DISARMED");
         }
 
-        #region IDisposable Support
-        private bool disposedValue = false; // To detect redundant calls
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (!disposedValue)
-            {
-                if (disposing)
-                {
-                    // TODO: dispose managed state (managed objects).
-                }
-
-                // TODO: free unmanaged resources (unmanaged objects) and override a finalizer below.
-                // TODO: set large fields to null.
-
-                disposedValue = true;
-            }
-        }
-
-        // TODO: override a finalizer only if Dispose(bool disposing) above has code to free unmanaged resources.
-        // ~AlarmAutomation() {
-        //   // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-        //   Dispose(false);
-        // }
-
-        // This code added to correctly implement the disposable pattern.
         public void Dispose()
         {
-            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
-            Dispose(true);
-            // TODO: uncomment the following line if the finalizer is overridden above.
-            // GC.SuppressFinalize(this);
+            //nothing to dispose, do nothing
         }
-        #endregion
     }
 }

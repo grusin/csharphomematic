@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Samples.ShowEvents
 {
-    class Program
+    class SampleShowEvents
     {
         static void Main(string[] args)
         {

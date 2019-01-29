@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Samples.Automations
 {
-    class Program
+    class SampleAutomations
     {
         private static ILog LOGGER = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Samples.JsonRPC
 {
-    class Program
+    class SampleJsonRPC
     {
         static void Main(string[] args)
         {

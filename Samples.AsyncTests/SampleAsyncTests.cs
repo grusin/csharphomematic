@@ -2,7 +2,7 @@
 
 namespace Samples.AsyncTests
 {
-    class Program
+    class SampleAsyncTests
     {
         static void Main(string[] args)
         {

@@ -17,7 +17,7 @@ using Unosquare.Labs.EmbedIO.Modules;
 
 namespace Samples.WebServer
 {
-    class Program
+    class SampleWebServer
     {
         private static ILog LOGGER = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
@@ -31,8 +31,7 @@ namespace Samples.WebServer
             Slack s = Slack.TryFromCCU(dm);
             if(s != null)
                 dm.RegisterNotificationService(s);
-            //dm.SendNotificationAsync("started!");
-
+                                  
             //register automations
             var alarmAutomation = new AlarmAutomation(dm, AutomationNames.AlarmAutomation);
 
@@ -60,6 +59,6 @@ namespace Samples.WebServer
                 dm.Work();
                 new ManualResetEvent(false).WaitOne(200);
             }
-        }
+        }       
     }
 }

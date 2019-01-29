@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Samples.ShowInterfaces
 {
-    class Program
+    class SampleShowInterfaces
     {
         static void Main(string[] args)
         {

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Samples.ManageTemp
 {
-    class Program
+    class SampleManageTemp
     {
 
         static void Main(string[] args)

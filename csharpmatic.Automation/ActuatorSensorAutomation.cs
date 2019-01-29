@@ -71,7 +71,7 @@ namespace csharpmatic.Automation
                 if (cnt > ul.MaximumTrue)
                 {
                     if (dev.State.Value)
-                        LOGGER.InfoFormat($"{dev.Name} is above usage limit: {cnt} (max {ul.MaximumTrue} in {ul.TimeSpan}");
+                        LOGGER.Info($"{dev.Name} is above usage limit: {cnt} (max {ul.MaximumTrue} in {ul.TimeSpan}");
 
                     return false;
                 }
@@ -153,7 +153,7 @@ namespace csharpmatic.Automation
                                 toON.Add(a);
 
                             if(a.State.Value == false)
-                                LOGGER.Info($"\t{s.Name} in {r} did not meet the OFF condition {offCondition}, value: {dpValue}. Marking to turn ***ON*** {a.Name}");                            
+                                LOGGER.Debug($"\t{s.Name} in {r} did not meet the OFF condition {offCondition}, value: {dpValue}. Marking to turn ***ON*** {a.Name}");                            
                         }
                         else
                             LOGGER.Debug($"\t{s.Name} in {r} met OFF condition {offCondition}, valve open: {dpValue}");
@@ -181,7 +181,7 @@ namespace csharpmatic.Automation
                         LOGGER.Debug($"Cannot turn ON {a.Name}, it has not been OFF long enough ({howLongInState} vs. {MinOffTime})");
                     else
                     {
-                        LOGGER.InfoFormat($"Turning ON {a.Name}");
+                        LOGGER.Info($"Turning ON {a.Name}");
                         a.State.Value = true;
                     }
                 }

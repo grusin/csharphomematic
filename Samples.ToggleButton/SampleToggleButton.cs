@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Samples.ToggleButton
 {
-    class Program
+    class SampleToggleButton
     {
         static void Main(string[] args)
         {

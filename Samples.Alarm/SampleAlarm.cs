@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Samples.Alarm
 {
-    class Program
+    class SampleAlarm
     {
         private static ILog LOGGER = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 

@@ -1,0 +1,26 @@
+{
+  "name": "homeui",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "ajv": "^6.10.2",
+    "onsenui": "^2.10.10",
+    "react": "^15.6.2",
+    "react-dom": "^15.6.2",
+    "react-onsenui": "^1.11.2",
+    "react-scripts": "^3.3.0",
+    "react-timeago": "^4.4.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
+}

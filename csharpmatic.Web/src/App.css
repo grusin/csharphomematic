@@ -1,0 +1,12 @@
+.button {   
+    padding: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: 2px;
+    margin-right: 2px;
+    font-size: 12px;
+}
+
+.button--large--cta:disabled, .button--large--cta[disabled] {
+    opacity: 0.7;
+}

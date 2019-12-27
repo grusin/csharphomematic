@@ -3,6 +3,7 @@ using log4net;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -176,7 +177,8 @@ namespace csharpmatic.XMLAPI
         {
             string iseidsString = String.Join(",", iseids);
 
-            Uri uri = new Uri(HttpServerUri, @"/addons/xmlapi/mastervalue.cgi?tcpport=2010&device_id=" + iseidsString);
+            //original XMLAPI mastervalue does not work well on HMIP devices I have, so i have my own, that works... 
+            Uri uri = new Uri(HttpServerUri, @"/addons/xmlapi/mastervalue2.cgi?tcpport=2010&device_id=" + iseidsString);
             var mv = await SafeXMLGetRequestAsync<MastervalueList.mastervalue>(uri);
 
             return mv;

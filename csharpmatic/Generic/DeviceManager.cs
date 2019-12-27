@@ -3,8 +3,10 @@ using csharpmatic.Notify;
 using log4net;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace csharpmatic.Generic
@@ -31,7 +33,10 @@ namespace csharpmatic.Generic
 
         public DeviceManager(string serverAddress)
         {
+            Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture("en-GB");
+
             LOGGER.Info($"Starting device manager for {serverAddress}");
+
             RefreshLock = new object();
             XMLAPIClient = new XMLAPI.Client("http://" + serverAddress);
             JsonAPIClient = new JsonAPI.Client(serverAddress);

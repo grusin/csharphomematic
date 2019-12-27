@@ -50,6 +50,11 @@ namespace csharpmatic.Automation
                 var roomDevices = allDevices.Where(w => w.Rooms.Contains(r)).ToList();
                 var roomLeader = allDevices.Where(w => w.ISEID == roomDevices.Min(min => min.ISEID)).FirstOrDefault();
 
+                if (roomLeader.Set_Point_Mode.Value != 1) //manual mode is forced!
+                    roomLeader.Set_Point_Mode.SetRoomValue(1);
+
+                //ForceManualModeOnly(roomDevices);
+
                 var roomMasterValues = new HashSet<string>(roomLeader.Channels[1].MasterValues.Values.Where(w =>
                     IsSchedulerTemperature(w)
                     || w.Name == "BOOST_TIME_PERIOD"

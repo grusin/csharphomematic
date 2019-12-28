@@ -84,12 +84,39 @@ class Heating extends BaseComponent {
             <Ons.Button modifier="large--cta" onClick={this.gotoComponent.bind(this, ChangeTemp, { ISEID: row.ISEID })} style={{ width: "30px" }}><Ons.Icon icon="fa-wrench" /></Ons.Button>
           </div>
           <div className="expandable-content">
-            Set Temp: {row.SetTemp}&#8451;<br />
-            Window Open: {row.WindowOpen ? 'Yes' : 'No'} <br />
-            Actual Temp (Min/Avg/Max): {row.ActualTempMin}&#8451; / {row.ActualTempAvg}&#8451; / {row.ActualTempMax}&#8451;<br />
-            Humidity (Min/Avg/Max): {row.HumidityMin}% / {row.HumidityAvg}% / {row.HumidityMax}%<br />
-            Valve Open (Min/Avg/Max): {row.ValveOpenMin}% / {row.ValveOpenAvg}% / {row.ValveOpenMax}%<br /><br/>
-            
+            <Ons.List 
+              dataSource={row.Devices}
+              renderHeader={() => 'Devices'}
+              renderRow={(d, idx) => (
+                <Ons.ListItem modifier='longdivider'>{d.ShortName}
+                {
+                  d.hasOwnProperty('Press_Long') &&  
+                  <Ons.Button modifier="large--cta" disabled style={{ width: "30px" }}>
+                    <Ons.Icon icon={d.State ? "fa-toggle-on" : "fa-toggle-off"}/>
+                  </Ons.Button>
+                } 
+                {
+                  d.hasOwnProperty('Actual_Temperature') &&  
+                  <Ons.Button modifier="large--cta" disabled style={{ width: "70px" }}>
+                     {d.Actual_Temperature.Value}&#8451;&nbsp;<Ons.Icon icon="fa-thermometer-empty" />
+                  </Ons.Button>
+                } 
+                {
+                  d.hasOwnProperty('Valve_State') &&  
+                  <Ons.Button modifier="large--cta" disabled style={{ width: "70px" }}>
+                     {d.Level.Value*100}%&nbsp;<Ons.Icon icon="fa-wrench" />
+                  </Ons.Button>
+                } 
+                {
+                  d.hasOwnProperty('Humidity') &&  
+                  <Ons.Button modifier="large--cta" disabled style={{ width: "70px" }}>
+                     {d.Humidity.Value}%&nbsp;<Ons.Icon icon="fa-tint" />
+                  </Ons.Button>
+                } 
+                </Ons.ListItem>
+              )}
+            />        
+
             {row.Warnings.map((item, i) => <li key={item}>Warning: {item}</li>)}            
           </div>
         </Ons.ListItem>

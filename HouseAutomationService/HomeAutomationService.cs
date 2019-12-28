@@ -11,11 +11,11 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Unosquare.Labs.EmbedIO;
-using Unosquare.Labs.EmbedIO.Constants;
-using Unosquare.Labs.EmbedIO.Modules;
 using csharpmatic.Notify;
 using csharpmatic.Automation.Alarm;
+using EmbedIO;
+using EmbedIO.WebApi;
+using EmbedIO.Files;
 
 namespace HouseAutomationService
 {
@@ -82,19 +82,16 @@ namespace HouseAutomationService
                     LOGGER.Info("Starting webserver");
                     //init web server
                     //web server runs in async mode, locking is required around all DM objects
-                    var server = new WebServer(Settings.Default.WebServerListenPort, RoutingStrategy.Regex);
-                    server.RegisterModule(new WebApiModule());
-                    server.Module<CorsModule>();
-                                        
+                    var server = new WebServer(Settings.Default.WebServerListenPort);
+                    server.WithCors(); 
+
                     RoomController.DeviceManager = dm;
-                    server.Module<WebApiModule>().RegisterController<RoomController>();
+                    server.WithWebApi("/api", m => m.WithController<RoomController>());
 
                     AlarmControler.AlarmAutomation = alarmAutomation;
-                    server.Module<WebApiModule>().RegisterController<AlarmControler>();
+                    server.WithWebApi("/api", m => m.WithController<AlarmControler>());
 
-                    server.RegisterModule(new StaticFilesModule(Settings.Default.WebServerRoot));
-                    server.Module<StaticFilesModule>().UseRamCache = true;
-                    server.Module<StaticFilesModule>().DefaultExtension = ".html";
+                    server.WithStaticFolder("/", Settings.Default.WebServerRoot, true, m => m.WithContentCaching(true));
 
                     server.RunAsync();
 

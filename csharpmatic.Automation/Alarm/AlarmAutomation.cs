@@ -19,8 +19,7 @@ namespace csharpmatic.Automation.Alarm
         public bool AlarmArmed { get; private set; }
         public bool AlarmTriggered { get; private set; }
 
-        [Unosquare.Swan.Attributes.JsonProperty("ignoredData", true)]
-        public DeviceManager DeviceManager { get; private set; }
+        internal DeviceManager DeviceManager { get; private set; }
 
         private static ILog LOGGER = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private Client rpcClient;

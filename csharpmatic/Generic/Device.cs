@@ -19,6 +19,8 @@ namespace csharpmatic.Generic
 
         public string Name { get; private set; }
 
+        public string ShortName => GetShortName();
+
         public string ISEID { get; private set; }
 
         public bool Reachable { get; internal set; }
@@ -224,6 +226,22 @@ namespace csharpmatic.Generic
         public override string ToString()
         {
             return JsonConvert.SerializeObject(this, Formatting.Indented);
+        }
+
+        private string GetShortName()
+        {
+            try
+            {
+                int idx = Name.IndexOf('-');
+                if (idx != 0)
+                    return Name.Substring(idx+1).Trim();
+                else
+                    return Name;
+            }
+            catch
+            {
+                return Name;
+            }
         }
     }  
 }

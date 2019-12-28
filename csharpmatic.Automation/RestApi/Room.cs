@@ -31,6 +31,8 @@ namespace csharpmatic.Automation.RestApi
         public DateTime Timestamp { get; set; } = DateTime.Now;
         public List<string> Warnings { get; set; } = new List<string>();
 
+        public List<Device> Devices { get; private set; }
+
         public Room()
         {
 
@@ -103,6 +105,9 @@ namespace csharpmatic.Automation.RestApi
                     .Select(s => String.Format($"{s.Name}: unreachable"))
                     .ToList()
                 );
+
+            //room device list
+            Devices = dr.HmDevices.Select(s => s as Device).Where(w => w != null).ToList();
         }
 
         private decimal RoundToHalfPoint(decimal input)

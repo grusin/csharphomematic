@@ -33,9 +33,10 @@ namespace csharpmatic.Automation.RestApi
                     Room r = new Room(dr);
                     list.Add(r);
                 }
-            }
 
-            return this.JsonResponse(list);
+                var ret = this.JsonResponse(list);
+                return ret;
+            }           
         }
 
         [WebApiHandler(HttpVerbs.Get, "/api/rooms/{iseid}")]

@@ -40,7 +40,7 @@ namespace csharpmatic.Generic
         public DateTime LastCommunicationTest { get; private set; } = DateTime.MinValue;
 
         [JsonIgnore]
-        public DeviceManager DeviceManager { get; private set; }
+        internal DeviceManager DeviceManager { get; private set; }
         
         public Device(XMLAPI.DeviceList.Device d, XMLAPI.Client CGIClient, DeviceManager dm)
         {

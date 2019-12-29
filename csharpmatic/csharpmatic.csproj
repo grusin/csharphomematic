@@ -80,6 +80,7 @@
     <Compile Include="Generic\IAutomation.cs" />
     <Compile Include="Interfaces\Devices\HMIP_BDT.generated.cs" />
     <Compile Include="Interfaces\Devices\HMIP_ETRV.generated.cs" />
+    <Compile Include="Interfaces\Devices\HMIP_ETRV_2.custom.cs" />
     <Compile Include="Interfaces\Devices\HMIP_ETRV_2.generated.cs" />
     <Compile Include="Interfaces\Devices\HMIP_HEATING.generated.cs" />
     <Compile Include="Interfaces\Devices\HMIP_PCBS.generated.cs" />

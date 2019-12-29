@@ -20,69 +20,78 @@ namespace csharpmatic.Automation.RestApi
                 
         }
 
-        [Route(HttpVerbs.Get | HttpVerbs.Post, "/{deviceiseid}")]
-        public async Task<Device> GetDevice(string device_iseid)
+        [Route(HttpVerbs.Get, "/{deviceiseid}")]
+        public Device GetDevice(string deviceiseid)
         {
             Device d;
 
-            if (DeviceManager.DevicesByISEID.TryGetValue(device_iseid, out d))
+            if (DeviceManager.DevicesByISEID.TryGetValue(deviceiseid, out d))
                 return d;
             else
                 return null;
         }        
 
-        [Route(HttpVerbs.Get | HttpVerbs.Post, "/{deviceiseid}/setdatapointbyname/{datapointname}/{value}")]
-        public async Task<Device> SetDatapointByName(string deviceiseid, string datapointname, string value)
-        {
-            var d = await GetDevice(deviceiseid);
+        [Route(HttpVerbs.Get, "/{deviceiseid}/setdatapointbyname/{datapointname}/{value}")]
+        public Device SetDatapointByName(string deviceiseid, string datapointname, string value)
+        {            
+            lock (DeviceManager.RefreshLock)
+            {
+                var d = GetDevice(deviceiseid);
 
-            if (d == null)
-                return null;
+                if (d == null)
+                    return null;
 
-            var dp = d.GetDatapointByName(datapointname);
+                var dp = d.GetDatapointByName(datapointname);
 
-            if(dp == null)
-                return null;
+                if (dp == null)
+                    return null;
 
-            await dp.SetValueAsync(value);
+                dp.SetValue(value);
 
-            return d;
+                return d;
+            }
         }
 
-        [Route(HttpVerbs.Get | HttpVerbs.Post, "/{deviceiseid}/setdatapointbyid/{datapointiseid}/{value}")]
-        public async Task<Device> SetDatapointById(string deviceiseid, string datapointiseid, string value)
+        [Route(HttpVerbs.Get, "/{deviceiseid}/setdatapointbyid/{datapointiseid}/{value}")]
+        public Device SetDatapointById(string deviceiseid, string datapointiseid, string value)
         {
-            var d = await GetDevice(deviceiseid);
+            lock (DeviceManager.RefreshLock)
+            {
+                var d = GetDevice(deviceiseid);
 
-            if (d == null)
-                return null;
+                if (d == null)
+                    return null;
 
-            var dp = d.GetDatapointById(datapointiseid);
+                var dp = d.GetDatapointById(datapointiseid);
 
-            if (dp == null)
-                return null;
+                if (dp == null)
+                    return null;
 
-            await dp.SetValueAsync(value);
+                dp.SetValue(value);
 
-            return d;
+                return d;
+            }
         }
 
-        [Route(HttpVerbs.Get | HttpVerbs.Post, "/{deviceiseid}/setmastervaluebyname/{mastervaluename}/{value}")]
-        public async Task<Device> SetMastervalueByName(string deviceiseid, string mastervaluename, string value)
+        [Route(HttpVerbs.Get, "/{deviceiseid}/setmastervaluebyname/{mastervaluename}/{value}")]
+        public Device SetMastervalueByName(string deviceiseid, string mastervaluename, string value)
         {
-            var d = await GetDevice(deviceiseid);
+            lock (DeviceManager.RefreshLock)
+            {
+                var d = GetDevice(deviceiseid);
 
-            if (d == null)
-                return null;
+                if (d == null)
+                    return null;
 
-            var mv = d.GetMastervalueByName(mastervaluename);
+                var mv = d.GetMastervalueByName(mastervaluename);
 
-            if (mv == null)
-                return null;
+                if (mv == null)
+                    return null;
 
-            mv.SetValue(Convert.ToDecimal(value));
+                mv.SetValue(Convert.ToDecimal(value));
 
-            return d;
+                return d;
+            }
         }
     }
 }

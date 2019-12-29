@@ -23,7 +23,7 @@ namespace csharpmatic.Automation.RestApi
         }
 
         [Route(HttpVerbs.Get, "/")]
-        public async Task<List<Room>> GetRooms()
+        public List<Room> GetRooms()
         {
             List<Room> list = new List<Room>();
 
@@ -41,7 +41,7 @@ namespace csharpmatic.Automation.RestApi
         }
 
         [Route(HttpVerbs.Get, "/{iseid}")]
-        public async Task<Room> GetRoom(string iseid)
+        public Room GetRoom(string iseid)
         {
             lock (DeviceManager.RefreshLock)
             {
@@ -57,7 +57,7 @@ namespace csharpmatic.Automation.RestApi
         }
 
         [Route(HttpVerbs.Get, "/{iseid}/temp/{newtemp}")]
-        public async Task<Room> SetRoomTemp(string iseid, decimal newtemp)
+        public Room SetRoomTemp(string iseid, decimal newtemp)
         {
             List<Room> list = new List<Room>();
 
@@ -78,7 +78,7 @@ namespace csharpmatic.Automation.RestApi
         }
 
         [Route(HttpVerbs.Get, "/{iseid}/boostmode/{newstate}")]
-        public async Task<Room> SetRoom(string iseid, bool newstate)
+        public Room SetRoom(string iseid, bool newstate)
         {
             List<Room> list = new List<Room>();
 

@@ -19,13 +19,13 @@ namespace csharpmatic.Automation.RestApi
         }
 
         [Route(HttpVerbs.Get, "/")]
-        public async Task<AlarmAutomation> GetAlarm()
+        public AlarmAutomation GetAlarm()
         {
             return AlarmAutomation;
         }
 
         [Route(HttpVerbs.Get, "/arm")]
-        public async Task<AlarmAutomation> Arm()
+        public AlarmAutomation Arm()
         {
             var armOK = AlarmAutomation.Arm();
 
@@ -33,7 +33,7 @@ namespace csharpmatic.Automation.RestApi
         }
 
         [Route(HttpVerbs.Get, "/disarm/{code}")]
-        public async Task<AlarmAutomation> Disarm(string code)
+        public AlarmAutomation Disarm(string code)
         {
             AlarmAutomation.Disarm();
 

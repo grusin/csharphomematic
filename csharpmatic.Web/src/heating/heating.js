@@ -88,7 +88,7 @@ class Heating extends BaseComponent {
               dataSource={row.Devices}
               renderHeader={() => 'Devices'}
               renderRow={(d, idx) => (
-                <Ons.ListItem modifier='longdivider'>{d.ShortName}
+                <Ons.ListItem modifier='longdivider'>{d.ShortName + ' (' + d.ISEID + ')'} 
                 {
                   d.hasOwnProperty('Press_Long') &&  
                   <Ons.Button modifier="large--cta" disabled style={{ width: "30px" }}>
@@ -104,7 +104,8 @@ class Heating extends BaseComponent {
                 {
                   d.hasOwnProperty('Valve_State') &&  
                   <Ons.Button modifier="large--cta" disabled style={{ width: "70px" }}>
-                     {d.Level.Value*100}%&nbsp;<Ons.Icon icon="fa-wrench" />
+                     {d.Level.Value*100}%&nbsp;
+                     <Ons.Icon icon="fa-wrench" />
                   </Ons.Button>
                 } 
                 {

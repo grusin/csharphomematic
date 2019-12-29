@@ -59,6 +59,7 @@
     <Compile Include="AutomationNames.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RestApi\AlarmController.cs" />
+    <Compile Include="RestApi\DeviceController.cs" />
     <Compile Include="RestApi\Room.cs" />
     <Compile Include="RestApi\RoomContoller.cs" />
     <Compile Include="SyncHeatingMasterValuesAutomation.cs" />

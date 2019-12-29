@@ -72,7 +72,7 @@ namespace InterfaceGenerator
                     tw.WriteLine("  {");
 
 
-                    foreach (var dp in d.DatapointByType.Values)
+                    foreach (var dp in d.GetDatapoints())
                     {
                         tw.WriteLine("\t\t{0}", ToCSharpPropertyTemplate(dp));
                         tw.WriteLine();
@@ -82,7 +82,7 @@ namespace InterfaceGenerator
                     tw.WriteLine("      public {0}(XMLAPI.DeviceList.Device d, XMLAPI.Client CGIClient, DeviceManager dm) : base(d, CGIClient, dm)", deviceClass);
                     tw.WriteLine("      {");
                     
-                    foreach (var dp in d.DatapointByType.Values)
+                    foreach (var dp in d.GetDatapoints())
                     {
                         tw.WriteLine("\t\t\t{0}", ToCSharpPropertyInitTemplate(dp));
                         tw.WriteLine();
@@ -150,7 +150,7 @@ namespace InterfaceGenerator
             string csharpdatatype = GetCsharpDataType(dp);
 
             return String.Format("{0} = new TypedDatapoint<{1}>(base.Channels[{2}].Datapoints[\"{3}\"]);", 
-                propname, csharpdatatype, dp.Channel.ChannelIndex, dp.Type);
+                propname, csharpdatatype, dp.GetChannel().ChannelIndex, dp.Type);
         }
 
     }

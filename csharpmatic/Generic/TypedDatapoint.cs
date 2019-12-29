@@ -23,13 +23,23 @@ namespace csharpmatic.Generic
 
         public int OperationsCounter { get { return UnderlyingDatapoint.OperationsCounter; } }
 
-        public Datapoint UnderlyingDatapoint { get; private set; }
+        private Datapoint UnderlyingDatapoint { get; set; }
 
-        public Channel Channel { get { return UnderlyingDatapoint.Channel; } }
+        private Channel Channel { get { return UnderlyingDatapoint.GetChannel(); } }
 
         public TypedDatapoint(Datapoint dp)
         {
             UnderlyingDatapoint = dp;
+        }
+
+        public Channel GetChannel()
+        {
+            return Channel;
+        }
+
+        public Datapoint GetUnderlyingDatapoint()
+        {
+            return UnderlyingDatapoint;
         }
 
         public void SetRoomValue(object value, Type interfaceFilter = null)

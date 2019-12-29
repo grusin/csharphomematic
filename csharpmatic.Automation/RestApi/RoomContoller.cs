@@ -15,12 +15,14 @@ namespace csharpmatic.Automation.RestApi
     {
         public static DeviceManager DeviceManager { get; set; }
 
+        //JsonSerializerSettings jsonOptions = new JsonSerializerSettings { ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
+
         public RoomController()
         {
            
         }
-        
-        [Route(HttpVerbs.Get, "/rooms")]
+
+        [Route(HttpVerbs.Get, "/")]
         public async Task<List<Room>> GetRooms()
         {
             List<Room> list = new List<Room>();
@@ -34,10 +36,11 @@ namespace csharpmatic.Automation.RestApi
                 }
 
                 return list;
+                //return JsonConvert.SerializeObject(list, jsonOptions);
             }           
         }
 
-        [Route(HttpVerbs.Get, "/rooms/{iseid}")]
+        [Route(HttpVerbs.Get, "/{iseid}")]
         public async Task<Room> GetRoom(string iseid)
         {
             lock (DeviceManager.RefreshLock)
@@ -53,7 +56,7 @@ namespace csharpmatic.Automation.RestApi
             return null;
         }
 
-        [Route(HttpVerbs.Get, "/rooms/{iseid}/temp/{newtemp}")]
+        [Route(HttpVerbs.Get, "/{iseid}/temp/{newtemp}")]
         public async Task<Room> SetRoomTemp(string iseid, decimal newtemp)
         {
             List<Room> list = new List<Room>();
@@ -74,7 +77,7 @@ namespace csharpmatic.Automation.RestApi
             return null;
         }
 
-        [Route(HttpVerbs.Get, "/rooms/{iseid}/boostmode/{newstate}")]
+        [Route(HttpVerbs.Get, "/{iseid}/boostmode/{newstate}")]
         public async Task<Room> SetRoom(string iseid, bool newstate)
         {
             List<Room> list = new List<Room>();
@@ -94,12 +97,6 @@ namespace csharpmatic.Automation.RestApi
             }
 
             return null;
-        }
-
-        // You can override the default headers and add custom headers to each API Response.
-        public void SetDefaultHeaders()
-        {            
-            this.Response.Headers.Add("Access-Control-Allow-Origin", "*");
         }
     }
 }

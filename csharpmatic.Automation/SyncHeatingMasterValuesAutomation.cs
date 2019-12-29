@@ -81,7 +81,7 @@ namespace csharpmatic.Automation
 
             decimal eps = 0.000001M;
 
-            Dictionary<Channel, List<MasterValue>> toChange = new Dictionary<Channel, List<MasterValue>>();
+            Dictionary<Channel, List<Mastervalue>> toChange = new Dictionary<Channel, List<Mastervalue>>();
 
             foreach (var lmv in leader.Channels[1].MasterValues.Values.Where(w => masterValuesInScope.Contains(w.Name)))
             {
@@ -90,14 +90,14 @@ namespace csharpmatic.Automation
                     if (d == leader || d.Channels.Count() < 2 || d.PendingConfig || !d.Reachable)
                         continue;
 
-                    MasterValue mv = null;
+                    Mastervalue mv = null;
 
                     if (d.Channels[1].MasterValues.TryGetValue(lmv.Name, out mv))
                     {
                         if (Math.Abs(mv.Value - lmv.Value) > eps)
                         {
                             if (!toChange.ContainsKey(d.Channels[1]))
-                                toChange.Add(d.Channels[1], new List<MasterValue>());
+                                toChange.Add(d.Channels[1], new List<Mastervalue>());
 
                             toChange[d.Channels[1]].Add(lmv);
                             LOGGER.InfoFormat($"Master value sync: found {d.Name} {mv.Name} = {mv.Value} where leader ({leader.Name}) has {lmv.Value}. Syncing with leader.");
@@ -112,7 +112,7 @@ namespace csharpmatic.Automation
             }
         }
 
-        public static bool IsSchedulerEndTime(MasterValue v)
+        public static bool IsSchedulerEndTime(Mastervalue v)
         {
             return v.Name.Length > 2
                     && v.Name[0] == 'P'
@@ -120,7 +120,7 @@ namespace csharpmatic.Automation
                     && v.Name.Substring(2).StartsWith("_ENDTIME_");
         }
 
-        public static bool IsSchedulerTemperature(MasterValue v)
+        public static bool IsSchedulerTemperature(Mastervalue v)
         {
             return v.Name.Length > 2
                     && v.Name[0] == 'P'

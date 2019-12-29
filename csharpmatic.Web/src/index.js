@@ -78,22 +78,22 @@ class App extends React.Component {
 
     static Api_GetRooms()
     {
-        return fetch(App.getApiUrl() + "/api/rooms").then(response => response.json())
+        return fetch(App.getApiUrl() + "/api/room").then(response => response.json())
     }
 
     static Api_GetRoom(room_iseid)
     {
-        return fetch(App.getApiUrl() + "/api/rooms/" + room_iseid).then(response => response.json())
+        return fetch(App.getApiUrl() + "/api/room/" + room_iseid).then(response => response.json())
     }
 
     static Api_SetRoomTemp(room_iseid, newtemp)
     {
-        return fetch(App.getApiUrl() + "/api/rooms/" + room_iseid + "/temp/" + newtemp).then(response => response.json())
+        return fetch(App.getApiUrl() + "/api/room/" + room_iseid + "/temp/" + newtemp).then(response => response.json())
     }
 
     static Api_SetRoomBoost(room_iseid, new_state)
     {
-        return fetch(App.getApiUrl() + "/api/rooms/" + room_iseid + "/boostmode/" + new_state).then(response => response.json())
+        return fetch(App.getApiUrl() + "/api/room/" + room_iseid + "/boostmode/" + new_state).then(response => response.json())
     }    
 
     static Api_GetAlarm()

@@ -114,7 +114,7 @@ namespace csharpmatic.JsonAPI
             return Session_RpcCall("Device.listAllDetail");
         }
 
-        public JToken Channel_SetMasterValues(string channelAddress, List<MasterValue> list, string interfaceName = "HmIP-RF")
+        public JToken Channel_SetMasterValues(string channelAddress, List<Mastervalue> list, string interfaceName = "HmIP-RF")
         {
             Session_Login();
 
@@ -149,7 +149,7 @@ namespace csharpmatic.JsonAPI
             return null;
         }
 
-        public JToken Channel_SetMasterValues(Channel c, List<MasterValue> list)
+        public JToken Channel_SetMasterValues(Channel c, List<Mastervalue> list)
         {
             return Channel_SetMasterValues(c.Address, list, c.Device.Interface);
         }

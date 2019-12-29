@@ -18,13 +18,13 @@ namespace csharpmatic.Automation.RestApi
         {
         }
 
-        [Route(HttpVerbs.Get, "/alarm")]
+        [Route(HttpVerbs.Get, "/")]
         public async Task<AlarmAutomation> GetAlarm()
         {
             return AlarmAutomation;
         }
 
-        [Route(HttpVerbs.Get, "/alarm/arm")]
+        [Route(HttpVerbs.Get, "/arm")]
         public async Task<AlarmAutomation> Arm()
         {
             var armOK = AlarmAutomation.Arm();
@@ -32,18 +32,12 @@ namespace csharpmatic.Automation.RestApi
             return AlarmAutomation;
         }
 
-        [Route(HttpVerbs.Get, "/alarm/disarm/{code}")]
+        [Route(HttpVerbs.Get, "/disarm/{code}")]
         public async Task<AlarmAutomation> Disarm(string code)
         {
             AlarmAutomation.Disarm();
 
             return AlarmAutomation;
-        }
-
-        // You can override the default headers and add custom headers to each API Response.
-        public void SetDefaultHeaders()
-        {
-            this.Response.Headers.Add("Access-Control-Allow-Origin", "*");
         }
     }
 }

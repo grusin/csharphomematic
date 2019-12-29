@@ -93,7 +93,7 @@ namespace csharpmatic.Automation.Alarm
         private AlarmSensorScanOutput IsDatapointTriggered<T>(TypedDatapoint<T> dp, T notTrippedValue)
         {
             if (dp.Value == null || !dp.Value.Equals(notTrippedValue))
-                return new AlarmSensorScanOutput(dp.Channel.Device, dp.UnderlyingDatapoint);
+                return new AlarmSensorScanOutput(dp.GetChannel().Device, dp.GetUnderlyingDatapoint());
 
             return null;
         }

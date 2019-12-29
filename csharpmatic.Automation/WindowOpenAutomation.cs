@@ -51,14 +51,14 @@ namespace csharpmatic.Automation
 
                 if(windowOpen)
                 {
-                    var devices = DeviceManager.Devices.Where(w => w.Rooms.Contains(r) && w.DatapointByType.ContainsKey("WINDOW_STATE"));
+                    var devices = DeviceManager.Devices.Where(w => w.Rooms.Contains(r));
 
                     foreach(Device d in devices)
                     {
-                        Datapoint dp = d.DatapointByType["WINDOW_STATE"];
-                        if (dp.GetValue<int>() == 0)
+                        Datapoint dp = d.GetDatapointByName("WINDOW_STATE");
+                        if (dp != null && dp.GetValue<int>() == 0)
                         {
-                            LOGGER.Info($"Window opened ({d.Name}) in {r}, setting WINDOW_OPEN=1 on {dp.Channel.Device.Name}");
+                            LOGGER.Info($"Window opened ({d.Name}) in {r}, setting WINDOW_OPEN=1 on {dp.GetChannel().Device.Name}");
                             dp.SetValue(1);
                         }
                     }
@@ -66,14 +66,14 @@ namespace csharpmatic.Automation
                 }
                 else if(windowClosed)
                 {
-                    var devices = DeviceManager.Devices.Where(w => w.Rooms.Contains(r) && w.DatapointByType.ContainsKey("WINDOW_STATE"));
+                    var devices = DeviceManager.Devices.Where(w => w.Rooms.Contains(r));
 
                     foreach (Device d in devices)
                     {
-                        Datapoint dp = d.DatapointByType["WINDOW_STATE"];
-                        if (dp.GetValue<int>() != 0)
+                        Datapoint dp = d.GetDatapointByName("WINDOW_STATE");
+                        if (dp != null && dp.GetValue<int>() != 0)
                         {
-                            LOGGER.Info($"Window closed ({d.Name}) in {r}, setting WINDOW_OPEN=0 on {dp.Channel.Device.Name}");
+                            LOGGER.Info($"Window closed ({d.Name}) in {r}, setting WINDOW_OPEN=0 on {dp.GetChannel().Device.Name}");
                             dp.SetValue(0);
                         }
                     }

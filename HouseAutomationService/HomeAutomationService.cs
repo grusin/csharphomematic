@@ -35,10 +35,10 @@ namespace HouseAutomationService
                 {                   
                     var dm = new DeviceManager(Settings.Default.HomematicServerAddress);
 
-                    LOGGER.Info("Starting external Slack notification service");
-                    Slack s = Slack.TryFromCCU(dm);
-                    if (s != null)
-                        dm.RegisterNotificationService(s);
+                    //LOGGER.Info("Starting external Slack notification service");
+                    //Slack s = Slack.TryFromCCU(dm);
+                    //if (s != null)
+                    //    dm.RegisterNotificationService(s);
 
                     LOGGER.Info("Starting alarm automation");
                     var alarmAutomation = new AlarmAutomation(dm, AutomationNames.AlarmAutomation);
@@ -86,10 +86,13 @@ namespace HouseAutomationService
                     server.WithCors(); 
 
                     RoomController.DeviceManager = dm;
-                    server.WithWebApi("/api", m => m.WithController<RoomController>());
+                    server.WithWebApi("/api/room", m => m.WithController<RoomController>());
+
+                    DeviceController.DeviceManager = dm;
+                    server.WithWebApi("/api/device", m => m.WithController<DeviceController>());
 
                     AlarmControler.AlarmAutomation = alarmAutomation;
-                    server.WithWebApi("/api", m => m.WithController<AlarmControler>());
+                    server.WithWebApi("/api/alarm", m => m.WithController<AlarmControler>());
 
                     server.WithStaticFolder("/", Settings.Default.WebServerRoot, true, m => m.WithContentCaching(true));
 

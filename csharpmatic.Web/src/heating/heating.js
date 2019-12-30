@@ -39,6 +39,12 @@ class Heating extends BaseComponent {
     );
   }  
 
+  getValveOffsetString(d) {
+    if(d.Valve_Offset.Value === 0)
+      return d.Level.Value*100 + '%'
+    else 
+      return d.Level.Value*100 + '% (+' + -d.Valve_Offset.Value + '%)'
+  }
 
   renderRow(row) {
     return (
@@ -102,9 +108,10 @@ class Heating extends BaseComponent {
                   </Ons.Button>
                 } 
                 {
-                  d.hasOwnProperty('Valve_State') &&  
-                  <Ons.Button modifier="large--cta" disabled style={{ width: "70px" }}>
-                     {d.Level.Value*100}%&nbsp;
+                  d.hasOwnProperty('Valve_State') &&                                  
+                                    
+                  <Ons.Button modifier="large--cta" disabled style={{ width: "90px" }}>
+                     {this.getValveOffsetString(d)}&nbsp;
                      <Ons.Icon icon="fa-wrench" />
                   </Ons.Button>
                 } 

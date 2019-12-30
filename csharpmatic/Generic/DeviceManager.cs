@@ -14,7 +14,7 @@ namespace csharpmatic.Generic
     public class DeviceManager
     {
         internal XMLAPI.Client XMLAPIClient;
-        internal JsonAPI.Client JsonAPIClient;
+        internal JsonAPIClient.Client JsonAPIClient;
         //private 
         public List<Device> Devices { get; private set; }
         public Dictionary<string, Device> DevicesByISEID { get; private set; }
@@ -39,7 +39,7 @@ namespace csharpmatic.Generic
 
             RefreshLock = new object();
             XMLAPIClient = new XMLAPI.Client("http://" + serverAddress);
-            JsonAPIClient = new JsonAPI.Client(serverAddress);
+            JsonAPIClient = new JsonAPIClient.Client(serverAddress);
 
             RegisteredAutomations = new Dictionary<string, IAutomation>();
             RegisteredNotificationServices = new Dictionary<string, INotify>();

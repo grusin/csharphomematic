@@ -94,7 +94,7 @@
     <Compile Include="Interfaces\ILowBatteryInfo.cs" />
     <Compile Include="Interfaces\IOperatingVoltageInfo.cs" />
     <Compile Include="Interfaces\ISmokeDetectorDevice.cs" />
-    <Compile Include="JsonAPI\Client.cs" />
+    <Compile Include="JsonAPIClient\Client.cs" />
     <Compile Include="Notify\INotify.cs" />
     <Compile Include="Notify\Slack.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
@@ -155,7 +155,9 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="XMLAPIClient\" />
+  </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>

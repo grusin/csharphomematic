@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace csharpmatic.JsonAPI
+namespace csharpmatic.JsonAPIClient
 {
     public class Client
     {
@@ -105,6 +105,48 @@ namespace csharpmatic.JsonAPI
             }
 
             return response.Result;
+        }
+
+        public JToken Room_getAll()
+        {
+            Session_Login();
+
+            return Session_RpcCall("Room.getAll");
+        }
+
+        public JToken Room_listAll()
+        {
+            Session_Login();
+
+            return Session_RpcCall("Room.listAll");
+        }
+
+        public JToken Event_poll()
+        {
+            Session_Login();
+
+            return Session_RpcCall("Event.poll");
+        }
+
+        public JToken Event_subscribe()
+        {
+            Session_Login();
+
+            return Session_RpcCall("Event.subscribe");
+        }
+
+        public JToken Event_unsubscribe()
+        {
+            Session_Login();
+
+            return Session_RpcCall("Event.unsubscribe");
+        }
+
+        public JToken Device_listAll()
+        {
+            Session_Login();
+
+            return Session_RpcCall("Device.listAll");
         }
 
         public JToken Device_listAllDetail()

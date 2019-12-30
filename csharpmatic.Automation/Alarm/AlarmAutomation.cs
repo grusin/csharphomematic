@@ -1,7 +1,7 @@
 ﻿using csharpmatic.Generic;
 using csharpmatic.Interfaces;
 using csharpmatic.Interfaces.Devices;
-using csharpmatic.JsonAPI;
+using csharpmatic.JsonAPIClient;
 using log4net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;

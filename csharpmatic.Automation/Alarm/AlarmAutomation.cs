@@ -1,7 +1,7 @@
 ﻿using csharpmatic.Generic;
 using csharpmatic.Interfaces;
 using csharpmatic.Interfaces.Devices;
-using csharpmatic.JsonAPI;
+using csharpmatic.JsonRPCAPIClient;
 using log4net;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -19,8 +19,7 @@ namespace csharpmatic.Automation.Alarm
         public bool AlarmArmed { get; private set; }
         public bool AlarmTriggered { get; private set; }
 
-        [Unosquare.Swan.Attributes.JsonProperty("ignoredData", true)]
-        public DeviceManager DeviceManager { get; private set; }
+        internal DeviceManager DeviceManager { get; private set; }
 
         private static ILog LOGGER = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         private Client rpcClient;
@@ -94,7 +93,7 @@ namespace csharpmatic.Automation.Alarm
         private AlarmSensorScanOutput IsDatapointTriggered<T>(TypedDatapoint<T> dp, T notTrippedValue)
         {
             if (dp.Value == null || !dp.Value.Equals(notTrippedValue))
-                return new AlarmSensorScanOutput(dp.Channel.Device, dp.UnderlyingDatapoint);
+                return new AlarmSensorScanOutput(dp.GetChannel().Device, dp.GetUnderlyingDatapoint());
 
             return null;
         }

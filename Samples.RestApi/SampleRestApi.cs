@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Unosquare.Labs.EmbedIO;
-using Unosquare.Labs.EmbedIO.Constants;
-using Unosquare.Labs.EmbedIO.Modules;
+using EmbedIO;
+using EmbedIO.WebApi;
+using EmbedIO.Files;
 
 namespace Samples.RestApi
 {
@@ -16,21 +16,16 @@ namespace Samples.RestApi
     {
         static void Main(string[] args)
         {
-            DeviceManager dm = new DeviceManager("192.168.1.200");                  
-                     
-            //start webserver listening on 
-            var server = new WebServer("http://localhost:81/", RoutingStrategy.Regex);
+            DeviceManager dm = new DeviceManager("192.168.1.200");
 
-            server.RegisterModule(new WebApiModule());
-            server.Module<CorsModule>();
+            //start webserver listening on 
+            var server = new WebServer(80);
+            server.WithCors();
 
             RoomController.DeviceManager = dm;
-            server.Module<WebApiModule>().RegisterController<RoomController>();                      
+            server.WithWebApi("/api", m => m.WithController<RoomController>());
 
-            //AlarmControler.AlarmAutomation = 
-
-            server.RegisterModule(new StaticFilesModule(@"C:\Users\G\npm\homeui\build"));
-
+            server.WithStaticFolder("/", "www", true, m => m.WithContentCaching(true));
 
             server.RunAsync();
 

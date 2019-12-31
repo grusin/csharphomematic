@@ -10,8 +10,6 @@ namespace csharpmatic.Interfaces
     public interface IHmDevice
     {
         Channel[] Channels { get; }
-       
-        Dictionary<string, Datapoint> DatapointByType { get; }
 
         string Name { get; }
 

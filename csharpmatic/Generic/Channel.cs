@@ -37,7 +37,7 @@ namespace csharpmatic.Generic
 
         public Dictionary<string, Datapoint> Datapoints { get; private set; }
 
-        public Dictionary<string, MasterValue> MasterValues { get; private set; }
+        public Dictionary<string, Mastervalue> MasterValues { get; private set; }
 
         public HashSet<string> Rooms { get; private set; }
 
@@ -52,7 +52,7 @@ namespace csharpmatic.Generic
             Rooms = new HashSet<string>();
             Functions = new HashSet<string>();
             Datapoints = new Dictionary<string, Datapoint>();
-            MasterValues = new Dictionary<string, MasterValue>();
+            MasterValues = new Dictionary<string, Mastervalue>();
             FillFromDeviceListChannel(dlc);          
         }
 
@@ -96,10 +96,12 @@ namespace csharpmatic.Generic
             return JsonConvert.SerializeObject(this, Formatting.Indented);
         }
 
-        public void SetMasterValues(List<MasterValue> list)
+        public void SetMasterValues(List<Mastervalue> list)
         {
+            //update on the server
             Device.DeviceManager.JsonAPIClient.Channel_SetMasterValues(this, list);
 
+            //update locally
             foreach(var mv in list)
             {
                 if (MasterValues.ContainsKey(mv.Name))

@@ -13,14 +13,16 @@ namespace csharpmatic.Generic
 {
     public class DeviceManager
     {
-        internal XMLAPI.Client XMLAPIClient;
-        internal JsonAPI.Client JsonAPIClient;
+        internal XMLAPI.Client LegacyXMLAPIClient;
+        internal JsonRPCAPIClient.Client JsonAPIClient;
+        internal XMLAPIClient.Client XMLAPIClient;
+
         //private 
         public List<Device> Devices { get; private set; }
         public Dictionary<string, Device> DevicesByISEID { get; private set; }
         private Dictionary<string, Datapoint> PrevDataPointsByISEID { get; set; }
         public List<DatapointEvent> Events { get; private set; }
-        public Uri HttpServerUri { get { return XMLAPIClient.HttpServerUri; } }
+        public Uri HttpServerUri { get { return LegacyXMLAPIClient.HttpServerUri; } }
         public List<Room> Rooms { get; private set; }
         public Dictionary<string, Room> RoomsByName { get; private set; }
 
@@ -31,16 +33,20 @@ namespace csharpmatic.Generic
 
         public object RefreshLock { get; set; }
 
-        public DeviceManager(string serverAddress)
+        public DeviceManager(string serverAddress, bool useLegacyAPI = true)
         {
             Thread.CurrentThread.CurrentCulture = CultureInfo.CreateSpecificCulture("en-GB");
 
             LOGGER.Info($"Starting device manager for {serverAddress}");
 
             RefreshLock = new object();
-            XMLAPIClient = new XMLAPI.Client("http://" + serverAddress);
-            JsonAPIClient = new JsonAPI.Client(serverAddress);
 
+            if (useLegacyAPI)
+                LegacyXMLAPIClient = new XMLAPI.Client("http://" + serverAddress);
+            else
+                XMLAPIClient = new XMLAPIClient.Client("http://" + serverAddress);
+
+            JsonAPIClient = new JsonRPCAPIClient.Client(serverAddress);
             RegisteredAutomations = new Dictionary<string, IAutomation>();
             RegisteredNotificationServices = new Dictionary<string, INotify>();
             Devices = new List<Device>();
@@ -103,12 +109,20 @@ namespace csharpmatic.Generic
             List<T> list = new List<T>();
 
             return Devices.Where(w => w is T).Select(s => s as T).ToList();
-        }             
+        }
+
+        public List<DatapointEvent> NewRefresh()
+        {
+            return null;
+        }
 
         public List<DatapointEvent> Refresh()
         {
+            if (LegacyXMLAPIClient == null)
+                return NewRefresh();
+
             //this does not need lock, it's internal data structure, and this actually takes time
-            var refreshTask = XMLAPIClient.FetchData();
+            var refreshTask = LegacyXMLAPIClient.FetchData();
             refreshTask.Wait();
 
             bool fullRefresh = refreshTask.Result;
@@ -125,7 +139,7 @@ namespace csharpmatic.Generic
                 }
                 else
                 {
-                    foreach (var cgi_dev in XMLAPIClient.StateList.Device)
+                    foreach (var cgi_dev in LegacyXMLAPIClient.StateList.Device)
                     {
                         Device d = null;
                         if (DevicesByISEID.TryGetValue(cgi_dev.Ise_id, out d))
@@ -182,7 +196,7 @@ namespace csharpmatic.Generic
             Rooms = new List<Room>();
             RoomsByName = new Dictionary<string, Room>();
 
-            foreach (var cgiroom in XMLAPIClient.RoomList.Room)
+            foreach (var cgiroom in LegacyXMLAPIClient.RoomList.Room)
             {
                 Room r = new Room(cgiroom.Name, cgiroom.Ise_id, this);
                 Rooms.Add(r);
@@ -203,9 +217,9 @@ namespace csharpmatic.Generic
             Devices = new List<Device>();
             DevicesByISEID = new Dictionary<string, Device>();
 
-            foreach (var d in XMLAPIClient.DeviceList.Device)
+            foreach (var d in LegacyXMLAPIClient.DeviceList.Device)
             {                
-                Device gd = DeviceFactory.CreateInstance(d, XMLAPIClient, this);
+                Device gd = DeviceFactory.CreateInstance(d, LegacyXMLAPIClient, this);
                                 
                 Devices.Add(gd);
                 DevicesByISEID.Add(gd.ISEID, gd);

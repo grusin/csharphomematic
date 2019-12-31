@@ -52,7 +52,7 @@ namespace csharpmatic.Notify
 
         public static Slack TryFromCCU(DeviceManager dm)
         {
-            JsonAPI.Client c = new JsonAPI.Client(dm.HttpServerUri.Host);
+            JsonRPCAPIClient.Client c = new JsonRPCAPIClient.Client(dm.HttpServerUri.Host);
 
             var url = c.GetSystemVariable("link").Value<string>();
 

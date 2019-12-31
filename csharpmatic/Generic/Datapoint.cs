@@ -38,10 +38,14 @@ namespace csharpmatic.Generic
         public override string ToString()
         {
             return JsonConvert.SerializeObject(this, Formatting.Indented);
-        }               
+        }
 
-        [JsonIgnore]
-        public Channel Channel { get; private set; }
+        private Channel Channel;
+
+        public Channel GetChannel()
+        {
+            return Channel;
+        }
 
         public Datapoint(XMLAPI.StateList.Datapoint dp, Channel c)
         {
@@ -59,6 +63,8 @@ namespace csharpmatic.Generic
 
             SetInternalValue(dp.Value);           
         }
+
+
 
         public string GetInterfacePropertyName(bool useCached = true)
         {
@@ -100,7 +106,7 @@ namespace csharpmatic.Generic
         private void Init_ValueType()
         {
             //special handling of dimmer level, it's reported as a string.
-            if (Type == "LEVEL" && Channel.Device.DeviceType == "HmIP-BDT")
+            if (Type == "LEVEL" && GetChannel().Device.DeviceType == "HmIP-BDT")
                 _InternalValueType = "4"; //decimal
 
             //special handling of RSSI_DEVICE and RSSI_PEER, some devices report it as string
@@ -184,7 +190,7 @@ namespace csharpmatic.Generic
         {
             SetInternalValue(value);                       
 
-            XMLAPI.Client cgi = new XMLAPI.Client(Channel.Device.DeviceManager.HttpServerUri);
+            XMLAPI.Client cgi = new XMLAPI.Client(GetChannel().Device.DeviceManager.HttpServerUri);
 
             //FIXME: this should use async logic
             cgi.SetISEIDValue(ISEID, GetValueString());
@@ -194,20 +200,20 @@ namespace csharpmatic.Generic
         {
             SetInternalValue(value);
 
-            XMLAPI.Client cgi = new XMLAPI.Client(Channel.Device.DeviceManager.HttpServerUri);
+            XMLAPI.Client cgi = new XMLAPI.Client(GetChannel().Device.DeviceManager.HttpServerUri);
 
             await cgi.SetISEIDValueAsync(ISEID, GetValueString());
         }
 
         public void SetRoomValue(object value, Type interfaceFilter = null)
         {
-            var list = Channel.Device.DeviceManager.Devices
-                 .Where(d => d.DatapointByType.ContainsKey(Type)).Select(s => s.DatapointByType[Type]) //select only datapoints having the same type
-                 .Where(dev => interfaceFilter == null || dev.Channel.Device.GetType().GetInterfaces().Contains(interfaceFilter)) //filter devices by supported interface   
-                 .Where(d => d.Channel.Rooms.Count() > 0 && d.Channel.Rooms.IsSubsetOf(Channel.Rooms)); //datapoints have to be in the same rooms as this one   
+            var list = GetChannel().Device.DeviceManager.Devices
+                 .Where(d => d.DatapointByName.ContainsKey(Type)).Select(s => s.DatapointByName[Type]) //select only datapoints having the same type
+                 .Where(dev => interfaceFilter == null || dev.GetChannel().Device.GetType().GetInterfaces().Contains(interfaceFilter)) //filter devices by supported interface   
+                 .Where(d => d.GetChannel().Rooms.Count() > 0 && d.GetChannel().Rooms.IsSubsetOf(GetChannel().Rooms)); //datapoints have to be in the same rooms as this one   
 
             //look for virtual device, if it's present, just set parameter at it
-            var vdev = list.Where(w => w.Channel.Device.Interface == "VirtualDevices").FirstOrDefault();
+            var vdev = list.Where(w => w.GetChannel().Device.Interface == "VirtualDevices").FirstOrDefault();
             if (vdev != null)
             {
                 vdev.SetValue(value);

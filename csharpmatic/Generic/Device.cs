@@ -1,6 +1,7 @@
 ﻿using csharpmatic.Interfaces;
+using csharpmatic.XMLAPI.MastervalueList;
 using log4net;
-using Newtonsoft.Json;
+using Swan.Formatters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,13 +12,12 @@ namespace csharpmatic.Generic
 {
     public class Device : IHmDevice
     {
-        public Channel[] Channels { get; private set; }
-        [JsonIgnore]
-
-        public Dictionary<string, Channel> ChannelByISEID { get; private set; }
-        public Dictionary<string, Datapoint> DatapointByType { get; private set; }
+        [JsonProperty("Channels", true)]
+        public Channel[] Channels { get; private set; }        
 
         public string Name { get; private set; }
+
+        public string ShortName => GetShortName();
 
         public string ISEID { get; private set; }
 
@@ -35,13 +35,17 @@ namespace csharpmatic.Generic
 
         public HashSet<string> Functions { get { return new HashSet<string>(Channels.SelectMany(c => c.Functions)); } }
 
-        ILog LOG = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        private ILog LOG = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         public DateTime LastCommunicationTest { get; private set; } = DateTime.MinValue;
-
-        [JsonIgnore]
+                
         internal DeviceManager DeviceManager { get; private set; }
-        
+
+        internal Dictionary<string, Channel> ChannelByISEID { get; set; }
+        internal Dictionary<string, Datapoint> DatapointByName { get; set; }
+        internal Dictionary<string, Datapoint> DatapointByISEID { get; set; }
+        internal Dictionary<string, Mastervalue> MastervalueByName { get; set; }
+
         public Device(XMLAPI.DeviceList.Device d, XMLAPI.Client CGIClient, DeviceManager dm)
         {
             DeviceManager = dm;
@@ -50,30 +54,88 @@ namespace csharpmatic.Generic
             FillFromRoomList(CGIClient.RoomList);
             FillFromFunctionList(CGIClient.FunctionList);
             FillFromStateList(CGIClient.StateList);
-            FillFromMasterValueList(CGIClient.MasterValueList);
+            FillFromMasterValueList(CGIClient.MasterValueListByChannel);
 
-            InitDatapointByType();
+            InitDatapointLookups();
+        }
+            
+
+        public List<Datapoint> GetDatapoints()
+        {
+            return DatapointByName.Values.ToList();
         }
 
-        private void FillFromMasterValueList(XMLAPI.MastervalueList.mastervalue masterValueList)
-        {            
-            foreach (var c in masterValueList.channels.Where(w => w.mastervalue != null))
-            {
-                var dc = DeviceManager.Devices.SelectMany(d => d.Channels.Where(w => w.ISEID == c.ise_id)).FirstOrDefault();
+        public List<string> GetDatapointNames()
+        {
+            return DatapointByName.Keys.ToList();
+        }
 
-                if(dc != null)
+        public List<string> GetDatapointIds()
+        {
+            return DatapointByISEID.Keys.ToList();
+        }
+
+        public Datapoint GetDatapointById(string iseid)
+        {
+            Datapoint dp = null;
+            if (DatapointByISEID.TryGetValue(iseid, out dp))
+                return dp;
+            else
+                return null;
+        }
+
+        public Datapoint GetDatapointByName(string name)
+        {
+            Datapoint dp = null;
+            if (DatapointByName.TryGetValue(name, out dp))
+                return dp;
+            else
+                return null;
+        }
+
+        public Mastervalue GetMastervalueByName(string name)
+        {
+            Mastervalue mv = null;
+            if (MastervalueByName.TryGetValue(name, out mv))
+                return mv;
+            else
+                return null;
+        }
+
+        private void FillFromMasterValueList(Dictionary<string, mastervalue[]> masterValueListByChannel)
+        {
+            if (MastervalueByName == null)
+                MastervalueByName = new Dictionary<string, Mastervalue>();
+
+            foreach (var c in Channels)
+            {
+                c.MasterValues.Clear();
+
+                mastervalue[] raw_mvl = null;                               
+                
+                if (masterValueListByChannel.TryGetValue(c.ISEID, out raw_mvl))
                 {
-                    dc.MasterValues.Clear();
-                    foreach (var mv in c.mastervalue)
+                    foreach (var raw_mv in raw_mvl)
                     {
-                        var dmv = new MasterValue(mv, dc);                        
-                        dc.MasterValues.Add(dmv.Name, dmv);
+                        //update channel master values
+                        Mastervalue mv = null;
+                        if (c.MasterValues.TryGetValue(raw_mv.name, out mv))
+                            mv.Value = raw_mv.value;
+                        else
+                        {
+                            mv = new Mastervalue(raw_mv, c);
+                            c.MasterValues.Add(raw_mv.name, mv);
+                        }
+
+                        //update global dict                       
+                        if (!MastervalueByName.ContainsKey(mv.Name))
+                            MastervalueByName.Add(mv.Name, mv);
                     }
-                }
+                }                
             }
         }
 
-        private void InitDatapointByType()
+        private void InitDatapointLookups()
         {
             //there can be multiple datapoints with the same type
             //if that is the case, only the datapoint with channel of direction RECEIVER is the one we should selected   
@@ -95,25 +157,35 @@ namespace csharpmatic.Generic
                 }
             }
 
-            DatapointByType = new Dictionary<string, Datapoint>();
+            DatapointByName = new Dictionary<string, Datapoint>();
 
             foreach (var kvp in dict)
             {
                 if (kvp.Value.Count == 1)
-                    DatapointByType.Add(kvp.Key, kvp.Value[0]);
+                    DatapointByName.Add(kvp.Key, kvp.Value[0]);
                 else
                 {
-                    var first = kvp.Value.Where(w => w.Channel.Direction == "RECEIVER").FirstOrDefault();
+                    var first = kvp.Value.Where(w => w.GetChannel().Direction == "RECEIVER").FirstOrDefault();
                     if (first == null)
                     {
                         //nothing interesting. ignoring.
                     }
                     else
                     {
-                        DatapointByType.Add(first.Type, first);
+                        DatapointByName.Add(first.Type, first);
                     }
                 }              
             }
+
+            //build dictionary by id...
+            DatapointByISEID = new Dictionary<string, Datapoint>();
+            foreach (var kvp in DatapointByName)            
+                DatapointByISEID.Add(kvp.Value.ISEID, kvp.Value);
+        }
+
+        internal void UpdateFromDeviceXML()
+        {
+
         }
 
         private void FillFromDeviceListDevice(XMLAPI.DeviceList.Device d)
@@ -199,7 +271,7 @@ namespace csharpmatic.Generic
 
             Datapoint rssiDp;
 
-            if(DatapointByType != null && DatapointByType.TryGetValue("RSSI_DEVICE", out rssiDp))
+            if(DatapointByName != null && DatapointByName.TryGetValue("RSSI_DEVICE", out rssiDp))
             {
                 if (rssiDp.Value as string == "0")
                     Reachable = false;
@@ -221,9 +293,27 @@ namespace csharpmatic.Generic
             return tkn.ToString();
         }
 
+        /*
         public override string ToString()
         {
-            return JsonConvert.SerializeObject(this, Formatting.Indented);
+            return Newtonsoft.Json.JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented);
+        }
+        */
+
+        private string GetShortName()
+        {
+            try
+            {
+                int idx = Name.IndexOf('-');
+                if (idx != 0)
+                    return Name.Substring(idx+1).Trim();
+                else
+                    return Name;
+            }
+            catch
+            {
+                return Name;
+            }
         }
     }  
 }

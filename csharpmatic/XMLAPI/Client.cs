@@ -21,8 +21,8 @@ namespace csharpmatic.XMLAPI
         public FunctionList.FunctionList FunctionList { get; private set; }
         public RoomList.RoomList RoomList { get; private set; }
         public StateList.StateList StateList { get; private set;  }
-        public MastervalueList.mastervalue MasterValueList { get; private set; }
-        private MastervalueList.mastervalue MasterValueListNew;
+        public Dictionary<string, MastervalueList.mastervalue[]> MasterValueListByChannel { get; private set; }
+        private MastervalueList.mastervalue MasterValueListTemp;
         private Task MasterValueListNewRefreshTask;
 
         public SysvarList.SystemVariables SystemVariablesList { get; private set; } 
@@ -168,7 +168,7 @@ namespace csharpmatic.XMLAPI
                 await deviceListRefreshTask;
 
             var idse = this.DeviceList.Device.Where(w => w.Interface == "HmIP-RF").SelectMany(s => s.Channel).Select(s => s.Ise_id).ToList();
-            MasterValueListNew = await FetchMasterValueListAsync(idse);
+            MasterValueListTemp = await FetchMasterValueListAsync(idse);
 
             //Console.WriteLine("FetchMasterValueListAsync() finished");
         }
@@ -186,25 +186,9 @@ namespace csharpmatic.XMLAPI
 
         public async Task<bool> FetchData(bool forceFullReload = false)
         {
-            //DEBUG ONLY
-            //forceFullReload = true;
-            //
-
-            bool fullReload = false;
             Dictionary<string, Task> taskWait = new Dictionary<string, Task>();
             
-            taskWait.Add("FetchStateListAsync()", FetchStateListAsync());
-
-            //master value list is long, it takes about 5s to generate and download
-            //download is preferemed in the async task, that just gets spawned now and then
-            //once tasks finishes the output of the task is made active
-
-            //if master value refresh task completed, swap the variables around
-            if (MasterValueListNewRefreshTask != null && MasterValueListNewRefreshTask.IsCompleted)
-            {
-                //Console.WriteLine("Master value data is ready, activating it");
-                MasterValueList = MasterValueListNew;
-            }
+            taskWait.Add("FetchStateListAsync()", FetchStateListAsync());                       
             
             if (DateTime.Now - lastFullUpdateTimestamp > FullRecheckInternval || forceFullReload)
             {               
@@ -213,27 +197,17 @@ namespace csharpmatic.XMLAPI
 
                 //only run master value refresh if previous task has completed
                 if (MasterValueListNewRefreshTask == null || MasterValueListNewRefreshTask.IsCompleted)
-                {
-                    ///Console.WriteLine("Starting new master value refresh task");
                     MasterValueListNewRefreshTask = FetchMasterValueListAsync(dlt);
-                }
 
                 //if we run first time, block till we get first master value list
-                if (MasterValueList == null)
-                {
-                    //Console.WriteLine("Waiting for inital master value do download, remaining downloads will be done async");
+                if (MasterValueListByChannel == null)
                     taskWait.Add("FetchMasterValueListAsync(dlt)", MasterValueListNewRefreshTask);
-                }
 
                 taskWait.Add("FetchFunctionListAsync()", FetchFunctionListAsync());
                 taskWait.Add("FetchRoomListAsync()", FetchRoomListAsync());
                 taskWait.Add("FetchSysvarListAsync()", FetchSysvarListAsync());               
-                lastFullUpdateTimestamp = DateTime.Now;
-                fullReload = true;                
+                lastFullUpdateTimestamp = DateTime.Now;            
             }
-
-            //Stopwatch sw = new Stopwatch();
-            //sw.Start();
 
             while (taskWait.Count > 0)
             {
@@ -245,19 +219,36 @@ namespace csharpmatic.XMLAPI
                 await task;
 
                 taskWait.Remove(taskName);
-                //Console.WriteLine("Task {0} compleeted in: {1} ms", taskName, sw.ElapsedMilliseconds);
+             }
+
+            //master value list is long, it takes about 5s to generate and download
+            //download is preferemed in the async task, that just gets spawned now and then
+            //once tasks finishes the output of the task is made active
+
+            //if master value refresh task completed, swap the variables around
+            if (MasterValueListNewRefreshTask != null && MasterValueListNewRefreshTask.IsCompleted)
+            {
+                if (MasterValueListByChannel == null)
+                    MasterValueListByChannel = new Dictionary<string, MastervalueList.mastervalue[]>();
+
+                foreach (var c in MasterValueListTemp.channels)
+                {
+                    if (c.mastervalue == null)
+                        continue;
+
+                    if (!MasterValueListByChannel.ContainsKey(c.ise_id))
+                        MasterValueListByChannel.Add(c.ise_id, c.mastervalue);
+                    else
+                        MasterValueListByChannel[c.ise_id] = c.mastervalue;
+                }
+
+                return true;
             }
 
-            //sw.Stop();
 
-            if (MasterValueList == null)
-                MasterValueList = MasterValueListNew;
-
-            return fullReload;
-        }
-
-
-
+            return false;
+        }             
+        
         public void SetISEIDValue(string iseid, string newvalue)
         {
             //FIXME: validate that both iseid and newvalue do contain only a-z and 0-9 values

@@ -183,6 +183,11 @@ namespace csharpmatic.Generic
                 DatapointByISEID.Add(kvp.Value.ISEID, kvp.Value);
         }
 
+        internal void UpdateFromDeviceXML()
+        {
+
+        }
+
         private void FillFromDeviceListDevice(XMLAPI.DeviceList.Device d)
         {
             Name = d.Name;

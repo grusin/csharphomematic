@@ -1,4 +1,5 @@
-﻿using csharpmatic.JsonAPIClient;
+﻿using csharpmatic.Generic;
+using csharpmatic.JsonRPCAPIClient;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -16,20 +17,20 @@ namespace Samples.JsonRPC
             Client rpcClient = new Client("192.168.1.20");
 
             //gets devices and their channels details, without the datapoints
-            var res = rpcClient.Device_listAllDetail().ToString();
+            //var res = rpcClient.Device_listAllDetail().ToString();
 
             //get all devies and challnel ids... (this can be used to check if new ones are there!)
-            var res2 = rpcClient.Device_listAll().ToString();
-            
-            var res3 = rpcClient.Event_subscribe().ToString();
+            //var res2 = rpcClient.Device_listAll().ToString();
 
-            var res4 = rpcClient.Room_getAll().ToString();
-            var res5 = rpcClient.Room_listAll().ToString();
+            //var res3 = rpcClient.Event_subscribe().ToString();
 
-            while (true)
-            {
-                var p = rpcClient.Event_poll().ToString();
-            }
+            //var res4 = rpcClient.Room_getAll().ToString();
+            //var res5 = rpcClient.Room_listAll().ToString();
+
+            //while (true)
+            //{
+            //    var p = rpcClient.Event_poll().ToString();
+            //}
 
             //var res4 = rpcClient.Device_listAllDetail();
             //var res5 = rpcClient.Interface_GetRSSI();
@@ -42,6 +43,12 @@ namespace Samples.JsonRPC
             //rpcClient.SetSystemVariable("link", "https://hooks.slack.com/services/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");
 
             //rpcClient.SetSystemVariable("Alarm Armed", "0");
+
+            DeviceManager dm = new DeviceManager("192.168.1.20", false);
+
+
+            //var xmlClient = new csharpmatic.XMLAPIClient.Client("http://192.168.1.20");
+            //xmlClient.UpdateDeviceList().Wait();
         }        
     }
 }

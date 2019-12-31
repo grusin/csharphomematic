@@ -35,10 +35,10 @@ namespace HouseAutomationService
                 {                   
                     var dm = new DeviceManager(Settings.Default.HomematicServerAddress);
 
-                    //LOGGER.Info("Starting external Slack notification service");
-                    //Slack s = Slack.TryFromCCU(dm);
-                    //if (s != null)
-                    //    dm.RegisterNotificationService(s);
+                    LOGGER.Info("Starting external Slack notification service");
+                    Slack s = Slack.TryFromCCU(dm);
+                    if (s != null)
+                        dm.RegisterNotificationService(s);
 
                     LOGGER.Info("Starting alarm automation");
                     var alarmAutomation = new AlarmAutomation(dm, AutomationNames.AlarmAutomation);

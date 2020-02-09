@@ -59,9 +59,9 @@ namespace csharpmatic.Automation.RestApi
             {
                 var pts = dr.TempControlDevices.Select(s => s.Actual_Temperature.Value);
 
-                ActualTempAvg = RoundToHalfPoint(pts.Average());
-                ActualTempMax = RoundToHalfPoint(pts.Max());
-                ActualTempMin = RoundToHalfPoint(pts.Min());
+                ActualTempAvg = Math.Round(pts.Average(), 1);
+                ActualTempMax = Math.Round(pts.Max(), 1);
+                ActualTempMin = Math.Round(pts.Min(), 1);
                 SetTemp = dr.TempControlDevices.GroupLeader.Set_Point_Temperature.Value;
                 WindowOpen = dr.TempControlDevices.GroupLeader.Window_State.Value == ITempControl_Windows_State_Enum.OPEN;
                 BoostActive = dr.TempControlDevices.GroupLeader.Boost_Mode.Value;

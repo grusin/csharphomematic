@@ -71,8 +71,8 @@ class App extends React.Component {
 
     static getApiUrl()
     {
-        return "http://localhost:81";
-        //return "http://192.168.1.21:8080"; 
+        //return "http://localhost:81";
+        return "http://192.168.1.21:8080"; 
         //return "";
     }
 

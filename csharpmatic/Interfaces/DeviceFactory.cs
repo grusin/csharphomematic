@@ -21,8 +21,8 @@ namespace csharpmatic.Interfaces
 
         static void initAllSupportedIntefraces()
         {
-            var types = AppDomain.CurrentDomain.GetAssemblies()
-                .SelectMany(s => s.GetTypes())
+            var types = Assembly.GetExecutingAssembly()
+                .GetTypes()
                 .Where(w => w.IsInterface && w.Namespace == "csharpmatic.Interfaces");
 
             AllSupportedIntefraces = new Dictionary<Type, Dictionary<string, PropertyInfo>>();
@@ -38,8 +38,8 @@ namespace csharpmatic.Interfaces
 
         static void initAllSupportedDevices()
         {
-            var types = AppDomain.CurrentDomain.GetAssemblies()
-                .SelectMany(s => s.GetTypes())
+            var types = Assembly.GetExecutingAssembly()
+                .GetTypes()
                 .Where(w => w.Namespace == "csharpmatic.Interfaces.Devices");
 
             AllSupportedDevices = new Dictionary<Type, Dictionary<string, Type>>();

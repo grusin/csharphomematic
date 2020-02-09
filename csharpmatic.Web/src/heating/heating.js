@@ -41,9 +41,9 @@ class Heating extends BaseComponent {
 
   getValveOffsetString(d) {
     if(d.Valve_Offset.Value === 0)
-      return d.Level.Value*100 + '%'
+      return (d.Level.Value*100).toFixed(0) + '%'
     else 
-      return d.Level.Value*100 + '% (+' + -d.Valve_Offset.Value + '%)'
+      return (d.Level.Value*100).toFixed(0) + '% (+' + -d.Valve_Offset.Value.toFixed(0) + '%)'
   }
 
   renderRow(row) {
@@ -97,27 +97,27 @@ class Heating extends BaseComponent {
                 <Ons.ListItem modifier='longdivider'>{d.ShortName + ' (' + d.ISEID + ')'} 
                 {
                   d.hasOwnProperty('Press_Long') &&  
-                  <Ons.Button modifier="large--cta" disabled style={{ width: "30px" }}>
-                    <Ons.Icon icon={d.State ? "fa-toggle-on" : "fa-toggle-off"}/>
+                  <Ons.Button modifier="material--flat" disabled style={{ padding: "0px 00px 0px 20px", color: "#008CBA" }}>
+                    <Ons.Icon icon={d.State ? "fa-toggle-on" : "fa-toggle-off"}/> <Ons.Icon icon="fa-cloud" />
                   </Ons.Button>
                 } 
                 {
                   d.hasOwnProperty('Actual_Temperature') &&  
-                  <Ons.Button modifier="large--cta" disabled style={{ width: "70px" }}>
+                  <Ons.Button modifier="material--flat" disabled style={{ padding: "0px 0px 0px 20px", color: "#008CBA" }}>
                      {d.Actual_Temperature.Value}&#8451;&nbsp;<Ons.Icon icon="fa-thermometer-empty" />
                   </Ons.Button>
                 } 
                 {
                   d.hasOwnProperty('Valve_State') &&                                  
                                     
-                  <Ons.Button modifier="large--cta" disabled style={{ width: "90px" }}>
+                  <Ons.Button modifier="material--flat" disabled style={{ padding: "0px 0px 0px 20px", color: "#008CBA" }}> 
                      {this.getValveOffsetString(d)}&nbsp;
                      <Ons.Icon icon="fa-wrench" />
                   </Ons.Button>
                 } 
                 {
                   d.hasOwnProperty('Humidity') &&  
-                  <Ons.Button modifier="large--cta" disabled style={{ width: "70px" }}>
+                  <Ons.Button modifier="material--flat" disabled style={{ padding: "0px 0px 0px 20px", color: "#008CBA" }}>
                      {d.Humidity.Value}%&nbsp;<Ons.Icon icon="fa-tint" />
                   </Ons.Button>
                 } 
